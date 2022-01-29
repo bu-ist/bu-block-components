@@ -1,0 +1,15 @@
+{
+    "name": "@bu/block-components",
+    "version": "0.1",
+    "description": "Reusable Block Components for BU Plugins and Themes",
+    "main": "index.js",
+    "scripts": {
+    },
+    "contributors": [
+        "Dakota Chichester <acketon@bu.edu>"
+    ],
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+  }
