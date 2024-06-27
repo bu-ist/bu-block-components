@@ -1,6 +1,8 @@
 # BU Loading Spinner
 ## Status: BETA
 
+![Loading Spinner Component Example](BU_Loading_Spinner.gif)
+
 A loading spinner to be used to indicate some activity is occuring.
 
 Extends the core `<Spinner />` component so that it can include

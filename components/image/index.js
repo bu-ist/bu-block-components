@@ -138,60 +138,63 @@ export const BU_Image = ( props ) => {
 
 	return (
 		<>
-
-			<InspectorControls>
-
-				<PanelBody title={__('Image Settings')}>
-					<h2>{__('Selected Image')}</h2>
-					<PanelRow>
-						{ canOverrideImage && (
-							<MediaUploadCheck>
-								<MediaUpload
-									onSelect={onSelect}
-									value={id}
-									allowedTypes={ allowedTypes }
-									render={({open}) => (
-										<IconButton
-											className="bu-components-image-media-edit-button"
-											onClick={ open }
-											icon='edit'
-											label={ __( 'Edit Media' ) }
-											isDefault
-											isLarge
-										>
-											{ __( 'Edit' ) }
-										</IconButton>
-									)}
-								/>
-							</MediaUploadCheck>
-						)}
-						{ onRemove && (
+			{ ( canOverrideImage || onRemove || displayFocalPointPicker ) && (
+				<InspectorControls>
+					<PanelBody title={__('Image Settings')}>
+						{ ( canOverrideImage || onRemove) && (
 							<>
-								<Button
-									className="bu-components-image-media-remove-button"
-									onClick={ onRemove }
-									label={ ( 'Remove Media' ) }
-									isLink
-								>
-									{ __( 'Remove Media' ) }
-								</Button>
+								<h2>{__('Selected Image')}</h2>
+								<PanelRow>
+									{ canOverrideImage && (
+										<MediaUploadCheck>
+											<MediaUpload
+												onSelect={onSelect}
+												value={id}
+												allowedTypes={ allowedTypes }
+												render={({open}) => (
+													<IconButton
+														className="bu-components-image-media-edit-button"
+														onClick={ open }
+														icon='edit'
+														label={ __( 'Edit Media' ) }
+														isDefault
+														isLarge
+													>
+														{ __( 'Edit' ) }
+													</IconButton>
+												)}
+											/>
+										</MediaUploadCheck>
+									)}
+									{ onRemove && (
+										<>
+											<Button
+												className="bu-components-image-media-remove-button"
+												onClick={ onRemove }
+												label={ ( 'Remove Media' ) }
+												isLink
+											>
+												{ __( 'Remove Media' ) }
+											</Button>
+										</>
+									)}
+								</PanelRow>
 							</>
 						)}
-					</PanelRow>
-					{displayFocalPointPicker && (
-						<PanelRow>
-							<FocalPointPicker
-								className="bu-components-image-media-edit-focalpoint"
-								label={__('Focal Point Picker')}
-								url={imageUrl}
-								value={focalPoint}
-								onChange={onChangeFocalPoint}
-							/>
-						</PanelRow>
-					)}
-				</PanelBody>
-			</InspectorControls>
-
+						{displayFocalPointPicker && (
+							<PanelRow>
+								<FocalPointPicker
+									className="bu-components-image-media-edit-focalpoint"
+									label={__('Focal Point Picker')}
+									url={imageUrl}
+									value={focalPoint}
+									onChange={onChangeFocalPoint}
+								/>
+							</PanelRow>
+						)}
+					</PanelBody>
+				</InspectorControls>
+			)}
 			<img
 				className={ getClasses( className ) }
 				src={imageUrl}

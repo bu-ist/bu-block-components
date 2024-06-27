@@ -1,6 +1,12 @@
 # BU Image
 ## Status: BETA
 
+**Image component the user can edit**
+![Image Component Editable Example](BU_Image_Editable.gif)
+
+**Image component the user cannot edit as the image id is set elsewhere**
+![Image Component Not Editable Example](BU_Image_Not_Editable.gif)
+
 An image display component for use within a block. This component can
 display an image by passing it a media ID. The component also supports
 uploading or selecting an image from the media library and allowing the
