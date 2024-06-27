@@ -140,7 +140,6 @@ export const PostChooser = ( props ) => {
 	 */
 	const handleSearchStringChange = ( value ) => {
 		setSearchString( value );
-		console.log( value + ' | ' + searchString);
 	};
 
 	/**
@@ -160,7 +159,6 @@ export const PostChooser = ( props ) => {
 
 		// Show the results after typing at least 3 characters
 		if ( searchString && ( searchString.length >= minCharacters || searchType === 'postid' ) ) {
-			console.log("searching: " + searchString );
 			searchPosts( searchString );
 		}
 
@@ -204,8 +202,6 @@ export const PostChooser = ( props ) => {
 				} );
 			}
 
-			console.log( path );
-
 			// Make the request to the standard endpoint.
 			const request = apiFetch( {
 				path: path,
@@ -218,7 +214,6 @@ export const PostChooser = ( props ) => {
 
 
 		Promise.all( requests ).then( ( results ) => {
-			console.log( results );
 			let data = results.reduce( ( result, final ) => [...final, ...result], [] );
 			setSearchResults( data );
 			setIsLoading( false );

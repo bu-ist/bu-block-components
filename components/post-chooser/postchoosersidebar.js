@@ -35,8 +35,6 @@ export const PostChooserSidebar = function( props ) {
 	} = props;
 
 	const onhandleRemovePost = ( e ) => {
-		console.log("removing ", postID, postTitle );
-
 		// Let the block code take care of further handling.
 		// Call passed onSelectPost Function.
 		if ( onRemovePost instanceof Function ) {
@@ -52,7 +50,6 @@ export const PostChooserSidebar = function( props ) {
 					title={ __( 'Selected Post' ) }
 					className="bu-components-post-chooser-sidebar-options"
 				>
-					{ console.log( postID, postTitle ) }
 					<>
 						<PanelRow>
 							{ postTitle && (
