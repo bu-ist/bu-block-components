@@ -9,12 +9,14 @@ or used to fetch additional data from data stores such as media.
 
 
 ## Usage
-`import { PostChooser, PostChooserSidebar } from '@bostonuniversity/block-components';`
+```js
+import { PostChooser, PostChooserSidebar } from '@bostonuniversity/block-components';
+```
 
 
 `<PostChooser />` provides a button that let's the user open
 a modal to search for and select a post.
-```
+```js
 <PostChooser
 	label="Choose a post"
 	buttonLabel="Choose..."
@@ -27,7 +29,7 @@ a modal to search for and select a post.
 displays the currently selected post and allows the user to remove the post. Additionally, if you pass a `<PostChooser>` component as a child you can easily add a button to select the post or change it.
 
 This can be useful so the user doesn't have to remove the post to change the post and in situations where you can't fit a "choose post" button in the block in the editor and want all controls in the sidebar.
-```
+```js
 <PostChooserSidebar
 	postTitle={ selectedPostTitle }
 	postID={ selectedPostID }
