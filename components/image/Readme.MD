@@ -37,10 +37,12 @@ The Component also supports an optional Focal Point Control to allow
 the focal point of the image to be set for use with Object-Fit scaling.
 
 ## Usage
-`import { BU_Image } from '@bostonuniversity/block-components';`
-
-
+```js
+import { BU_Image } from '@bostonuniversity/block-components';
 ```
+
+
+```js
 const handleImageSelect = ( media ) => {
 	console.log("image Selected:", media);
 	setAttributes({
