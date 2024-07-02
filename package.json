@@ -1,15 +1,38 @@
 {
-    "name": "@bu/block-components",
-    "version": "0.1",
-    "description": "Reusable Block Components for BU Plugins and Themes",
-    "main": "index.js",
-    "scripts": {
-    },
-    "contributors": [
-        "Dakota Chichester <acketon@bu.edu>"
-    ],
-    "dependencies": {
-    },
-    "devDependencies": {
-    }
-  }
+	"name": "@bostonuniversity/block-components",
+	"version": "0.1.0",
+	"description": "Reusable Block Components for BU Plugins and Themes",
+	"main": "index.js",
+	"scripts": {
+		"postinstall": "composer install",
+		"yalc": "yalc publish",
+		"yalc:push": "yalc publish --push",
+		"yalc:changed": "yalc push --changed",
+		"watch": "npm-watch"
+	},
+	"watch": {
+		"yalc:changed": {
+			"patterns": [
+				"components",
+				"index.js",
+				"package.json"
+			],
+			"extensions": "js,scss,php,json",
+			"quiet": false
+		}
+	},
+	"contributors": [
+		"Dakota Chichester <acketon@bu.edu>"
+	],
+	"dependencies": {
+		"@wordpress/api-fetch": "^6.0.0",
+		"@wordpress/date": "^5.1.0",
+		"classnames": "^2.5.1"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^4.4.0",
+		"@wordpress/icons": "^10.1.0",
+		"npm-watch": "^0.13.0",
+		"yalc": "^1.0.0-pre.53"
+	}
+}
