@@ -12,10 +12,12 @@ some content.
 
 
 ## Usage
-`import { BULoadingSpinner } from '@bostonuniversity/block-components';`
-
-
+```js
+import { BULoadingSpinner } from '@bostonuniversity/block-components';
 ```
+
+
+```js
 { isLoading && (
 	<BULoadingSpinner
 		text="Loading" // Default is undefined.

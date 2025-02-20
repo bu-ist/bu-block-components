@@ -22,10 +22,13 @@ Pass a value of `label` to offset the help icon by a negative 18px to position t
 of the label on core components such as TextControl.
 
 ## Usage
-`import { BU_Help_Wrapper } from '@bostonuniversity/block-components';`
-
-
+```js
+import { BU_Help_Wrapper } from '@bostonuniversity/block-components';
 ```
+
+
+
+```js
 <BU_Help_Wrapper
 	text={ <p>Does Something. <a href="https://wpdocs.bu.edu">Read More</a> </p>}
 >
