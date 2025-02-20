@@ -1,27 +1,22 @@
 # BU Block Components
 Standardized set of components that can be used within WordPress blocks.
 
-# Installation
+## Installation
 Install the package
 
 ```
 npm i @bostonuniversity/block-components
 ```
 
-# Use
+## Use
 
+## Publishing & Release Process
 
-# Publishing & Release Process
+This package is managed through NPM.  It can be found here: https://www.npmjs.com/package/@bostonuniversity/block-components
 
-This package is managed through NPM (https://www.npmjs.com/).  It can be found here: https://www.npmjs.com/package/@bostonuniversity/block-components
+This repo has an action that will run whenever a new release is created.
 
-Publishing Process (manual for now, we will automate in the future - please ask a DEV for assistance):
-- ensure that this repositor's Main branch is up-to-date
-- increment the version number to match changes that were made
-- clone the main branch down to your computer
-- navigate to the folder on your local computer
-- run: 'npm login', and follow the instructions (you will need a valid login account for the BU account)
-- once logged in, run: 'npm publish' from the folder on your local computer (please see the note below)
+To learn more about how NPM is managed for BU projects, please read https://developer.bu.edu/webteam/developer/vcs/npm-javascript-packages/
 
 NOTE: you should verify that the package JSON file includes the following to make publishing easier:
 
@@ -30,8 +25,3 @@ NOTE: you should verify that the package JSON file includes the following to mak
     "access": "public"
   }
 ```
-
-
-
-
-
