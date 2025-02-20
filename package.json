@@ -1,6 +1,6 @@
 {
 	"name": "@bostonuniversity/block-components",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Reusable Block Components for BU Plugins and Themes",
 	"main": "index.js",
 	"scripts": {
@@ -22,7 +22,9 @@
 		}
 	},
 	"contributors": [
-		"Dakota Chichester <acketon@bu.edu>"
+		"Sean Tierney <tierneys@bu.edu>",
+		"Dakota Chichester <acketon@bu.edu>",
+		"Tim King <timking@bu.edu>"
 	],
 	"dependencies": {
 		"@wordpress/api-fetch": "^6.0.0",
