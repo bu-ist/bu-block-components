@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/components/optional
+
 # Optional
 
 ![Optional Component Demo](../../images/optional-component.gif)

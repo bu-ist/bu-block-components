@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/components/rich-text-character-limit
+
 # RichTextWithLimit
 
 The `RichTextWithLimit` component is a special version of [`RichText`](https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/rich-text/index.js) that allows for specifying a character limit.

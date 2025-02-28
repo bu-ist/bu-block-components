@@ -1,3 +1,6 @@
+https://github.com/10up/block-components/tree/develop/components/color-settings
+@todo this is just for demo; remove once others are working
+
 # ColorSetting
 
 A component that lets you add a `label`, `help` text and all the existing options from the core `ColorPalette` component. This component can be used by any other Bock Component or a Block. This component calls the `onChange` callback with the value of the selected color and does not add/update any CSS classes.

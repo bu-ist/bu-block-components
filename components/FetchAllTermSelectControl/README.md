@@ -1,3 +1,5 @@
+https://github.com/humanmade/block-editor-components/tree/main/src/components/FetchAllTermSelectControl
+
 # FetchAllTermSelectControl
 
 The `FetchAllTermSelectControl` component allows for choosing one of a reasonably small number of terms in a given taxonomy.

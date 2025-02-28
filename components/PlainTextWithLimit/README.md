@@ -1,3 +1,5 @@
+https://github.com/humanmade/block-editor-components/tree/main/src/components/PlainTextWithLimit
+
 # PlainTextWithLimit
 
 The `PlainTextWithLimit` component is a special version of [`PlainText`](https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/plain-text/index.js) that allows for specifying a character limit.

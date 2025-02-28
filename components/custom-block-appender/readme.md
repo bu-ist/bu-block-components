@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/components/custom-block-appender
+
 # CustomBlockAppender
 
 This component is passed to an `InnerBlocks` instance to as it's `renderAppender` to provide a customized button that opens the Block Inserter.

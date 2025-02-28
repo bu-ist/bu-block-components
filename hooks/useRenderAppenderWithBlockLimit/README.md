@@ -1,3 +1,5 @@
+https://github.com/humanmade/block-editor-components/tree/main/src/hooks/useRenderAppenderWithBlockLimit
+
 # useRenderAppenderWithBlockLimit
 
 The `useRenderAppenderWithBlockLimit` hook allows for conditionally displaying a (custom) render appender component for inner blocks.

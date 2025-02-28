@@ -1,3 +1,5 @@
+https://github.com/humanmade/block-editor-components/tree/main/src/components/LinkToolbar
+
 # LinkToolbar
 
 The `LinkToolbar` component allows for linking a portion of content or other block attribute data to a user-defined URL.

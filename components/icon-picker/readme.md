@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/components/icon-picker
+
 # `IconPicker`
 
 ![Icon Picker Demonstration](../../images/icon-picker.gif)

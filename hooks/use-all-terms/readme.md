@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/hooks/use-all-terms
+
 # `useAllTerms`
 
 The `useAllTerms` hook is a simple utility that makes it easy to get all terms from a taxonomy.

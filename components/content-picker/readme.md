@@ -1,3 +1,5 @@
+https://github.com/10up/block-components/tree/develop/components/content-picker
+
 # ContentPicker
 
 A Content Picker component that allows you to pick posts and pages very easily.
