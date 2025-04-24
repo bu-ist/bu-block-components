@@ -19,13 +19,13 @@ import { useSelect, useDispatch } from '@wordpress/data';
  * @returns {Array} The data returned from the request.
  */
 export const useRequestData = (entity='postType', kind='post', query = {} ) => {
-	const functionToCall = isObject(query) ? 'getEntityRecords' : 'getEntityRecord';
+	const whichGER = isObject(query) ? 'getEntityRecords' : 'getEntityRecord';
 	const { invalidateResolution } = useDispatch('core/data');
 	const { data, isLoading } = useSelect(
 		(select) => {
 			return {
-				data: select(coreStore)[functionToCall](entity, kind, query),
-				isLoading: select('core/data').isResolving(coreStore, functionToCall, [
+				data: select(coreStore)[whichGER](entity, kind, query),
+				isLoading: select('core/data').isResolving(coreStore, whichGER, [
 					entity,
 					kind,
 					query,
@@ -36,7 +36,7 @@ export const useRequestData = (entity='postType', kind='post', query = {} ) => {
 	);
 
 	const invalidateResolver = () => {
-		invalidateResolution(coreStore, functionToCall, [entity, kind, query]);
+		invalidateResolution(coreStore, whichGER, [entity, kind, query]);
 	};
 
 	return [data, isLoading, invalidateResolver];
