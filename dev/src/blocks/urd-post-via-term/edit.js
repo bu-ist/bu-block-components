@@ -15,13 +15,12 @@ import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 
 import {
 	useRequestData,
-	useMedia,
 	LoadingSpinner,
 } from '@bostonuniversity/block-imports';
 
 import { TextControl, PanelBody, PanelRow } from '@wordpress/components';
 
-import {PostFromTerm} from "./post-from-term";
+import {ThePost} from './the-post';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,6 +29,7 @@ import {PostFromTerm} from "./post-from-term";
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+import {post} from "@wordpress/icons";
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -44,10 +44,6 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	console.log('Atts:', attributes);
-	console.log('termSlug:', termSlug);
-
-	let imageID = '';
 	let termID = '';
 
 	const [ termData, termIsLoading, termInvalidateRequest ] = useRequestData(
@@ -58,7 +54,8 @@ export default function Edit( props ) {
 		}
 	);
 
-	if ( termData && termData.length > 0 ) {
+	if (termData && termData.length > 0) {
+		console.log('Term Data: ', termData);
 		termID = termData[0].id;
 	}
 
@@ -66,20 +63,9 @@ export default function Edit( props ) {
 		'postType',
 		'import-bob',
 		{
-			fish: termID
+			fish: [termID]
 		}
 	);
-
-	if ( data ) {
-		console.log( 'We Got Data:', data );
-		console.log( 'Featured Image', data.featured_media );
-		imageID = data.featured_media;
-	}
-
-	// const { media, isResolvingMedia, hasResolvedMedia } = useMedia( imageID );
-
-	// console.log( isResolvingMedia );
-	// console.log( hasResolvedMedia );
 
 	return (
 		<>
@@ -97,21 +83,26 @@ export default function Edit( props ) {
 				</PanelBody>
 			</InspectorControls>
 			<p { ...useBlockProps() }>
-				{/*{ isLoading && (*/}
-				{/*	<>*/}
-				{/*		<LoadingSpinner*/}
-				{/*			text="Loading" // Default is undefined.*/}
-				{/*			shadow={ false } // Default is true.*/}
-				{/*			className="a-custom-classname-to-add"*/}
-				{/*		/>*/}
-				{/*	</>*/}
-				{/*) }*/}
+				{/*	{isLoading && (*/}
+				{/*		<>*/}
+				{/*			<LoadingSpinner*/}
+				{/*				text="Loading" // Default is undefined.*/}
+				{/*				shadow={false} // Default is true.*/}
+				{/*				className="a-custom-classname-to-add"*/}
+				{/*			/>*/}
+				{/*		</>*/}
+				{/*	)}*/}
 
 				<h2>Hi. We'll have more in a bit.</h2>
-				{/*{ data && (*/}
-				{/*	<>*/}
-				{/*	</>*/}
-				{/*) }*/}
+				{/*{data && data.length > 0 && (*/}
+				{/*	data.map((post) => {*/}
+				{/*		return (*/}
+				{/*			<ThePost*/}
+				{/*				post={post}*/}
+				{/*			/>*/}
+				{/*		)*/}
+				{/*	})*/}
+				{/*)}*/}
 
 				{ ! termSlug && (
 					<strong>Enter a Fish slug in the inspector controls</strong>

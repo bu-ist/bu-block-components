@@ -8,7 +8,6 @@ export const ThePost = (props) => {
 		post
 	} = props;
 	const {media, isResolvingMedia, hasResolvedMedia} = useMedia(post.featured_media);
-	console.log(post);
 	return (
 		<div id={post.id} className="post-container" style={{border: "1px dotted #f00", margin:'10px', padding: '10px'}}>
 			{media && isResolvingMedia && (

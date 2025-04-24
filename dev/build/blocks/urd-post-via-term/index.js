@@ -142,7 +142,7 @@ __webpack_require__.r(__webpack_exports__);
  * @returns {Array} The data returned from the request.
  */
 const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
-  const functionToCall = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(query) ? 'getEntityRecords' : 'getEntityRecord';
+  const whichGER = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(query) ? 'getEntityRecords' : 'getEntityRecord';
   const {
     invalidateResolution
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)('core/data');
@@ -151,12 +151,12 @@ const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
     isLoading
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     return {
-      data: select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store)[functionToCall](entity, kind, query),
-      isLoading: select('core/data').isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, functionToCall, [entity, kind, query])
+      data: select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store)[whichGER](entity, kind, query),
+      isLoading: select('core/data').isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, whichGER, [entity, kind, query])
     };
   }, [entity, kind, query]);
   const invalidateResolver = () => {
-    invalidateResolution(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, functionToCall, [entity, kind, query]);
+    invalidateResolution(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, whichGER, [entity, kind, query]);
   };
   return [data, isLoading, invalidateResolver];
 };
@@ -380,8 +380,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @bostonuniversity/block-imports */ "../index.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _post_from_term__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./post-from-term */ "./src/blocks/urd-post-via-term/post-from-term.js");
-/* harmony import */ var _post_from_term__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_post_from_term__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _the_post__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./the-post */ "./src/blocks/urd-post-via-term/the-post.js");
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/urd-post-via-term/editor.scss");
 
 /**
@@ -410,6 +409,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -427,30 +427,17 @@ function Edit(props) {
   const {
     termSlug
   } = attributes;
-  console.log('Atts:', attributes);
-  console.log('termSlug:', termSlug);
-  let imageID = '';
   let termID = '';
   const [termData, termIsLoading, termInvalidateRequest] = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.useRequestData)('taxonomy', 'fish', {
     slug: termSlug
   });
   if (termData && termData.length > 0) {
+    console.log('Term Data: ', termData);
     termID = termData[0].id;
   }
   const [data, isLoading, invalidateRequest] = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.useRequestData)('postType', 'import-bob', {
-    fish: termID
+    fish: [termID]
   });
-  if (data) {
-    console.log('We Got Data:', data);
-    console.log('Featured Image', data.featured_media);
-    imageID = data.featured_media;
-  }
-
-  // const { media, isResolvingMedia, hasResolvedMedia } = useMedia( imageID );
-
-  // console.log( isResolvingMedia );
-  // console.log( hasResolvedMedia );
-
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: "Post Settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
@@ -534,16 +521,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/blocks/urd-post-via-term/post-from-term.js":
-/*!********************************************************!*\
-  !*** ./src/blocks/urd-post-via-term/post-from-term.js ***!
-  \********************************************************/
-/***/ (() => {
-
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /Users/jreevior/Developer/budev/block-imports/dev/src/blocks/urd-post-via-term/post-from-term.js: Unexpected token (32:3)\n\n\u001b[0m \u001b[90m 30 |\u001b[39m \t\t\t{termData \u001b[33m&&\u001b[39m hasResolvedData \u001b[33m&&\u001b[39m (\n \u001b[90m 31 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 32 |\u001b[39m \t\t\t)}\n \u001b[90m    |\u001b[39m \t\t\t\u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 33 |\u001b[39m \t\t\u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\n \u001b[90m 34 |\u001b[39m \t)\u001b[33m;\u001b[39m\n \u001b[90m 35 |\u001b[39m }\u001b[33m;\u001b[39m\u001b[0m\n    at constructor (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:360:19)\n    at JSXParserMixin.raise (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:3338:19)\n    at JSXParserMixin.unexpected (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:3358:16)\n    at JSXParserMixin.parseParenAndDistinguishExpression (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:11403:12)\n    at JSXParserMixin.parseExprAtom (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:11033:23)\n    at JSXParserMixin.parseExprAtom (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6950:20)\n    at JSXParserMixin.parseExprSubscripts (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10785:23)\n    at JSXParserMixin.parseUpdate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10770:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10750:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10603:61)\n    at JSXParserMixin.parseExprOpBaseRightExpr (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10690:34)\n    at JSXParserMixin.parseExprOpRightExpr (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10685:21)\n    at JSXParserMixin.parseExprOp (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10651:27)\n    at JSXParserMixin.parseExprOp (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10657:21)\n    at JSXParserMixin.parseExprOps (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10612:17)\n    at JSXParserMixin.parseMaybeConditional (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10585:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10538:21)\n    at JSXParserMixin.parseExpressionBase (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10491:23)\n    at /Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10487:39\n    at JSXParserMixin.allowInAnd (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:12126:12)\n    at JSXParserMixin.parseExpression (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10487:17)\n    at JSXParserMixin.jsxParseExpressionContainer (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6818:31)\n    at JSXParserMixin.jsxParseElementAt (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6897:36)\n    at JSXParserMixin.jsxParseElement (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6935:17)\n    at JSXParserMixin.parseExprAtom (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6945:19)\n    at JSXParserMixin.parseExprSubscripts (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10785:23)\n    at JSXParserMixin.parseUpdate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10770:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10750:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10603:61)\n    at JSXParserMixin.parseExprOps (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10608:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10585:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10538:21)\n    at /Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10507:39\n    at JSXParserMixin.allowInAnd (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:12126:12)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10507:17)\n    at JSXParserMixin.parseParenAndDistinguishExpression (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:11386:28)\n    at JSXParserMixin.parseExprAtom (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:11033:23)\n    at JSXParserMixin.parseExprAtom (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:6950:20)\n    at JSXParserMixin.parseExprSubscripts (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10785:23)\n    at JSXParserMixin.parseUpdate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10770:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10750:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10603:61)\n    at JSXParserMixin.parseExprOps (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10608:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10585:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10538:21)\n    at JSXParserMixin.parseExpressionBase (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10491:23)\n    at /Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10487:39\n    at JSXParserMixin.allowInAnd (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:12121:16)\n    at JSXParserMixin.parseExpression (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:10487:17)\n    at JSXParserMixin.parseReturnStatement (/Users/jreevior/Developer/budev/block-imports/dev/node_modules/@babel/parser/lib/index.js:12806:28)");
-
-/***/ }),
-
 /***/ "./src/blocks/urd-post-via-term/save.js":
 /*!**********************************************!*\
   !*** ./src/blocks/urd-post-via-term/save.js ***!
@@ -596,6 +573,54 @@ function save() {
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
+
+/***/ }),
+
+/***/ "./src/blocks/urd-post-via-term/the-post.js":
+/*!**************************************************!*\
+  !*** ./src/blocks/urd-post-via-term/the-post.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ThePost: () => (/* binding */ ThePost)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @bostonuniversity/block-imports */ "../index.js");
+
+
+const ThePost = props => {
+  const {
+    post
+  } = props;
+  const {
+    media,
+    isResolvingMedia,
+    hasResolvedMedia
+  } = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_1__.useMedia)(post.featured_media);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: post.id,
+    className: "post-container",
+    style: {
+      border: "1px dotted #f00",
+      margin: '10px',
+      padding: '10px'
+    }
+  }, media && isResolvingMedia && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_1__.LoadingSpinner, {
+    text: "Loading",
+    shadow: false,
+    className: "a-clever-classname"
+  }), media && hasResolvedMedia && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: media.source_url,
+    alt: media.alt_text,
+    width: "150"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, post.title.rendered), post?.excerpt?.raw && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "excerpt-something"
+  }, post.excerpt.raw));
+};
 
 /***/ }),
 

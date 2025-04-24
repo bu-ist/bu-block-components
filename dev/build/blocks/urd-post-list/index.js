@@ -142,7 +142,7 @@ __webpack_require__.r(__webpack_exports__);
  * @returns {Array} The data returned from the request.
  */
 const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
-  const functionToCall = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(query) ? 'getEntityRecords' : 'getEntityRecord';
+  const whichGER = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(query) ? 'getEntityRecords' : 'getEntityRecord';
   const {
     invalidateResolution
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)('core/data');
@@ -151,12 +151,12 @@ const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
     isLoading
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     return {
-      data: select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store)[functionToCall](entity, kind, query),
-      isLoading: select('core/data').isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, functionToCall, [entity, kind, query])
+      data: select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store)[whichGER](entity, kind, query),
+      isLoading: select('core/data').isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, whichGER, [entity, kind, query])
     };
   }, [entity, kind, query]);
   const invalidateResolver = () => {
-    invalidateResolution(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, functionToCall, [entity, kind, query]);
+    invalidateResolution(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, whichGER, [entity, kind, query]);
   };
   return [data, isLoading, invalidateResolver];
 };
