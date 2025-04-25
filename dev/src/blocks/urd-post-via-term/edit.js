@@ -44,28 +44,70 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	let termID = '';
+	let termID = undefined;
 
-	const [ termData, termIsLoading, termInvalidateRequest ] = useRequestData(
-		'taxonomy',
-		'fish',
-		{
-			slug: termSlug
+
+	const Posts = ( props ) => {
+		const {
+			postslug
+		} = props;
+		console.log("termSlug: ", postslug);
+
+		const [ termData, termIsLoading, termInvalidateRequest ] = useRequestData(
+			'taxonomy',
+			'fish',
+			{
+				slug: postslug
+			}
+		);
+
+		if (termData && termData.length > 0) {
+			console.log('Term Data: ', termData);
+			termID = termData[0].id;
 		}
-	);
 
-	if (termData && termData.length > 0) {
-		console.log('Term Data: ', termData);
-		termID = termData[0].id;
+		return (
+			<>
+				{ termID && (
+					<PostsResults term={termID}/>
+				)}
+			</>
+		);
 	}
 
-	const [ data, isLoading, invalidateRequest ] = useRequestData(
-		'postType',
-		'import-bob',
-		{
-			fish: [termID]
-		}
-	);
+
+
+	const PostsResults = ( props ) => {
+		const {
+			term
+		} = props;
+
+		console.log("++++++++++++++++");
+		console.log("posts results component");
+		console.log("term id is: ", term);
+		const [ data, isLoading, invalidateRequest ] = useRequestData(
+			'postType',
+			'import-bob',
+			{
+				'fish': term
+			}
+		);
+		console.log("posts2:", data);
+		console.log("++++++++++++++++");
+
+		return (
+			<>
+				{data && data.length > 0 && (
+					data.map((post) => {
+						return (
+							<ThePost post={post} />
+						)
+					})
+				)}
+			</>
+		);
+	};
+
 
 	return (
 		<>
@@ -94,19 +136,14 @@ export default function Edit( props ) {
 				{/*	)}*/}
 
 				<h2>Hi. We'll have more in a bit.</h2>
-				{/*{data && data.length > 0 && (*/}
-				{/*	data.map((post) => {*/}
-				{/*		return (*/}
-				{/*			<ThePost*/}
-				{/*				post={post}*/}
-				{/*			/>*/}
-				{/*		)*/}
-				{/*	})*/}
-				{/*)}*/}
+				{ termSlug && (
+					<Posts postslug={termSlug} />
+				)}
 
 				{ ! termSlug && (
 					<strong>Enter a Fish slug in the inspector controls</strong>
 				) }
+
 			</p>
 		</>
 	);
