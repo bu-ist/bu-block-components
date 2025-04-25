@@ -356,7 +356,7 @@ module.exports = isObject;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/wp/5.8/block.json","apiVersion":2,"name":"imports-dev/urd-post-via-term","version":"0.1.0","title":"Get a post via useRequestData using a term slug","category":"widgets","icon":"database-import","description":"Using useRequestData to get a post via term","example":{},"attributes":{"termSlug":{"type":"string"}},"supports":{"html":false},"textdomain":"imports-dev-urd-post-via-term","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/wp/5.8/block.json","apiVersion":2,"name":"imports-dev/urd-post-via-term","version":"0.1.0","title":"Get a post via useRequestData using a term slug","category":"widgets","icon":"database-import","description":"Using useRequestData to get a post via term","example":{},"attributes":{"termSlug":{"type":"string","default":""}},"supports":{"html":false},"textdomain":"imports-dev-urd-post-via-term","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ }),
 

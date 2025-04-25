@@ -10,7 +10,8 @@
 	"example": {},
 	"attributes": {
 		"termSlug": {
-			"type": "string"
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
