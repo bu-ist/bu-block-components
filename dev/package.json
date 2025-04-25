@@ -29,7 +29,8 @@
 		"@wordpress/scripts": "^27.8.0"
 	},
 	"dependencies": {
-		"@bostonuniversity/block-imports": "file:../index.js",
-		"@wordpress/icons": "^9.48.0"
+		"@bostonuniversity/block-imports": "file:..",
+		"@wordpress/icons": "^9.48.0",
+		"classnames": "^2.5.1"
 	}
 }
