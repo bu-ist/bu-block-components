@@ -45,27 +45,44 @@ export default function Edit( props ) {
 	const { termSlug } = attributes;
 
 	let termID = '';
+	let termEntity = undefined;
+	let termTax = undefined;
+	let termQuery = undefined;
+	let requestEntity = undefined;
+	let postType = undefined;
+	let postQuery = undefined;
+
+	if ( termSlug ) {
+		termEntity = 'taxonomy';
+		termTax = 'fish';
+		termQuery = {
+			slug: termSlug
+		};
+	}
 
 	const [ termData, termIsLoading, termInvalidateRequest ] = useRequestData(
-		'taxonomy',
-		'fish',
-		{
-			slug: termSlug
-		}
+		termEntity,
+		termTax,
+		termQuery
 	);
 
-	if (termData && termData.length > 0) {
+	if (termSlug && termData && termData.length > 0) {
 		console.log('Term Data: ', termData);
 		termID = termData[0].id;
+		requestEntity = 'postType';
+		postQuery = {
+			fish: termID
+		}
+		postType = 'import-bob';
 	}
 
 	const [ data, isLoading, invalidateRequest ] = useRequestData(
-		'postType',
-		'import-bob',
-		{
-			fish: [termID]
-		}
+		requestEntity,
+		postType,
+		postQuery
 	);
+
+	console.log("posts:", data );
 
 	return (
 		<>
@@ -94,15 +111,14 @@ export default function Edit( props ) {
 				{/*	)}*/}
 
 				<h2>Hi. We'll have more in a bit.</h2>
-				{/*{data && data.length > 0 && (*/}
-				{/*	data.map((post) => {*/}
-				{/*		return (*/}
-				{/*			<ThePost*/}
-				{/*				post={post}*/}
-				{/*			/>*/}
-				{/*		)*/}
-				{/*	})*/}
-				{/*)}*/}
+				{data && data.length > 0 && (
+					data.map((post) => {
+						return (
+							<ThePost post={post} />
+						)
+					})
+				)}
+
 
 				{ ! termSlug && (
 					<strong>Enter a Fish slug in the inspector controls</strong>
