@@ -18,7 +18,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
  * @param {object | number} [query] Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @returns {Array} The data returned from the request.
  */
-export const useRequestData = (entity='postType', kind='post', query = {} ) => {
+export const useRequestData = (entity, kind, query = {} ) => {
 	const whichGER = isObject(query) ? 'getEntityRecords' : 'getEntityRecord';
 	const { invalidateResolution } = useDispatch('core/data');
 	const { data, isLoading } = useSelect(
