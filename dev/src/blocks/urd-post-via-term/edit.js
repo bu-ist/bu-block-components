@@ -12,6 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useState, useEffect } from '@wordpress/element';
 
 import {
 	useRequestData,
@@ -44,27 +45,67 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	let termID = '';
+	// Store derived query states
+	const [termQueryParams, setTermQueryParams] = useState({
+		entity: undefined,
+		tax: undefined,
+		query: undefined
+	});
 
-	const [ termData, termIsLoading, termInvalidateRequest ] = useRequestData(
-		'taxonomy',
-		'fish',
-		{
-			slug: termSlug
+	const [postQueryParams, setPostQueryParams] = useState({
+		entity: undefined,
+		type: undefined,
+		query: undefined
+	});
+
+	// Update term query params when termSlug changes
+	useEffect(() => {
+		if (!termSlug) {
+			setTermQueryParams({
+				entity: undefined,
+				tax: undefined,
+				query: undefined
+			});
+			return;
 		}
+
+		setTermQueryParams({
+			entity: 'taxonomy',
+			tax: 'fish',
+			query: { slug: termSlug }
+		});
+	}, [termSlug]);
+
+	// First query: Get term data
+	const [ termData, termIsLoading ] = useRequestData(
+		termQueryParams.entity,
+		termQueryParams.tax,
+		termQueryParams.query
 	);
 
-	if (termData && termData.length > 0) {
-		console.log('Term Data: ', termData);
-		termID = termData[0].id;
-	}
-
-	const [ data, isLoading, invalidateRequest ] = useRequestData(
-		'postType',
-		'import-bob',
-		{
-			fish: [termID]
+	// Update post query params when term data changes
+	useEffect(() => {
+		if (!termSlug || !termData || termData.length === 0) {
+			setPostQueryParams({
+				entity: undefined,
+				type: undefined,
+				query: undefined
+			});
+			return;
 		}
+
+		setPostQueryParams({
+			entity: 'postType',
+			type: 'import-bob',
+			query: { fish: termData[0].id }
+		});
+	}, [termSlug, termData]);
+
+	// Second query: Get posts
+	const [ posts, isLoading ] = useRequestData(
+		postQueryParams.entity,
+		postQueryParams.type,
+		postQueryParams.query
 	);
 
 	return (
@@ -82,32 +123,14 @@ export default function Edit( props ) {
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
-			<p { ...useBlockProps() }>
-				{/*	{isLoading && (*/}
-				{/*		<>*/}
-				{/*			<LoadingSpinner*/}
-				{/*				text="Loading" // Default is undefined.*/}
-				{/*				shadow={false} // Default is true.*/}
-				{/*				className="a-custom-classname-to-add"*/}
-				{/*			/>*/}
-				{/*		</>*/}
-				{/*	)}*/}
-
-				<h2>Hi. We'll have more in a bit.</h2>
-				{/*{data && data.length > 0 && (*/}
-				{/*	data.map((post) => {*/}
-				{/*		return (*/}
-				{/*			<ThePost*/}
-				{/*				post={post}*/}
-				{/*			/>*/}
-				{/*		)*/}
-				{/*	})*/}
-				{/*)}*/}
-
+			<div { ...useBlockProps() }>
+				{posts && posts.map((post) => (
+					<ThePost key={post.id} post={post} />
+				))}
 				{ ! termSlug && (
 					<strong>Enter a Fish slug in the inspector controls</strong>
 				) }
-			</p>
+			</div>
 		</>
 	);
 }
