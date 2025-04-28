@@ -45,29 +45,32 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	// Store derived query states
+	/**
+	 * @typedef requestDataQueryParams
+	 * @property {string} entity
+	 * @property {string} tax
+	 * @property {object | number} query
+	 * */
+
+	// Term Query Params
+	/** @type {useState<requestDataQueryParams>} */
 	const [termQueryParams, setTermQueryParams] = useState({
-		entity: undefined,
-		tax: undefined,
-		query: undefined
+		entity: null,
+		tax: null,
+		query: null
 	});
 
+	// Post Query Params
+	/** @type {useState<requestDataQueryParams>} */
 	const [postQueryParams, setPostQueryParams] = useState({
-		entity: undefined,
-		type: undefined,
-		query: undefined
+		entity: null,
+		type: null,
+		query: null
 	});
 
 	// Update term query params when termSlug changes
 	useEffect(() => {
-		if (!termSlug) {
-			setTermQueryParams({
-				entity: undefined,
-				tax: undefined,
-				query: undefined
-			});
-			return;
-		}
+		if (!termSlug) { return; }
 
 		setTermQueryParams({
 			entity: 'taxonomy',
@@ -77,7 +80,7 @@ export default function Edit( props ) {
 	}, [termSlug]);
 
 	// First query: Get term data
-	const [ termData, termIsLoading ] = useRequestData(
+	const [ termData ] = useRequestData(
 		termQueryParams.entity,
 		termQueryParams.tax,
 		termQueryParams.query
@@ -85,14 +88,8 @@ export default function Edit( props ) {
 
 	// Update post query params when term data changes
 	useEffect(() => {
-		if (!termSlug || !termData || termData.length === 0) {
-			setPostQueryParams({
-				entity: undefined,
-				type: undefined,
-				query: undefined
-			});
-			return;
-		}
+		// Do we always only want the first item in the termData array?
+		if (!termData || termData[0]?.id || !termSlug) { return; }
 
 		setPostQueryParams({
 			entity: 'postType',
@@ -102,7 +99,7 @@ export default function Edit( props ) {
 	}, [termSlug, termData]);
 
 	// Second query: Get posts
-	const [ posts, isLoading ] = useRequestData(
+	const [ posts ] = useRequestData(
 		postQueryParams.entity,
 		postQueryParams.type,
 		postQueryParams.query
