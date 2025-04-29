@@ -47,15 +47,15 @@ export default function Edit( props ) {
 
 	// Store derived query states
 	const [termQueryParams, setTermQueryParams] = useState({
-		entity: undefined,
-		tax: undefined,
-		query: undefined
+		entity: null,
+		tax: null,
+		query: null
 	});
 
 	const [postQueryParams, setPostQueryParams] = useState({
-		entity: undefined,
-		type: undefined,
-		query: undefined
+		entity: null,
+		type: null,
+		query: null
 	});
 
 	// Update term query params when termSlug changes
