@@ -60,15 +60,18 @@ export default function Edit( props ) {
 
 	// Update term query params when termSlug changes
 	useEffect(() => {
+		// Guard clause: reset state and exit if no termSlug
+		// This prevents stale taxonomy queries from executing
 		if (!termSlug) {
 			setTermQueryParams({
-				entity: undefined,
-				tax: undefined,
-				query: undefined
+				entity: null,
+				tax: null,
+				query: null
 			});
 			return;
 		}
 
+		// Set term query params to get the taxonomy term data
 		setTermQueryParams({
 			entity: 'taxonomy',
 			tax: 'fish',
@@ -85,11 +88,13 @@ export default function Edit( props ) {
 
 	// Update post query params when term data changes
 	useEffect(() => {
+		// Guard clause: reset state if any required data is missing
+		// This ensures we don't continue querying posts with stale term IDs
 		if (!termSlug || !termData || termData.length === 0) {
 			setPostQueryParams({
-				entity: undefined,
-				type: undefined,
-				query: undefined
+				entity: null,
+				type: null,
+				query: null
 			});
 			return;
 		}
