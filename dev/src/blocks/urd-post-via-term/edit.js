@@ -33,8 +33,15 @@ import './editor.scss';
 import {post} from "@wordpress/icons";
 
 /**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
+ * Demonstrates a React component with dependent data fetching using state management.
+ * 
+ * This component shows common patterns in React state management:
+ * 1. Dependent states - where one state depends on another
+ * 2. State reset patterns - how to handle invalid or empty states
+ * 3. Data fetching with dependencies - chaining API calls
+ * 
+ * Data Flow:
+ * termSlug (prop) → termQueryParams → termData → postQueryParams → posts
  *
  * @param  props
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
@@ -45,23 +52,19 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	// Store derived query states
+	// First data fetch chain: Get taxonomy term data
+	// --------------------------------------------
+	
+	// 1. Query parameters state for taxonomy term
 	const [termQueryParams, setTermQueryParams] = useState({
 		entity: null,
 		tax: null,
 		query: null
 	});
 
-	const [postQueryParams, setPostQueryParams] = useState({
-		entity: null,
-		type: null,
-		query: null
-	});
-
-	// Update term query params when termSlug changes
+	// Effect to update term query params when termSlug changes
 	useEffect(() => {
 		// Guard clause: reset state and exit if no termSlug
-		// This prevents stale taxonomy queries from executing
 		if (!termSlug) {
 			setTermQueryParams({
 				entity: null,
@@ -71,7 +74,6 @@ export default function Edit( props ) {
 			return;
 		}
 
-		// Set term query params to get the taxonomy term data
 		setTermQueryParams({
 			entity: 'taxonomy',
 			tax: 'fish',
@@ -79,17 +81,26 @@ export default function Edit( props ) {
 		});
 	}, [termSlug]);
 
-	// First query: Get term data
+	// Execute the term query
 	const [ termData, termIsLoading ] = useRequestData(
 		termQueryParams.entity,
 		termQueryParams.tax,
 		termQueryParams.query
 	);
 
-	// Update post query params when term data changes
+	// Second data fetch chain: Get posts using term ID
+	// --------------------------------------------
+	
+	// 2. Query parameters state for posts
+	const [postQueryParams, setPostQueryParams] = useState({
+		entity: null,
+		type: null,
+		query: null
+	});
+
+	// Effect to update post query params when term data changes
 	useEffect(() => {
 		// Guard clause: reset state if any required data is missing
-		// This ensures we don't continue querying posts with stale term IDs
 		if (!termSlug || !termData || termData.length === 0) {
 			setPostQueryParams({
 				entity: null,
@@ -106,13 +117,15 @@ export default function Edit( props ) {
 		});
 	}, [termSlug, termData]);
 
-	// Second query: Get posts
+	// Execute the posts query
 	const [ posts, isLoading ] = useRequestData(
 		postQueryParams.entity,
 		postQueryParams.type,
 		postQueryParams.query
 	);
 
+	// Render UI
+	// --------------------------------------------
 	return (
 		<>
 			<InspectorControls>
