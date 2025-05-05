@@ -42,10 +42,28 @@ import {post} from "@wordpress/icons";
  * 
  * Data Flow:
  * termSlug (prop) → termQueryParams → termData → postQueryParams → posts
- *
- * @param  props
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
+ * 
+ * Understanding Query Execution:
+ * 
+ * 1. Component Mounting
+ *    - Component mounts with initial termSlug from props
+ *    - All states initialize with null values
+ *    - Both queries run but do nothing (null parameters)
+ * 
+ * 2. When termSlug Changes
+ *    - Component re-renders (prop change)
+ *    - First useEffect runs → updates termQueryParams
+ *    - First query executes with new params
+ * 
+ * 3. When termData Returns
+ *    - Second useEffect runs → updates postQueryParams
+ *    - Second query executes with new params
+ * 
+ * Note: Queries will re-run whenever their parameters change!
+ * - termQueryParams causes first query to re-run
+ * - postQueryParams causes second query to re-run
+ * 
+ * @param {Object} props - The component props.
  * @return {Element} Element to render.
  */
 export default function Edit( props ) {
@@ -63,6 +81,9 @@ export default function Edit( props ) {
 	});
 
 	// Effect to update term query params when termSlug changes
+	// Effect runs on:
+	// - Component mount
+	// - Any change to termSlug
 	useEffect(() => {
 		// Guard clause: reset state and exit if no termSlug
 		if (!termSlug) {
@@ -81,7 +102,10 @@ export default function Edit( props ) {
 		});
 	}, [termSlug]);
 
-	// Execute the term query
+	// First query executes whenever termQueryParams changes
+	// This includes:
+	// - Initial render (with null params)
+	// - After termQueryParams is updated by the effect above
 	const [ termData, termIsLoading ] = useRequestData(
 		termQueryParams.entity,
 		termQueryParams.tax,
@@ -99,6 +123,10 @@ export default function Edit( props ) {
 	});
 
 	// Effect to update post query params when term data changes
+	// Effect runs on:
+	// - Component mount
+	// - Any change to termSlug
+	// - Any change to termData
 	useEffect(() => {
 		// Guard clause: reset state if any required data is missing
 		if (!termSlug || !termData || termData.length === 0) {
@@ -117,7 +145,10 @@ export default function Edit( props ) {
 		});
 	}, [termSlug, termData]);
 
-	// Execute the posts query
+	// Second query executes whenever postQueryParams changes
+	// This includes:
+	// - Initial render (with null params)
+	// - After postQueryParams is updated by the effect above
 	const [ posts, isLoading ] = useRequestData(
 		postQueryParams.entity,
 		postQueryParams.type,
@@ -152,3 +183,55 @@ export default function Edit( props ) {
 		</>
 	);
 }
+
+
+/**
+ * Educational Notes: Understanding React State and Query Patterns
+ * -----------------------------------------------------------
+ * 
+ * This component demonstrates several important React patterns and concepts:
+ * 
+ * 1. Chained Data Dependencies
+ *    The data flow follows this chain:
+ *    termSlug → termQueryParams → termData → postQueryParams → posts
+ *    
+ *    Each step depends on the previous one being valid:
+ *    - termQueryParams only updates when termSlug is valid
+ *    - termData only fetches when termQueryParams are set
+ *    - postQueryParams only updates when termData contains items
+ *    - posts only fetch when postQueryParams are set
+ * 
+ * 2. Query Execution Timing
+ *    Understanding when queries run is crucial:
+ *    a) On initial mount:
+ *       - Both queries run with null parameters (no API calls made)
+ *    b) When termSlug changes:
+ *       - Component re-renders
+ *       - First useEffect runs → updates termQueryParams
+ *       - First query executes with new params
+ *    c) When termData returns:
+ *       - Second useEffect runs → updates postQueryParams
+ *       - Second query executes with new params
+ * 
+ * 3. State Reset Pattern
+ *    The component demonstrates an important pattern for handling dependent states:
+ *    - Each state must be explicitly reset when its dependencies become invalid
+ *    - We use guard clauses (early returns) to handle invalid states first
+ *    - This prevents stale data from persisting in the UI
+ * 
+ * 4. Query Parameter State Management
+ *    Key points about managing query parameter state:
+ *    - We use null (not undefined) to represent "no value" state
+ *    - Each query's parameters are kept in their own state
+ *    - Parameters only update when all dependencies are valid
+ *    - Invalid conditions trigger parameter resets
+ * 
+ * 5. React Hooks Usage
+ *    The component shows proper use of several React hooks:
+ *    - useState: For managing query parameter states
+ *    - useEffect: For updating states in response to changes
+ *    - Custom hooks (useRequestData): For data fetching
+ *    
+ *    Note the dependency arrays in useEffect - they determine
+ *    when the effects run and help maintain the data flow chain.
+ */
