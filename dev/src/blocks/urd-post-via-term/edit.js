@@ -51,26 +51,27 @@ export default function Edit( props ) {
 	 * @property {string} tax
 	 * @property {object | number} query
 	 * */
-
-	// Term Query Params
-	/** @type {useState<requestDataQueryParams>} */
-	const [termQueryParams, setTermQueryParams] = useState({
+	const defaultQueryParams = {
 		entity: null,
 		tax: null,
 		query: null
-	});
+	}
+
+	// Term Query Params
+	/** @type {useState<requestDataQueryParams>} */
+	const [termQueryParams, setTermQueryParams] = useState(defaultQueryParams);
 
 	// Post Query Params
 	/** @type {useState<requestDataQueryParams>} */
-	const [postQueryParams, setPostQueryParams] = useState({
-		entity: null,
-		type: null,
-		query: null
-	});
+	const [postQueryParams, setPostQueryParams] = useState(defaultQueryParams);
 
 	// Update term query params when termSlug changes
 	useEffect(() => {
-		if (!termSlug) { return; }
+		// Guard clause: reset state and exit if no termSlug
+ 		// This prevents stale taxonomy queries from executing
+		if (!termSlug) {
+			return setTermQueryParams(defaultQueryParams);
+		}
 
 		setTermQueryParams({
 			entity: 'taxonomy',
@@ -88,8 +89,11 @@ export default function Edit( props ) {
 
 	// Update post query params when term data changes
 	useEffect(() => {
-		// Do we always only want the first item in the termData array?
-		if (!termData || termData[0]?.id || !termSlug) { return; }
+		// Guard clause: reset state if any required data is missing
+ 		// This ensures we don't continue querying posts with stale term IDs
+		if (!termData || termData[0]?.id || !termSlug) {
+			return setPostQueryParams(defaultQueryParams);
+		}
 
 		setPostQueryParams({
 			entity: 'postType',
