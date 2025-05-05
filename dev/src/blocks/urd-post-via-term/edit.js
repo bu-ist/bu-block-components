@@ -141,7 +141,7 @@ export default function Edit( props ) {
 		setPostQueryParams({
 			entity: 'postType',
 			type: 'import-bob',
-			query: { fish: termData[0].id }
+			query: { fish: termData[0].id }  // Because the termData was searched by slug, we can assume it will return a single item.
 		});
 	}, [termSlug, termData]);
 
@@ -168,6 +168,7 @@ export default function Edit( props ) {
 							onChange={ ( value ) =>
 								setAttributes( { termSlug: value } )
 							}
+							help="Enter a fish taxonomy slug to display related posts"
 						/>
 					</PanelRow>
 				</PanelBody>
