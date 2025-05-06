@@ -51,6 +51,8 @@ export default function Edit( props ) {
 	 * @property {string} tax
 	 * @property {object | number} query
 	 * */
+
+	/** @type {requestDataQueryParams} */
 	const defaultQueryParams = {
 		entity: null,
 		tax: null,
@@ -92,7 +94,7 @@ export default function Edit( props ) {
 		// Guard clause: reset state if any required data is missing
  		// This ensures we don't continue querying posts with stale term IDs
 		if (!termData || termData[0]?.id || !termSlug) {
-			return setPostQueryParams(defaultQueryParams);
+			return setPostQueryParams(defaultQueryParams);	
 		}
 
 		setPostQueryParams({
