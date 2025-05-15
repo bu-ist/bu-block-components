@@ -30,6 +30,7 @@ function create_block_imports_dev_block_init() {
 	register_block_type( __DIR__ . '/build/blocks/urd-post-list' );
 	register_block_type( __DIR__ . '/build/blocks/urd-post-via-term' );
 	register_block_type( __DIR__ . '/build/blocks/urd-post-terms' );
+	register_block_type( __DIR__ . '/build/blocks/urd-post-meta' );
 }
 add_action( 'init', 'create_block_imports_dev_block_init' );
 
@@ -102,6 +103,19 @@ function imports_dev_action_cpt() {
 	);
 
 	register_post_type( 'import-bob', $args );
+
+	// Register meta fields for REST API
+	register_post_meta('import-bob', 'bob_where_are_you', array(
+		'show_in_rest' => true,
+		'single' => true,
+		'type' => 'string',
+	));
+
+	register_post_meta('import-bob', 'bob_text_meta', array(
+		'show_in_rest' => true,
+		'single' => true,
+		'type' => 'string',
+	));
 }
 
 add_action( 'init', 'imports_dev_action_cpt' );
