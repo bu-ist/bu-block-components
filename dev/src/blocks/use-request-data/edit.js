@@ -46,7 +46,7 @@ export default function Edit( props ) {
 
 	const [ data, isLoading, invalidateRequest ] = useRequestData(
 		'postType',
-		'post',
+		'import-bob',
 		postID
 	);
 
