@@ -45,68 +45,24 @@ export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
 	const { termSlug } = attributes;
 
-	// Store derived query states
-	const [termQueryParams, setTermQueryParams] = useState({
-		entity: undefined,
-		tax: undefined,
-		query: undefined
-	});
-
-	const [postQueryParams, setPostQueryParams] = useState({
-		entity: undefined,
-		type: undefined,
-		query: undefined
-	});
-
-	// Update term query params when termSlug changes
-	useEffect(() => {
-		if (!termSlug) {
-			setTermQueryParams({
-				entity: undefined,
-				tax: undefined,
-				query: undefined
-			});
-			return;
-		}
-
-		setTermQueryParams({
-			entity: 'taxonomy',
-			tax: 'fish',
-			query: { slug: termSlug }
-		});
-	}, [termSlug]);
-
-	// First query: Get term data
-	const [ termData, termIsLoading ] = useRequestData(
-		termQueryParams.entity,
-		termQueryParams.tax,
-		termQueryParams.query
+	// Fetch any matching terms for the slug.
+	// If there is no slug, send null (which is a safe guard value to prevent invalid requests).
+	const [termData, termIsLoading] = useRequestData(
+		'taxonomy',
+		'fish',
+		termSlug ? { slug: termSlug } : null
 	);
-
-	// Update post query params when term data changes
-	useEffect(() => {
-		if (!termSlug || !termData || termData.length === 0) {
-			setPostQueryParams({
-				entity: undefined,
-				type: undefined,
-				query: undefined
-			});
-			return;
-		}
-
-		setPostQueryParams({
-			entity: 'postType',
-			type: 'import-bob',
-			query: { fish: termData[0].id }
-		});
-	}, [termSlug, termData]);
-
-	// Second query: Get posts
-	const [ posts, isLoading ] = useRequestData(
-		postQueryParams.entity,
-		postQueryParams.type,
-		postQueryParams.query
+	
+	// Fetch posts for the first term that matches the slug.
+	// If there are no terms, send null (which is a safe guard value to prevent invalid requests).
+	const [posts, postsIsLoading] = useRequestData(
+		'postType',
+		'import-bob',
+		termData?.[0]?.id ? { fish: termData[0].id } : null
 	);
+	
+	// Calculate if any of the requests are loading.
+	const isLoading = termIsLoading || postsIsLoading;
 
 	return (
 		<>
