@@ -38,3 +38,4 @@ vendor/
 /dev/.DS_Store
 /.vscode
 /build
+.aider*
