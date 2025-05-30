@@ -15,7 +15,6 @@ import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 
 import {
 	useRequestData,
-	LoadingSpinner,
 } from '@bostonuniversity/block-imports';
 
 import { TextControl, PanelBody, PanelRow } from '@wordpress/components';
