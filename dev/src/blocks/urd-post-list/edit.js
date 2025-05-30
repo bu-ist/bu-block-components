@@ -11,6 +11,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import {useBlockProps} from '@wordpress/block-editor';
+import {useState, useEffect} from '@wordpress/element';
 
 import {
 	useRequestData,
@@ -38,9 +39,11 @@ import './editor.scss';
  */
 export default function Edit(props) {
 	const {attributes, setAttributes} = props;
-	const page = 1;
+	const [page, setPage] = useState(1);
+	const [isLastPage, setIsLastPage] = useState(false);
+	const perPage = 15;
 	const query = {
-		per_page: 15,
+		per_page: perPage,
 		page,
 	};
 
@@ -51,6 +54,15 @@ export default function Edit(props) {
 		'post',
 		query
 	);
+
+	// Check if we're on the last page (fewer posts than per_page)
+	useEffect(() => {
+		if (data && data.length < perPage && data.length > 0) {
+			setIsLastPage(true);
+		} else {
+			setIsLastPage(false);
+		}
+	}, [data]);
 
 	return (
 		<>
@@ -64,20 +76,64 @@ export default function Edit(props) {
 						/>
 					</>
 				)}
-				{data && data.length > 0 && (
-					data.map((post) => {
-						return (
-							<ThePost
-								post={post}
-							/>
-						)
-					})
+				{data && data.length > 0 ? (
+					<>
+						{data.map((post) => {
+							return (
+								<ThePost
+									post={post}
+								/>
+							)
+						})}
+
+						{isLastPage ? (
+							<div className="last-page-message">
+								<p>You've reached the last page of posts.</p>
+								{page > 1 && (
+									<button
+										type="button"
+										onClick={() => {
+											setPage(1);
+											invalidateRequest();
+										}}
+									>
+										Back to first page
+									</button>
+								)}
+							</div>
+						) : (
+							<button
+								type="button"
+								onClick={() => {
+									setPage(page + 1);
+									invalidateRequest();
+								}}
+							>
+								Refresh list
+							</button>
+						)}
+					</>
+				) : (
+					<>
+						{!isLoading && (
+							<div className="no-posts">
+								<p>No posts to display.</p>
+								{page > 1 && (
+									<button
+										type="button"
+										onClick={() => {
+											setPage(1);
+											invalidateRequest();
+										}}
+									>
+										Back to first page
+									</button>
+								)}
+							</div>
+						)}
+					</>
 				)}
-				<button type="button" onClick={invalidateRequest}>
-					Refresh list
-				</button>
 			</div>
 		</>
 	);
 }
-
