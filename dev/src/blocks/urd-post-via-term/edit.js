@@ -12,7 +12,6 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { useState, useEffect } from '@wordpress/element';
 
 import {
 	useRequestData,
@@ -52,7 +51,7 @@ export default function Edit( props ) {
 		'fish',
 		termSlug ? { slug: termSlug } : null
 	);
-	
+
 	// Fetch posts for the first term that matches the slug.
 	// If there are no terms, send null (which is a safe guard value to prevent invalid requests).
 	const [posts, postsIsLoading] = useRequestData(
@@ -60,7 +59,7 @@ export default function Edit( props ) {
 		'import-bob',
 		termData?.[0]?.id ? { fish: termData[0].id } : null
 	);
-	
+
 	// Calculate if any of the requests are loading.
 	const isLoading = termIsLoading || postsIsLoading;
 
