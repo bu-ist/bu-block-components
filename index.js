@@ -18,7 +18,7 @@ export { LoadingSpinner } from './components/LoadingSpinner/index.mjs';
 // export { ParagraphCaptionStyle } from './components/ParagraphCaptionStyle/paragraph-caption-style.js';
 // export { ParagraphEndOfArticleStyle } from './components/ParagraphEndOfArticleStyle/paragraph-end-of-article-style.js';
 // export { PlainTextWithLimit } from './components/PlainTextWithLimit';
-// export { PostChooser } from './components/PostChooser';
+export { PostChooser } from './components/PostChooser/index.mjs';
 // export { PostPicker } from './components/PostPicker';
 // export { Repeater } from './components/Repeater';
 // export { RichTextWithLimit } from './components/RichTextWithLimit';
