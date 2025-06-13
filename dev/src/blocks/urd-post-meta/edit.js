@@ -44,7 +44,7 @@ export default function Edit( props ) {
 	const [ data, isLoading, invalidateRequest ] = useRequestData(
 		'postType',
 		'import-bob',
-		postID,
+		postID
 	);
 
 	console.log( 'Data for Meta: ', data );
@@ -77,24 +77,28 @@ export default function Edit( props ) {
 
 				{ data && (
 					<>
-						{data.title && (
+						{ data.title && (
 							<h2>
 								<strong>{ data.title.rendered }</strong>
 							</h2>
-						)}
+						) }
 						<div className="post-meta">
 							<strong>Meta:</strong>
-							{ data.meta && Object.keys(data.meta).length > 0 ? (
+							{ data.meta &&
+							Object.keys( data.meta ).length > 0 ? (
 								<ul>
-									{Object.entries(data.meta).map(([key, value]) => (
-										<li key={key}>
-											<strong>{key}:</strong> {value}
-										</li>
-									))}
+									{ Object.entries( data.meta ).map(
+										( [ key, value ] ) => (
+											<li key={ key }>
+												<strong>{ key }:</strong>{ ' ' }
+												{ value }
+											</li>
+										)
+									) }
 								</ul>
 							) : (
 								<p>No meta data available</p>
-							)}
+							) }
 						</div>
 					</>
 				) }
