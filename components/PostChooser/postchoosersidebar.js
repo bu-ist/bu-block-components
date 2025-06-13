@@ -7,9 +7,7 @@
 // WordPress dependencies.
 import { __ } from '@wordpress/i18n';
 
-import {
-	Fragment
-} from '@wordpress/element';
+import { Fragment } from '@wordpress/element';
 
 import {
 	Button,
@@ -18,19 +16,14 @@ import {
 	ExternalLink,
 	Flex,
 	FlexItem,
-	FlexBlock
+	FlexBlock,
 } from '@wordpress/components';
 
-import {
-	InspectorControls
-} from '@wordpress/block-editor';
+import { InspectorControls } from '@wordpress/block-editor';
 
-import {
-	decodeEntities
-} from '@wordpress/html-entities';
+import { decodeEntities } from '@wordpress/html-entities';
 
-
-export const PostChooserSidebar = function( props ) {
+export const PostChooserSidebar = function ( props ) {
 	const {
 		children,
 		postID,
@@ -46,7 +39,6 @@ export const PostChooserSidebar = function( props ) {
 		if ( onRemovePost instanceof Function ) {
 			onRemovePost( e );
 		}
-
 	};
 
 	return (
@@ -60,30 +52,35 @@ export const PostChooserSidebar = function( props ) {
 						<PanelRow>
 							{ postTitle && (
 								<>
-									<h2>Title: { decodeEntities(postTitle) }</h2>
-									{ postURL && <p><ExternalLink href={postURL}>View Post</ExternalLink></p> }
+									<h2>
+										Title: { decodeEntities( postTitle ) }
+									</h2>
+									{ postURL && (
+										<p>
+											<ExternalLink href={ postURL }>
+												View Post
+											</ExternalLink>
+										</p>
+									) }
 								</>
-							)}
+							) }
 						</PanelRow>
 						<PanelRow>
-							<Flex
-								wrap={true}
-							>
-								<FlexItem>
-									{ children }
-								</FlexItem>
-								{postID && (
+							<Flex wrap={ true }>
+								<FlexItem>{ children }</FlexItem>
+								{ postID && (
 									<FlexBlock>
 										<Button
 											//variant="tertiary"
 											isLink
 											onClick={ ( e ) => {
-													onhandleRemovePost(e)
-												}
-											}
-										>Remove</Button>
+												onhandleRemovePost( e );
+											} }
+										>
+											Remove
+										</Button>
 									</FlexBlock>
-								)}
+								) }
 							</Flex>
 						</PanelRow>
 					</>
