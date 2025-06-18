@@ -11,6 +11,8 @@
 // External dependencies.
 import classnames from 'classnames';
 
+import { useState } from '@wordpress/element';
+
 import {
 	MediaPlaceholder,
 	InspectorControls,
@@ -60,14 +62,17 @@ const getClasses = ( className ) => classnames(
 
 // Export component.
 export const Image = ( props ) => {
+
 	const {
 		className = undefined,
 		mediaId = undefined,
-		size = 'full',
+		size = 'thumbnail',
 		tag = 'img',
-		altSource = 'alt',
-		onSelect,
-		onRemove,
+		altSource  = 'alt',
+		onSelect = undefined,
+		onRemove = undefined,
+
+		// https://developer.wordpress.org/block-editor/reference-guides/components/focal-point-picker/
 		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint = undefined,
 		labels = {},
@@ -78,158 +83,177 @@ export const Image = ( props ) => {
 		...rest
 	} = props;
 
-	// Is an image set already?
-	const hasImage = ( mediaId ) ? true : false;
-
-	// If component has FocalPoint Handler Function show the focal picker.
-	const displayFocalPointPicker = typeof onChangeFocalPoint === 'function';
-
-	/**
-	 * Fetch the media based on the attachment ID utilizing useSelect
-	 *
-	 * Returns Media object
-	 */
-		const { mediaObj, isResolvingMedia, hasResolvedMedia } =
-		fetchMedia( mediaId );
+	const [ initialFocalPoint, onChangeFocalPointState ] = useState( focalPoint );
 
 
-	// If Debug is set to true, output some helpful information to the
-	// console for block developers to utilize media object info in their block development.
-	if ( debug ) {
-		if ( isResolvingMedia ) {
-			console.log( "Image Media Fetch in Progress: ", isResolvingMedia );
-		}
-		if ( hasResolvedMedia ) {
-			console.log( "Image Media Fetched: ", mediaObj );
-		}
-	}
+	const handleFocalPointPickerOnChange = (focalPoint) => {
+        onChangeFocalPoint(focalPoint); // Call user supplied function
+        onChangeFocalPointState(focalPoint); // Call state function
 
-	// If media is being fetched, just show the spinner.
-	if ( isResolvingMedia ) {
-		return <LoadingSpinner text="LoadingSpinner" />;
-	}
-
-	// If there is no image set, and the user can't edit the image show placeholder
-	if ( !hasImage && !canEditImage ) {
-		return (<><p>!hasImage && !canEditImage</p><Placeholder className="bu-components-image-media-placeholder" icon={ more } label="Placeholder" withIllustration /></>);
-	}
-
-	// If there is no image set, and the user can edit the image, show Media Placeholder
-	if ( !hasImage && canEditImage ) {
-		return (<><p>!hasImage && canEditImage</p>
-			<MediaPlaceholder
-				labels={labels}
-				onSelect={onSelect}
-				accept="image"
-				multiple={false}
-				allowedTypes={allowedTypes}
-			/></>
-		);
-	}
-
-	if (displayFocalPointPicker) {
-		const focalPointStyle = {
-			objectFit: 'cover',
-			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
-		};
-
-		rest.style = {
-			...rest.style,
-			...focalPointStyle,
-		};
 	}
 
 
-// Let's get everything we need to display a specific size.
-const imgObj = fetchImage( mediaObj, 'thumbnail' );
-if ( ! imgObj ) {
-	return <p>imgObj b0rked.</p>;
-}
+					// Is an image set already?
+					const hasImage = ( mediaId ) ? true : false;
+
+					// If component has FocalPoint Handler Function show the focal picker.
+					const displayFocalPointPicker = typeof onChangeFocalPoint === 'function';
+					// console.log(typeof onChangeFocalPoint);
+
+										/**
+					 * Fetch the media based on the attachment ID utilizing useSelect
+					 *
+					 * Returns Media object
+					 */
+						const { mediaObj, isResolvingMedia, hasResolvedMedia } =
+						fetchMedia( mediaId );
 
 
-const sources = [];
-	if (tag === 'picture') {
-		const srcset = {
-			sources: [
-				{
-					srcset: fetchImage( mediaObj, 'medium' ).src,
-					media: '(min-width: 600px)',
-					type: imgObj.mime_type,
-				},
-				{
-					srcset: fetchImage( mediaObj, 'large' ).src,
-					media: '(min-width: 300px)',
-				},
-			],
-		};
-		for (let i = 0; i < srcset.sources.length; i++) {
-			let source = srcset.sources[i];
-			sources.push(<source
-				srcset={source.srcset}
-				media={source.media}
-				type={source.type}
-			/>);
-		  }
-	}
+					// If Debug is set to true, output some helpful information to the
+					// console for block developers to utilize media object info in their block development.
+					if ( debug ) {
+						if ( isResolvingMedia ) {
+							console.log( "Image Media Fetch in Progress: ", isResolvingMedia );
+						}
+						if ( hasResolvedMedia ) {
+							console.log( "Image Media Fetched: ", mediaObj );
+						}
+					}
 
+					// If media is being fetched, just show the spinner.
+					if ( isResolvingMedia ) {
+						<p>isResolvingMedia</p>
+						return <LoadingSpinner text="LoadingSpinner" />;
+					}
 
+					// If there is no image set, and the user can't edit the image show placeholder
+					if ( !hasImage && !canEditImage ) {
+						return (<>
+						<p>!hasImage && !canEditImage</p>
+						<Placeholder className="bu-components-image-media-placeholder" icon={ more } label="Placeholder" withIllustration />
+						</>);
+					}
 
-
-
-// The component also supports uploading or selecting an image from the media library and allowing the user to remove the image.
-	// @todo selector/uploader/replacer
-
-
-
-	/**
-	 * TODOs...
-	// make inspector options for all the settings?
-	// + option for what to use for alt, or custom
-	// + option for
-
-The developer can choose to use this component with or without the ability to edit, select, or remove the image.
-
-For example if the image should always be displayed and the ID of the image is already known such as the featured image by getting it using the Post Chooser component along with the rest of the post data you can choose to not permit the image to be removed by leaving the onRemove function passed to the component empty. You'll also want to set canEditImage to false so that no edit controls are presented to the user.
-
-To prevent the user from editing (overriding) the featured image leave the option canOverrideImage to false.
-
-This component can be used when building a block and you do want to allow the user to upload or select an image from the media library. This would be the typical case when there is no previously selected post to grab an image from.
-
-In that scenario you'll want to setup your own onSelect handler, and onRemove handlers.
-
-The Component also supports an optional Focal Point Control to allow the focal point of the image to be set for use with Object-Fit scaling.
-	 *
-	 *
-	 *
-The component should support the following use cases:
-
-√ Displays an image by passing in an ID for a media library item
-
-Displays an Upload/Select Media Component allowing the admin user to select or upload a media library item.
-
-Displays an image by passing in an ID for a media library item and then allows admin user to override that image and replace it with a different image. (This would be to allow a default such as the featured image from the selected post, but then let the admin override that and provide a different photo).
-
-Features:
-
-Label customizations - allow block developers to adjust the labels of the component UI
-
-Size option - should control what Image Size is fetched and displayed in the editor. (Full, Medium, custom, etc)
-
-Display Size/dimensions - should control the width/height the component is displayed in the editor
-
-Focal point picker - optional selection of the focal point of the image for use with Object-Fit
-
-Placeholder image - We may want to support passing in a custom placeholder image to display until the selected image is fetched?
-
-Future ideas: Control over setting Src set to allow for customization of images at different breakpoints?
-	 *
+					// If there is no image set, and the user can edit the image, show Media Placeholder
+					if ( !hasImage && canEditImage ) {
+						return (<>
+						<p>!hasImage && canEditImage</p>
+							<MediaPlaceholder
+								labels={labels}
+								onSelect={onSelect}
+								accept="image"
+								multiple={false}
+								allowedTypes={allowedTypes}
+							/>
+							</>
+						);
+					}
 
 
 
-what tag to use
+				// Let's get everything we need to display a specific size.
+				// @todo breaks if size doesn't exist
+				const imgObj = fetchImage( mediaObj, size );
+				if ( ! imgObj ) {
+					return <p>{mediaObj} @ {size} does not seem to be an image, or the fetchImage process failed... Sadness is all that I can provide.</p>;
+				}
 
-	 */
 
+				// srcset
+				const sources = [];
+					if (tag === 'picture') {
+						const srcset = {
+							sources: [
+								{
+									srcset: fetchImage( mediaObj, 'medium' ).src,
+									media: '(min-width: 600px)',
+									type: imgObj.mime_type,
+								},
+								{
+									srcset: fetchImage( mediaObj, 'large' ).src,
+									media: '(min-width: 300px)',
+								},
+							],
+						};
+						for (let i = 0; i < srcset.sources.length; i++) {
+							let source = srcset.sources[i];
+							sources.push(<source
+								srcset={source.srcset}
+								media={source.media}
+								type={source.type}
+							/>);
+						}
+					}
+
+					// alt
+				// console.log(imgObj);
+					let altText = '';
+					// alt, caption, title, description
+					if (altSource === 'alt') {
+						altText = imgObj.alt;
+					} else if(altSource === 'caption'){
+						altText = imgObj.caption;
+					} else if(altSource === 'title'){
+						altText = imgObj.title;
+					} else if(altSource === 'description'){
+						altText = imgObj.description;
+					} else {
+						altText = altSource;
+					}
+
+
+
+
+
+
+
+					/**
+					 *
+					 * TODO
+					*
+					*
+					*
+				The component should support the following use cases:
+
+				Display Size/dimensions - should control the width/height the component is displayed in the editor
+
+				Placeholder image - We may want to support passing in a custom placeholder image to display until the selected image is fetched?
+
+				Future ideas: Control over setting Src set to allow for customization of images at different breakpoints?
+
+						√ className
+						√ mediaId
+						√ size
+						√ tag
+						√ altSource
+						√ onSelect - send a function; should make this more clear
+						√ onRemove - send a function; should make this more clear
+						√ focalPoint - send array
+						√ onChangeFocalPoint - send a function
+				labels - allow block developers to adjust the labels of the component UI
+				canEditImage - show picker???
+						√ canOverrideImage - show or hide edit button
+				X seems to work just once allowedTypes // https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/media-upload/README.md#allowedtypes
+						√ debug
+
+					*/
+
+
+
+					// @todo does this work?
+					if (displayFocalPointPicker) {
+						const focalPointStyle = {
+							objectFit: 'cover',
+							objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
+						};
+
+						rest.style = {
+							...rest.style,
+							...focalPointStyle,
+						};
+					}
+
+					// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/media-upload/README.md
 	return (
 		<div>
 			{ ( canOverrideImage || onRemove || displayFocalPointPicker ) && (
@@ -244,7 +268,7 @@ what tag to use
 											<MediaUpload
 												onSelect={onSelect}
 												value={mediaId}
-												allowedTypes={ allowedTypes }
+												allowedTypes={allowedTypes}
 												render={({open}) => (
 													<IconButton
 														className="bu-components-image-media-edit-button"
@@ -280,9 +304,9 @@ what tag to use
 								<FocalPointPicker
 									className="bu-components-image-media-edit-focalpoint"
 									label={__('Focal Point Picker')}
-									url={imageUrl}
-									value={focalPoint}
-									onChange={onChangeFocalPoint}
+									url={imgObj.src}
+									value={initialFocalPoint}
+									onChange={handleFocalPointPickerOnChange}
 								/>
 							</PanelRow>
 						)}
@@ -299,7 +323,7 @@ what tag to use
 						{sources}
 					<img
 						src={imgObj.src}
-						alt={imgObj.alt}
+						alt={altText}
 					/>
 					</picture>
 				</>
@@ -313,9 +337,9 @@ what tag to use
 					>
 						<img
 						src={imgObj.src}
-						alt=""
+						alt={altText}
 					/>
-					<figcaption>{imgObj.alt}</figcaption>
+					<figcaption>{altText}</figcaption>
 					</figure>
 				</>
 			)}
@@ -325,7 +349,7 @@ what tag to use
 					<img
 						className={ getClasses( className ) }
 						src={imgObj.src}
-						alt={imgObj.alt}
+						alt={altText}
 						{...rest}
 					/>
 				</>
