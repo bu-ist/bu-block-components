@@ -43,6 +43,10 @@
     "access": "public"
   },
   "scripts": {
+    "__SETUP__": "=========================================================================",
+    "postinstall": "composer install",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
 		"__DEVELOPMENT__": "===================================================================",
 		"start": "wp-scripts start",
 		"dev-start": "npm run start -w dev",
