@@ -6,7 +6,20 @@
 import classnames from 'classnames';
 
 import { useState } from '@wordpress/element';
+// import { useSelect } from '@wordpress/data';
+// import { store as coreStore } from '@wordpress/core-data';
 
+// 	const media = useSelect(
+//   select => {
+//     const media = select(coreStore).getMedia(mediaId, { context: 'view' }); // undefined
+//     return media;
+//   },
+//   [mediaId]
+// )
+
+// if (!media) return <div>Loading... {mediaId}</div>;
+
+// return <div>...</div>;
 import {
 	MediaPlaceholder,
 	InspectorControls,
@@ -28,7 +41,7 @@ import { more } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 // BU dependencies.
-import { fetchMedia, fetchImage, LoadingSpinner } from '../../index.js';
+import { useMedia, getImageData, LoadingSpinner } from '../../index.js';
 
 // Import CSS.
 import './editor.scss';
@@ -85,13 +98,18 @@ export const Image = (props) => {
 	// Is an image set already?
 	const hasImage = mediaId ? true : false;
 
+
+
+
+
+
 	/**
 	 * Fetch the media object based on the `mediaId`.
 	 *
 	 * Returns Media object
 	 */
 	const { mediaObj, isResolvingMedia, hasResolvedMedia } =
-		fetchMedia(mediaId);
+		useMedia(mediaId);
 	console.log(mediaObj);
 	console.log(isResolvingMedia);
 	console.log(hasResolvedMedia);
@@ -113,6 +131,17 @@ export const Image = (props) => {
 	 */
 	if (isResolvingMedia) {
 		return <LoadingSpinner text="Loading..." />;
+	}
+
+	/**
+	 * If media is being fetched, just show the spinner.
+	 *
+	 * @see https://github.com/bu-ist/block-imports/tree/develop/components/LoadingSpinner
+	 */
+	if (!mediaObj) {
+		return <p>
+				mediaObj undefined for {mediaId}
+			</p>;
 	}
 
 	/**
@@ -156,12 +185,12 @@ export const Image = (props) => {
 	 */
 	// console.log(mediaObj);
 	// console.log(size);
-	const imgObj = fetchImage(mediaObj, size);
+	const imgObj = getImageData(mediaObj, size);
 	if (!imgObj) {
 		return (
 			<p>
 				{mediaObj} @ {size} does not seem to be an image, or the
-				fetchImage process failed... Sadness is all that I can provide.
+				getImageData process failed... Sadness is all that I can provide.
 			</p>
 		);
 	}
@@ -182,12 +211,12 @@ export const Image = (props) => {
 		const srcset = {
 			sources: [
 				{
-					srcset: fetchImage(mediaObj, 'medium').src,
+					srcset: getImageData(mediaObj, 'medium').src,
 					media: '(min-width: 600px)',
 					type: imgObj.mime_type,
 				},
 				{
-					srcset: fetchImage(mediaObj, 'large').src,
+					srcset: getImageData(mediaObj, 'large').src,
 					media: '(min-width: 300px)',
 				},
 			],
@@ -314,6 +343,7 @@ export const Image = (props) => {
 						)}
 						{displayFocalPointPicker && (
 							<PanelRow>
+								{/* https://developer.wordpress.org/block-editor/reference-guides/components/focal-point-picker/ */}
 								<FocalPointPicker
 									className="bu-components-image-media-edit-focalpoint"
 									label={__('Focal Point Picker')}
