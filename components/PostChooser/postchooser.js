@@ -40,7 +40,7 @@ export const PostChooser = ( { onSelectPost } ) => {
 					orderby: searchType === 'title' ? 'title' : 'date',
 					order: 'desc',
 					status: 'publish',
-				}
+			  }
 			: {}
 	);
 
