@@ -1,68 +1,15 @@
-https://github.com/10up/block-components/tree/develop/hooks/use-request-data
-
 # useRequestData
 
-Custom hook to to make a request using `getEntityRecords` or `getEntityRecord` that provides `data`, `isLoading` and `invalidator` function. The hook determines which selector to use based on the query parameter. If a number is passed, it will use `getEntityRecord` to retrieve a single item. If an object is passed, it will use that as the query for `getEntityRecords` to retrieve multiple pieces of data.
+## Overview
 
-The `invalidator` function, when dispatched, will tell the datastore to invalidate the resolver associated with the request made by getEntityRecords. This will trigger the request to be re-run as if it was being requested for the first time. This is not always needed but is very useful for components that need to update the data after an event. For example, displaying a list of uploaded media after a new item has been uploaded.
+`useRequestData` is a basically a wrapper around `getEntityRecords` (`getEntityRecord` if the query is not an array), with addtional processing that would be standard practice. This reduces the amount of redundant code within a theme.
 
-Parameters:
+## Examples
 
-* `{string}` entity The entity to retrieve. ie. postType
-* `{string}` kind   The entity kind to retrieve. ie. posts
-* `{Object|Number}` Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+There are a number of examples within the `dev\src\blocks` folder, highliting the flexibility of `useRequestData`:
 
-Returns:
-
-* `{Array}`
-  * `{Array}`   Array containing the requested entity kind.
-  * `{Boolean}`  Representing if the request is resolving
-  * `{Function}` This function will invalidate the resolver and re-run the query.
-
-## Usage
-
-## Multiple pieces of data
-
-```js
-import { useRequestData } from '@10up/block-components';
-
-const ExampleBockEdit = ({ className }) => {
-    const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
-
-    if (isLoading) {
-        return <h3>Loading...</h3>;
-    }
-    return (
-        <div className={className}>
-            <ul>
-                {data && data.map(({ title: { rendered: postTitle } }) => (
-                    <li>{postTitle}</li>
-                 ))}
-            </ul>
-            <button type="button" onClick={invalidateRequest}>
-                Refresh list
-            </button>
-        </div>
-    );
-};
-```
-
-## Single piece of data
-
-```js
-const ExampleBockEdit = ({ className }) => {
-    const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', 59);
-
-    if (isLoading) {
-        return <h3>Loading...</h3>;
-    }
-    return (
-        <div className={className}>
-            {data &&( <div>{data.title.rendered}</div>)}
-            <button type="button" onClick={invalidateRequest}>
-                Refresh list
-            </button>
-        </div>
-    );
-};
-```
+- `/useRequestData/` - Displays a post title, featured image, and excerpt based on a supplied post ID.
+- `/urd-post-list/` - Display a list of posts within a specific post type. This example includes a method for pagination.
+- `/urd-post-meta/` - Display the post's meta alongside the title.
+- `/urd-post-terms/` - Display a post's terms within a specified taxonomy. This uses `useRequestData` in two separate queries - one to get the post, the second to provide the terms if the previous query was successful.
+- `/urd-post-via-term/` - Display a list of posts based on a taxonomy term's slug. This one also requires `useRequestData` to do double work. This time, we need the term id, since we are asking for the slug. The REST API only allows a term id ad an input for the query. The term id can then be used to provide a list of posts.
