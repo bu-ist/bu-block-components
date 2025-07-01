@@ -10,9 +10,11 @@ import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 export const PostChooserModal = ( props ) => {
 	const {
 		onClose,
-		label,
+		label = __( 'Enter a search query' ),
 		onSelectPost,
 		postTypes = [ 'posts', 'pages' ],
+		placeholder = __( 'Enter a search term...' ),
+		title = __( 'Choose a Post' ),
 	} = props;
 
 
@@ -103,7 +105,7 @@ export const PostChooserModal = ( props ) => {
 
 	return (
 		<Modal
-			title={ __( 'Choose a Post' ) }
+			title={ title }
 			onRequestClose={ onClose }
 			isOpen={ false }
 			className="bu-components-post-chooser-modal"
@@ -115,7 +117,7 @@ export const PostChooserModal = ( props ) => {
 							label={ label }
 							value={ searchTerm }
 							onChange={ ( value ) => setSearchTerm( value ) }
-							placeholder={ __( 'Enter search term' ) }
+							placeholder={ placeholder }
 						/>
 					</div>
 					<div className="bu-components-post-chooser-search-button">

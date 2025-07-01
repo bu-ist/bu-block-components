@@ -22,10 +22,11 @@ import './editor.scss';
 export const PostChooser = ( props ) => {
 	const {
 		onSelectPost,
-		label          = 'Enter a search query',
+		modalLabel,
+		modalTitle,
 		buttonLabel = __( 'Select Post' ),
 		postTypes      = [ 'posts', 'pages' ], // Default post types to search.
-		placeholder    = '',
+		searchPlaceholder,
 		minCharacters  = 3,
 	} = props;
 
@@ -52,9 +53,10 @@ export const PostChooser = ( props ) => {
 			{ isModalOpen && (
 				<PostChooserModal
 					onSelectPost={ onSelectPost }
-					label={ label }
+					label={ modalLabel }
+					title={ modalTitle }
 					postTypes={ postTypes }
-					placeholder={ placeholder }
+					placeholder={ searchPlaceholder }
 					minCharacters={ minCharacters }
 					onClose={ () => setIsModalOpen( false ) }
 				/>

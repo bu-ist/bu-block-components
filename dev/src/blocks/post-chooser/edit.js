@@ -124,13 +124,14 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	return (
 		<div { ...useBlockProps() }>
 			<div className="wp-block-plugin-slug-block-callout-postpicker--container">
-				{ ! selectedPostID && <p>Choose a post.</p> }
+				{ ! selectedPostID && <p>Post picker block, no post selected.</p> }
 				{ ! selectedPostID && isSelected && (
 					<PostChooser
-						label="Choose a post"
-						buttonLabel="Choose..."
-						placeholder="Pick something..."
+						modalLabel={ __( 'Choose a post (postchooser block)' ) }
+						buttonLabel="Choose your post if you dare..."
+						searchPlaceholder={ __( 'Pick something... (postchooser block)' ) }
 						onSelectPost={ calloutSelectedPostHandler }
+						modalTitle={ __( 'Choose a post (postchooser block)' ) }
 					/>
 				) }
 				<div className="wp-block-plugin-slug-block-callout-postpicker--image">
