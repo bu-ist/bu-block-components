@@ -112,7 +112,7 @@ export const PostChooserModal = ( props ) => {
 				<div className="bu-components-post-chooser-search-bar">
 					<div className="bu-components-post-chooser-search-field">
 						<TextControl
-							label={ __( 'Search Posts' ) }
+							label={ label }
 							value={ searchTerm }
 							onChange={ ( value ) => setSearchTerm( value ) }
 							placeholder={ __( 'Enter search term' ) }
