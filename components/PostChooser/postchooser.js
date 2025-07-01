@@ -6,115 +6,61 @@
  */
 
 // WordPress dependencies
-import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { TextControl, Button, Spinner } from '@wordpress/components';
+import { Button } from '@wordpress/components';
+import {
+	useState,
+	useEffect
+} from '@wordpress/element';
 
 // Internal dependencies
-import { useRequestData } from '../../hooks/useRequestData/index.mjs';
+import { PostChooserModal } from './editor-partials/modal/index.js';
 
-export const PostChooser = ( { onSelectPost } ) => {
-	const [ searchTerm, setSearchTerm ] = useState( '' );
-	const [ searchType, setSearchType ] = useState( 'title' );
+// Import Editor Styles for this Component.
+import './editor.scss';
 
-	// Initial query for recent posts
-	const [ posts, isLoading, invalidateResolver ] = useRequestData(
-		'postType',
-		'post',
-		{
-			per_page: 10,
-			orderby: 'date',
-			order: 'desc',
-			status: 'publish',
-		}
-	);
+export const PostChooser = ( props ) => {
+	const {
+		onSelectPost,
+		label          = 'Enter a search query',
+		buttonLabel = __( 'Select Post' ),
+		postTypes      = [ 'posts', 'pages' ], // Default post types to search.
+		placeholder    = '',
+		minCharacters  = 3,
+	} = props;
 
-	// Search query
-	const [ searchPosts, isSearchLoading ] = useRequestData(
-		'postType',
-		'post',
-		searchTerm
-			? {
-					search: searchTerm,
-					per_page: 10,
-					orderby: searchType === 'title' ? 'title' : 'date',
-					order: 'desc',
-					status: 'publish',
-			  }
-			: {}
-	);
-
-	const handleSearch = useCallback( () => {
-		// Trigger search by updating the query
-		invalidateResolver();
-	}, [ invalidateResolver ] );
-
-	const renderPostResults = ( postsToRender ) => {
-		if ( ! postsToRender || postsToRender.length === 0 ) {
-			return <p>{ __( 'No posts found.' ) }</p>;
-		}
-
-		return postsToRender.map( ( post ) => (
-			<div
-				key={ post.id }
-				className="bu-components-post-chooser-results-item-container"
-				onClick={ () => onSelectPost( post ) }
-			>
-				<div className="bu-components-post-chooser-results-item-inner">
-					<div className="bu-components-post-chooser-results-item-postdetails">
-						<div className="bu-components-post-chooser-results-item-title">
-							{ post.title.rendered }
-						</div>
-						<div className="bu-components-post-chooser-results-item-metadata">
-							<span className="bu-components-post-chooser-results-item-modified">
-								{ new Date(
-									post.modified
-								).toLocaleDateString() }
-							</span>
-							<span className="bu-components-post-chooser-results-item-status">
-								{ post.status }
-							</span>
-						</div>
-					</div>
-					<div className="bu-components-post-chooser-results-item-posttype">
-						<span className="bu-components-post-chooser-results-item-type">
-							{ post.type }
-						</span>
-					</div>
-				</div>
-			</div>
-		) );
-	};
+	/**
+	 * Modal State Handlers.
+	 *
+	 * Manages the open/closed state of the Modal
+	 * that contains the Post Chooser UI.
+	 */
+	const [
+		isModalOpen,
+		setIsModalOpen
+	] = useState( false );
 
 	return (
-		<div className="bu-components-post-chooser-modal">
-			<div className="bu-components-search-controls">
-				<div className="bu-components-post-chooser-search-bar">
-					<div className="bu-components-post-chooser-search-field">
-						<TextControl
-							label={ __( 'Search Posts' ) }
-							value={ searchTerm }
-							onChange={ ( value ) => setSearchTerm( value ) }
-							placeholder={ __( 'Enter search term' ) }
-						/>
-					</div>
-					<div className="bu-components-post-chooser-search-button">
-						<Button
-							variant="primary"
-							onClick={ handleSearch }
-							disabled={ ! searchTerm }
-						>
-							{ __( 'Search' ) }
-						</Button>
-					</div>
-				</div>
-			</div>
-			<div className="bu-components-post-chooser-results">
-				{ ( isLoading || isSearchLoading ) && <Spinner /> }
-				{ searchTerm
-					? renderPostResults( searchPosts )
-					: renderPostResults( posts ) }
-			</div>
-		</div>
+		<>
+			<Button
+				isPrimary
+				className="bu-components-post-chooser-button"
+				onClick={ () => {
+					setIsModalOpen(true);
+				} }
+			>{ buttonLabel }</Button>
+			{ isModalOpen && (
+				<PostChooserModal
+					onSelectPost={ onSelectPost }
+					label={ label }
+					postTypes={ postTypes }
+					placeholder={ placeholder }
+					minCharacters={ minCharacters }
+					onClose={ () => setIsModalOpen( false ) }
+				/>
+			) }
+
+		</>
+
 	);
 };
