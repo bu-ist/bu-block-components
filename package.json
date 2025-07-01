@@ -10,6 +10,7 @@
   ],
   "license": "GPL-2.0-or-later",
   "keywords": [],
+  "type": "module",
   "homepage": "https://github.com/bu-ist/block-imports",
   "repository": {
     "type": "git",
