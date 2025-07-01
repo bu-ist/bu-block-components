@@ -110,34 +110,39 @@ export const PostChooserModal = ( props ) => {
 			isOpen={ false }
 			className="bu-components-post-chooser-modal"
 		>
-			<div className="bu-components-search-controls">
-				<div className="bu-components-post-chooser-search-bar">
-					<div className="bu-components-post-chooser-search-field">
+			<div className="bu-components-post-chooser-modal-container">
+				<div className="bu-components-search-controls">
+					{ // Add Search controls
+					}
+					<div className="bu-components-post-chooser-search-bar">
 						<TextControl
 							label={ label }
 							value={ searchTerm }
 							onChange={ ( value ) => setSearchTerm( value ) }
 							placeholder={ placeholder }
+							className="bu-components-post-chooser-search-field"
 						/>
-					</div>
-					<div className="bu-components-post-chooser-search-button">
 						<Button
-							variant="primary"
+							isPrimary
+							className="bu-components-post-chooser-search-button"
 							onClick={ handleSearch }
 							disabled={ ! searchTerm }
 						>
 							{ __( 'Search' ) }
 						</Button>
+
 					</div>
 				</div>
+				<div className="bu-components-post-chooser-results-container">
+					<ul className="bu-components-post-chooser-results">
+						{ ( isLoading || isSearchLoading ) && <Spinner /> }
+						{ searchTerm
+							? renderPostResults( searchPosts )
+							: renderPostResults( posts )
+						}
+					</ul>
+				</div>
 			</div>
-			<ul className="bu-components-post-chooser-results">
-				{ ( isLoading || isSearchLoading ) && <Spinner /> }
-				{ searchTerm
-					? renderPostResults( searchPosts )
-					: renderPostResults( posts )
-				}
-			</ul>
 		</Modal>
 	)
 };
