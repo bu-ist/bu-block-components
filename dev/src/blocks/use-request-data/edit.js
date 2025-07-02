@@ -19,6 +19,8 @@ import {
 	LoadingSpinner,
 } from '@bostonuniversity/block-imports';
 
+import { HelpWrapper } from '../../../../components/HelpWrapper';
+
 import { TextControl, PanelBody, PanelRow } from '@wordpress/components';
 
 /**
@@ -66,13 +68,20 @@ export default function Edit( props ) {
 			<InspectorControls>
 				<PanelBody title="Post Settings">
 					<PanelRow>
-						<TextControl
-							label="Post ID"
-							value={ postID }
-							onChange={ ( value ) =>
-								setAttributes( { postID: value } )
-							}
-						/>
+						<HelpWrapper
+							offset="label"
+							text={ <p>Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Donec sed odio dui. Sed posuere consectetur est at lobortis.
+
+Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum id ligula porta felis euismod semper. <a href="https://wpdocs.bu.edu">Read More</a> </p>}
+						>
+							<TextControl
+								label="Post ID"
+								value={ postID }
+								onChange={ ( value ) =>
+									setAttributes( { postID: value } )
+								}
+							/>
+						</HelpWrapper>
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
