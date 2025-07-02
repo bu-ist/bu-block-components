@@ -8,7 +8,7 @@
 // export { CustomBlockAppender } from './components/CustomBlockAppender';
 // export { DragHandle } from './components/drag-handle';
 // export { FetchAllTermSelectControl } from './components/FetchAllTermSelectControl';
-// export { HelpWrapper } from './components/HelpWrapper';
+export { HelpWrapper } from './components/HelpWrapper';
 // export { IconPicker } from './components/IconPicker';
 // export { Image } from './components/Image/index.mjs';
 // export { LinkToolbar } from './components/LinkToolbar';
