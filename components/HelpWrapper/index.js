@@ -1,9 +1,8 @@
 // External dependencies.
 import classnames from 'classnames';
 
-
-
-import { useState } from 'react';
+// WordPress dependencies.
+import { useState } from '@wordpress/element';
 import {
 	Popover,
 	Icon
@@ -29,43 +28,76 @@ const getClasses = ( className, offset  ) => classnames(
 
 export const HelpWrapper = ( props ) => {
 	const {
-		text = undefined,
-		className = undefined,
-		offset = undefined,
+		text,
+		title,
+		className,
+		offset,
 		children
 	} = props;
 
+	// State to manage the visibility of the popover.
+	// Initially, the popover is not visible.
 	const [ popoverVisible, setPopoverVisible ] = useState( false );
 
-	const toggleVisible = () => {
-		setPopoverVisible( (state ) => ! state );
+	// Function to toggle the visibility of the popover.
+	// This function is called when the icon is clicked.
+	const toggleVisible = ( event ) => {
+		// If the click is on the icon, toggle the popover visibility.
+		if ( popoverVisible ) {
+			// If the popover is already visible, hide it.
+			setPopoverVisible( false );
+		} else {
+			// If the popover is not visible, show it.
+			setPopoverVisible( true );
+		}
 	};
 
-	console.log( 'HelpWrapper', props );
 	return (
-		<>
-			<div className={ getClasses( className, offset ) }>
-				<div className="bu-components-help-wrapper-container">
+		<div className={ getClasses( className, offset ) }>
+			<div className="bu-components-help-wrapper-container">
+				{ ! popoverVisible && (
+					<Icon
+						onClick={ toggleVisible }
+						icon="editor-help"
+						size="20"
+						className="bu-components-help-wrapper-icon"
+					/>
+				)}
+				{ popoverVisible && (
 					<>
 						<Icon
-							onClick={ toggleVisible }
-							icon="editor-help"
+							icon="dismiss"
 							size="20"
+							className="bu-components-help-wrapper-icon"
+							onClick={ () => {
+								setPopoverVisible( false );
+							} }
+						/>
+						<Popover
+							className="bu-components-help-wrapper-popover"
+							noArrow={false}
+							onFocusOutside={ () => {
+								setPopoverVisible( false );
+							} }
 						>
-							{ popoverVisible && (
-								<Popover
-									className="bu-components-help-wrapper-popover"
-									noArrow={false}
-									onFocusOutside={ toggleVisible }
-								>
-									{text}
-								</Popover>
-							)}
-						</Icon>
+							<div className="bu-components-help-wrapper-popover-content">
+								{ title && (
+									<h3 className="bu-components-help-wrapper-popover-title">
+										{ title }
+									</h3>
+								)}
+								{ text }
+							</div>
+						</Popover>
 					</>
-				</div>
-				{ children }
+				)}
 			</div>
-		</>
+			{ /* Render children inside the wrapper, if any.
+				This is how the component can be used to wrap other elements.
+				For example, you can use it to wrap other components, like this:
+				<HelpWrapper><TextControl label="Title" /></HelpWrapper>
+			*/ }
+			{ children }
+		</div>
 	)
 };
