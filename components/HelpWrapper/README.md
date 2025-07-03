@@ -1,9 +1,12 @@
 https://github.com/bu-ist/bu-block-components/tree/develop/components/help-wrapper
 
 # BU Help Wrapper
-## Status: BETA
+## Status: Released
+
+![Help Wrapper Component Example](BU_Help_Wrapper_Component_1.gif)
 
 ![Help Wrapper Component Example](BU_Help_Wrapper_Component.gif)
+
 
 An component that can wrap core components in the sidebar and provide a quick and easy help
 popover component to display inline help and/or links to external documentation.
@@ -13,53 +16,53 @@ or TextControl in the InspectorControls.
 
 ## Props
 
-### className
-Allows you to pass a class to apply to the component
-
-### text
-The text property let's you pass the text string to display in the popover. This can also be a JSX component.
-
-### offset
-Pass a value of `label` to offset the help icon by a negative 18px to position the icon to the right
-of the label on core components such as TextControl.
+| Prop | Description |
+|------|-------------|
+| `className` | Allows you to pass a class to apply to the component |
+| `text` | The text string to display in the popover. Can also be a JSX component |
+| `offset` | Pass a value of `label` to offset the help icon to position it to the right of the label on core components such as TextControl |
+| `title` | Optional title for the popover |
 
 ## Usage
 ```js
-import { BU_Help_Wrapper } from '@bostonuniversity/block-components';
+import { HelpWrapper } from '@bostonuniversity/block-components';
+
+import { HelpWrapper as BU_Help_Wrapper } from '@bostonuniversity/block-components';
 ```
 
 
 
 ```js
-<BU_Help_Wrapper
+<HelpWrapper
+	title="Some title"
 	text={ <p>Does Something. <a href="https://wpdocs.bu.edu">Read More</a> </p>}
 >
 	<p>Some Text</p>
-</BU_Help_Wrapper>
-<BU_Help_Wrapper
+</HelpWrapper>
+<HelpWrapper
 	text="Some message for the tooltip">
 	<ToggleControl
 		label="Fixed Background"
 		help={'Has fixed background.'}
 		checked={ true }
 	/>
-</BU_Help_Wrapper>
-<BU_Help_Wrapper
+</HelpWrapper>
+<HelpWrapper
 	text={ <p>Does Something. <ExternalLink href="https://wpdocs.bu.edu">Read More</ExternalLink> </p>}
 >
 	<ToggleControl
 		label="Another Setting"
 		checked={ false }
 	/>
-</BU_Help_Wrapper>
-<BU_Help_Wrapper
+</HelpWrapper>
+<HelpWrapper
 	text={ <p>Does Something. <ExternalLink href="https://wpdocs.bu.edu">Read More</ExternalLink> </p>}
 >
 	<TextControl
 		label="Title"
 	/>
-</BU_Help_Wrapper>
-<BU_Help_Wrapper
+</HelpWrapper>
+<HelpWrapper
 	text={ <p>Does Something. <ExternalLink href="https://wpdocs.bu.edu">Read More</ExternalLink> </p>}
 	offset="label"
 >
@@ -71,5 +74,5 @@ import { BU_Help_Wrapper } from '@bostonuniversity/block-components';
 			{ label: 'Small', value: '25%' },
 		] }
 	/>
-</BU_Help_Wrapper>
+</HelpWrapper>
 ```
