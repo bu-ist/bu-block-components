@@ -5,19 +5,18 @@ import classnames from 'classnames';
 import { useState } from '@wordpress/element';
 import {
 	Popover,
-	Icon,
 	Button
 } from '@wordpress/components';
 
-
 // Import CSS.
 import './editor.scss';
-
 
 /**
  * Returns the class list for the component based on the current settings.
  *
  * @param {string} className  Additional classes assigned to the component.
+ * @param {boolean} offset    If true, adds the 'has-offset-label' class to the component.
+ * @returns {string}          The computed class list for the component.
  */
 const getClasses = ( className, offset  ) => classnames(
 	'bu-components-help-wrapper',
@@ -57,27 +56,18 @@ export const HelpWrapper = ( props ) => {
 		<div className={ getClasses( className, offset ) }>
 			<div className="bu-components-help-wrapper-container">
 				{ ! popoverVisible && (
-					<>
-						<Button
-							onClick={ toggleVisible }
-							role="button"
-							icon="editor-help"
-							className="bu-components-help-wrapper-icon"
-							iconSize="20"
-							label="Help"
-							description="Click to toggle help popover"
-							size="small"
-							variant="link"
-						></Button>
-						{/* <Icon
-							onClick={ toggleVisible }
-							role="button"
-							icon="editor-help"
-							size="20"
-							className="bu-components-help-wrapper-icon"
-						/> */}
-					</>
-				)}
+					<Button
+						onClick={ toggleVisible }
+						role="button"
+						icon="editor-help"
+						className="bu-components-help-wrapper-icon"
+						iconSize="20"
+						label="Help"
+						size="small" // For Future WP 6.x compatibility.
+						isSmall // for WP 5.8 compatibility
+						variant="link"
+					></Button>
+				) }
 				{ popoverVisible && (
 					<>
 						<Button
@@ -89,13 +79,13 @@ export const HelpWrapper = ( props ) => {
 							className="bu-components-help-wrapper-icon"
 							iconSize="20"
 							label="Close Help"
-							description="Click to hide help popover"
-							size="small"
+							size="small" // For Future WP 6.x compatibility.
+							isSmall // for WP 5.8 compatibility
 							variant="link"
 						></Button>
 						<Popover
 							className="bu-components-help-wrapper-popover"
-							noArrow={false}
+							noArrow={ true }
 							onFocusOutside={ () => {
 								setPopoverVisible( false );
 							} }
