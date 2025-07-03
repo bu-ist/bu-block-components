@@ -26,6 +26,21 @@ const getClasses = ( className, offset  ) => classnames(
 	}
 );
 
+/**
+ * Help Wrapper Component
+ *
+ * A component that wraps children elements and provides a help icon button
+ * that shows a popover with help information when clicked.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.text] - Help text content to be displayed in the popover.
+ * @param {string} [props.title] - Optional title for the help popover.
+ * @param {string} [props.className] - Additional CSS class name for the wrapper element.
+ * @param {string|Object} [props.offset] - Offset positioning for the help icon.
+ * @param {React.ReactNode} [props.children] - Child elements to be wrapped by this component.
+ *
+ * @returns {JSX.Element} The HelpWrapper component.
+ */
 export const HelpWrapper = ( props ) => {
 	const {
 		text,
