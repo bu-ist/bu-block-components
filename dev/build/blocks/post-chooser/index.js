@@ -128,13 +128,16 @@ const PostChooserModal = props => {
     title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Choose a Post')
   } = props;
   const [searchTerm, setSearchTerm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('');
-  const [searchType, setSearchType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('title');
+  const [sortOrder, setSortOrder] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    orderby: 'date',
+    order: 'desc'
+  });
 
   // Initial query for recent posts
   const [posts, isLoading, invalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', {
     per_page: 10,
-    orderby: 'date',
-    order: 'desc',
+    orderby: sortOrder.orderby,
+    order: sortOrder.order,
     status: 'publish'
   });
 
@@ -144,8 +147,8 @@ const PostChooserModal = props => {
   const [searchPosts, isSearchLoading] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', searchTerm ? {
     search: searchTerm,
     per_page: 10,
-    orderby: searchType === 'title' ? 'title' : 'date',
-    order: 'desc',
+    orderby: sortOrder.orderby,
+    order: sortOrder.order,
     status: 'publish'
   } : {});
   const handleSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
@@ -163,8 +166,8 @@ const PostChooserModal = props => {
     onSearch: handleSearch,
     searchTerm: searchTerm,
     setSearchTerm: setSearchTerm,
-    searchType: searchType,
-    setSearchType: setSearchType,
+    sortOrder: sortOrder,
+    setSortOrder: setSortOrder,
     isLoading: isLoading || isSearchLoading,
     label: label,
     placeholder: placeholder
@@ -343,8 +346,8 @@ const SearchUI = props => {
     onSearch,
     searchTerm,
     setSearchTerm,
-    searchType,
-    setSearchType,
+    sortOrder,
+    setSortOrder,
     isLoading,
     label,
     placeholder
@@ -353,7 +356,56 @@ const SearchUI = props => {
     className: "bu-components-post-chooser-search-ui"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-search-controls"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
+    icon: "sort",
+    label: "Select a direction"
+  }, ({
+    onClose
+  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+    icon: "calendar",
+    disabled: sortOrder.orderby === 'date' && sortOrder.order === 'asc' ? true : false,
+    onClick: () => {
+      setSortOrder({
+        orderby: 'date',
+        order: 'asc'
+      });
+      onSearch();
+      onClose();
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Date Ascending')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+    icon: "calendar",
+    disabled: sortOrder.orderby === 'date' && sortOrder.order === 'desc' ? true : false,
+    onClick: () => {
+      setSortOrder({
+        orderby: 'date',
+        order: 'desc'
+      });
+      onSearch();
+      onClose();
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Date Descending')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+    icon: "heading",
+    disabled: sortOrder.orderby === 'title' && sortOrder.order === 'asc' ? true : false,
+    onClick: () => {
+      setSortOrder({
+        orderby: 'title',
+        order: 'asc'
+      });
+      onSearch();
+      onClose();
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Title Ascending')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+    icon: "heading",
+    disabled: sortOrder.orderby === 'title' && sortOrder.order === 'desc' ? true : false,
+    onClick: () => {
+      setSortOrder({
+        orderby: 'title',
+        order: 'desc'
+      });
+      onSearch();
+      onClose();
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Title Descending'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sort by')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-search-bar"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     label: label,

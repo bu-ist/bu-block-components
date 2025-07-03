@@ -19,7 +19,10 @@ export const PostChooserModal = ( props ) => {
 	} = props;
 
 	const [ searchTerm, setSearchTerm ] = useState( '' );
-	const [ searchType, setSearchType ] = useState( 'title' );
+	const [ sortOrder, setSortOrder ] = useState( {
+		orderby: 'date',
+		order: 'desc',
+	} );
 
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
@@ -27,8 +30,8 @@ export const PostChooserModal = ( props ) => {
 		'post',
 		{
 			per_page: 10,
-			orderby: 'date',
-			order: 'desc',
+			orderby: sortOrder.orderby,
+			order: sortOrder.order,
 			status: 'publish',
 		}
 	);
@@ -43,10 +46,10 @@ export const PostChooserModal = ( props ) => {
 			? {
 					search: searchTerm,
 					per_page: 10,
-					orderby: searchType === 'title' ? 'title' : 'date',
-					order: 'desc',
+					orderby: sortOrder.orderby,
+					order: sortOrder.order,
 					status: 'publish',
-			}
+			  }
 			: {}
 	);
 
@@ -67,8 +70,8 @@ export const PostChooserModal = ( props ) => {
 					onSearch={ handleSearch }
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
-					searchType={ searchType }
-					setSearchType={ setSearchType }
+					sortOrder={ sortOrder }
+					setSortOrder={ setSortOrder }
 					isLoading={ isLoading || isSearchLoading }
 					label={ label }
 					placeholder={ placeholder }
@@ -80,7 +83,10 @@ export const PostChooserModal = ( props ) => {
 							<h2 className="bu-components-post-chooser-results-title">
 								{ __( 'Recently Published' ) }
 							</h2>
-							<Results posts={ posts } onSelectPost={ onSelectPost } />
+							<Results
+								posts={ posts }
+								onSelectPost={ onSelectPost }
+							/>
 						</>
 					) }
 					{ searchTerm && (
@@ -88,7 +94,10 @@ export const PostChooserModal = ( props ) => {
 							<h2 className="bu-components-post-chooser-results-title">
 								{ __( 'Search Results' ) }
 							</h2>
-							<Results posts={ searchPosts } onSelectPost={ onSelectPost } />
+							<Results
+								posts={ searchPosts }
+								onSelectPost={ onSelectPost }
+							/>
 						</>
 					) }
 				</div>
