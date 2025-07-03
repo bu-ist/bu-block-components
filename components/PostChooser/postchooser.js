@@ -8,10 +8,7 @@
 // WordPress dependencies
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
-import {
-	useState,
-	useEffect
-} from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
 // Internal dependencies
 import { PostChooserModal } from './editor-partials/modal/index.js';
@@ -25,9 +22,9 @@ export const PostChooser = ( props ) => {
 		modalLabel,
 		modalTitle,
 		buttonLabel = __( 'Select Post' ),
-		postTypes      = [ 'posts', 'pages' ], // Default post types to search.
+		postTypes = [ 'posts', 'pages' ], // Default post types to search.
 		searchPlaceholder,
-		minCharacters  = 3,
+		minCharacters = 3,
 	} = props;
 
 	/**
@@ -36,10 +33,7 @@ export const PostChooser = ( props ) => {
 	 * Manages the open/closed state of the Modal
 	 * that contains the Post Chooser UI.
 	 */
-	const [
-		isModalOpen,
-		setIsModalOpen
-	] = useState( false );
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
 
 	return (
 		<>
@@ -47,9 +41,11 @@ export const PostChooser = ( props ) => {
 				isPrimary
 				className="bu-components-post-chooser-button"
 				onClick={ () => {
-					setIsModalOpen(true);
+					setIsModalOpen( true );
 				} }
-			>{ buttonLabel }</Button>
+			>
+				{ buttonLabel }
+			</Button>
 			{ isModalOpen && (
 				<PostChooserModal
 					onSelectPost={ onSelectPost }
@@ -61,8 +57,6 @@ export const PostChooser = ( props ) => {
 					onClose={ () => setIsModalOpen( false ) }
 				/>
 			) }
-
 		</>
-
 	);
 };

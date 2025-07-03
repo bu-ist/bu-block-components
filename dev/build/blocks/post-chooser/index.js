@@ -105,10 +105,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
-/* harmony import */ var _search_ui_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../search-ui/index.js */ "../components/PostChooser/editor-partials/search-ui/index.js");
-/* harmony import */ var _results_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../results/index.js */ "../components/PostChooser/editor-partials/results/index.js");
-/* harmony import */ var _results_item_index_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../results-item/index.js */ "../components/PostChooser/editor-partials/results-item/index.js");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
+/* harmony import */ var _results_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../results/index.js */ "../components/PostChooser/editor-partials/results/index.js");
+/* harmony import */ var _search_ui_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../search-ui/index.js */ "../components/PostChooser/editor-partials/search-ui/index.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
 
 
 
@@ -119,14 +118,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const PostChooserModal = props => {
   const {
     onClose,
     label = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search query'),
     onSelectPost,
     postTypes = ['posts', 'pages'],
-    placeholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search term...'),
+    placeholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search term…'),
     title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Choose a Post')
   } = props;
   const [searchTerm, setSearchTerm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('');
@@ -154,42 +152,6 @@ const PostChooserModal = props => {
     // Trigger search by updating the query
     invalidateResolver();
   }, [invalidateResolver]);
-
-  // Todo turn this into a component and move it to a separate file.
-  // This function renders the post results based on the search term.
-  // We also need to show the link to the post, more data about the post,
-  // and add a specific "select" button to handle the onSelectPost action.
-  // Data to add: publish date, last updated date, post type, post status
-  const renderPostResults = postsToRender => {
-    if (!postsToRender || postsToRender.length === 0) {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No posts found.'));
-    }
-    return postsToRender.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-      className: "bu-components-post-chooser-results-item",
-      key: post.id
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-container"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-inner"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-postdetails"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-title"
-    }, post.title.rendered), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-metadata"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-modified"
-    }, new Date(post.modified).toLocaleDateString()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-status"
-    }, post.status))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-posttype"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-type"
-    }, post.type))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-      className: "bu-components-post-chooser-item-select-button",
-      onClick: () => onSelectPost(post)
-    }, "Select"))));
-  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Modal, {
     title: title,
     onRequestClose: onClose,
@@ -214,11 +176,17 @@ const PostChooserModal = props => {
     disabled: !searchTerm
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-results-container"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+  }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), !searchTerm && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "bu-components-post-chooser-results-title"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Recently Published')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
-    className: "bu-components-post-chooser-results"
-  }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_item_index_js__WEBPACK_IMPORTED_MODULE_7__.ResultsItem, null), searchTerm ? renderPostResults(searchPosts) : renderPostResults(posts)))));
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Recently Published')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_index_js__WEBPACK_IMPORTED_MODULE_5__.Results, {
+    posts: posts,
+    onSelectPost: onSelectPost
+  })), searchTerm && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "bu-components-post-chooser-results-title"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search Results')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_index_js__WEBPACK_IMPORTED_MODULE_5__.Results, {
+    posts: searchPosts,
+    onSelectPost: onSelectPost
+  })))));
 };
 
 /***/ }),
@@ -249,14 +217,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results-item/editor.scss");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results-item/editor.scss");
+
 
 
 const ResultsItem = props => {
   const {
-    post
+    post,
+    onSelectPost
   } = props;
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "\"I'm a result item.\"");
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    className: "bu-components-post-chooser-results-item",
+    key: post.id
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-container"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-inner"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-postdetails"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-title"
+  }, post.title.rendered), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-metadata"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-post-chooser-results-item-modified"
+  }, new Date(post.modified).toLocaleDateString()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-post-chooser-results-item-status"
+  }, post.status))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-item-posttype"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-post-chooser-results-item-type"
+  }, post.type))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    className: "bu-components-post-chooser-item-select-button",
+    onClick: () => onSelectPost(post)
+  }, "Select")));
 };
 
 /***/ }),
@@ -282,8 +278,34 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results/editor.scss");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Results: () => (/* binding */ Results)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results/editor.scss");
+/* harmony import */ var _results_item_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../results-item/index.js */ "../components/PostChooser/editor-partials/results-item/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
 
+
+
+
+const Results = props => {
+  const {
+    posts,
+    onSelectPost
+  } = props;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "bu-components-post-chooser-results"
+  }, !posts && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    className: "bu-components-post-chooser-results-item"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No posts found.')), posts && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, posts.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_item_index_js__WEBPACK_IMPORTED_MODULE_2__.ResultsItem, {
+    key: post.id,
+    post: post,
+    onSelectPost: onSelectPost
+  })))));
+};
 
 /***/ }),
 
@@ -921,7 +943,7 @@ function Edit({
   }, !selectedPostID && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Post picker block, no post selected."), !selectedPostID && isSelected && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.PostChooser, {
     modalLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose a post (postchooser block)'),
     buttonLabel: "Choose your post if you dare...",
-    searchPlaceholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Pick something... (postchooser block)'),
+    searchPlaceholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Pick something… (postchooser block)'),
     onSelectPost: calloutSelectedPostHandler,
     modalTitle: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose a post (postchooser block)')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

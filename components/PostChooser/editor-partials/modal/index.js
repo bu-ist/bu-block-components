@@ -4,11 +4,8 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import { Results } from '../results/index.js';
 import '../search-ui/index.js';
-import  '../results/index.js';
-import {ResultsItem} from '../results-item/index.js';
-
-
 import './editor.scss';
 
 export const PostChooserModal = ( props ) => {
@@ -17,10 +14,9 @@ export const PostChooserModal = ( props ) => {
 		label = __( 'Enter a search query' ),
 		onSelectPost,
 		postTypes = [ 'posts', 'pages' ],
-		placeholder = __( 'Enter a search term...' ),
+		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 	} = props;
-
 
 	const [ searchTerm, setSearchTerm ] = useState( '' );
 	const [ searchType, setSearchType ] = useState( 'title' );
@@ -50,7 +46,7 @@ export const PostChooserModal = ( props ) => {
 					orderby: searchType === 'title' ? 'title' : 'date',
 					order: 'desc',
 					status: 'publish',
-				}
+			}
 			: {}
 	);
 
@@ -58,54 +54,6 @@ export const PostChooserModal = ( props ) => {
 		// Trigger search by updating the query
 		invalidateResolver();
 	}, [ invalidateResolver ] );
-
-
-	// Todo turn this into a component and move it to a separate file.
-	// This function renders the post results based on the search term.
-	// We also need to show the link to the post, more data about the post,
-	// and add a specific "select" button to handle the onSelectPost action.
-	// Data to add: publish date, last updated date, post type, post status
-	const renderPostResults = ( postsToRender ) => {
-		if ( ! postsToRender || postsToRender.length === 0 ) {
-			return <p>{ __( 'No posts found.' ) }</p>;
-		}
-
-		return postsToRender.map( ( post ) => (
-			<li className="bu-components-post-chooser-results-item" key={ post.id }>
-				<div className="bu-components-post-chooser-results-item-container">
-					<div className="bu-components-post-chooser-results-item-inner">
-						<div className="bu-components-post-chooser-results-item-postdetails">
-							<div className="bu-components-post-chooser-results-item-title">
-								{ post.title.rendered }
-							</div>
-							<div className="bu-components-post-chooser-results-item-metadata">
-								<span className="bu-components-post-chooser-results-item-modified">
-									{ new Date(
-										post.modified
-									).toLocaleDateString() }
-								</span>
-								<span className="bu-components-post-chooser-results-item-status">
-									{ post.status }
-								</span>
-							</div>
-						</div>
-						<div className="bu-components-post-chooser-results-item-posttype">
-							<span className="bu-components-post-chooser-results-item-type">
-								{ post.type }
-							</span>
-						</div>
-					</div>
-					<Button
-							className="bu-components-post-chooser-item-select-button"
-							onClick={ () => onSelectPost( post ) }
-						>
-							Select
-						</Button>
-				</div>
-			</li>
-		) );
-	};
-
 
 	return (
 		<Modal
@@ -116,7 +64,8 @@ export const PostChooserModal = ( props ) => {
 		>
 			<div className="bu-components-post-chooser-modal-container">
 				<div className="bu-components-search-controls">
-					{ // Add Search controls
+					{
+						// Add Search controls
 					}
 					<div className="bu-components-post-chooser-search-bar">
 						<TextControl
@@ -134,23 +83,28 @@ export const PostChooserModal = ( props ) => {
 						>
 							{ __( 'Search' ) }
 						</Button>
-
 					</div>
 				</div>
 				<div className="bu-components-post-chooser-results-container">
-					<h2 className="bu-components-post-chooser-results-title">
-						{ __( 'Recently Published' ) }
-					</h2>
-					<ul className="bu-components-post-chooser-results">
-						{ ( isLoading || isSearchLoading ) && <Spinner /> }
-						<ResultsItem/>
-						{ searchTerm
-							? renderPostResults( searchPosts )
-							: renderPostResults( posts )
-						}
-					</ul>
+					{ ( isLoading || isSearchLoading ) && <Spinner /> }
+					{ ! searchTerm && (
+						<>
+							<h2 className="bu-components-post-chooser-results-title">
+								{ __( 'Recently Published' ) }
+							</h2>
+							<Results posts={ posts } onSelectPost={ onSelectPost } />
+						</>
+					) }
+					{ searchTerm && (
+						<>
+							<h2 className="bu-components-post-chooser-results-title">
+								{ __( 'Search Results' ) }
+							</h2>
+							<Results posts={ searchPosts } onSelectPost={ onSelectPost } />
+						</>
+					) }
 				</div>
 			</div>
 		</Modal>
-	)
+	);
 };

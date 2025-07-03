@@ -23,51 +23,6 @@
   background-color: var(--wp-admin-theme-color);
   font-weight: normal;
 }
-/*!**************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/search-ui/editor.scss ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************/
-.bu-components-search-controls {
-  position: sticky;
-  top: 0px;
-  right: 0;
-  left: 0;
-  z-index: 2;
-  background-color: #fff;
-  padding: 2em;
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
-}
-
-.bu-components-post-chooser-searchtype .components-base-control__field {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-.bu-components-post-chooser-searchtype .components-base-control__field .components-base-control__label {
-  margin-left: 1em;
-}
-.bu-components-post-chooser-searchtype .components-base-control__field .components-radio-control__option {
-  margin-left: 1em;
-}
-
-.bu-components-post-chooser-search-bar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  width: 100%;
-  gap: 1em;
-}
-.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field {
-  width: 100%;
-}
-.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-base-control__field {
-  margin-bottom: 0;
-}
-.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-text-control__input {
-  font-size: 18px;
-}
-.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-button {
-  display: block;
-}
 /*!************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/results/editor.scss ***!
   \************************************************************************************************************************************************************************************************************************************************************************************/
@@ -202,6 +157,51 @@
 .bu-components-post-chooser-results-item-placeholder .bu-components-post-chooser-item-select-button {
   min-width: 5ch;
   background-color: #73959e;
+}
+/*!**************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/search-ui/editor.scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************/
+.bu-components-search-controls {
+  position: sticky;
+  top: 0px;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  background-color: #fff;
+  padding: 2em;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.bu-components-post-chooser-searchtype .components-base-control__field {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.bu-components-post-chooser-searchtype .components-base-control__field .components-base-control__label {
+  margin-left: 1em;
+}
+.bu-components-post-chooser-searchtype .components-base-control__field .components-radio-control__option {
+  margin-left: 1em;
+}
+
+.bu-components-post-chooser-search-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1em;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field {
+  width: 100%;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-base-control__field {
+  margin-bottom: 0;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-text-control__input {
+  font-size: 18px;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-button {
+  display: block;
 }
 /*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/modal/editor.scss ***!
