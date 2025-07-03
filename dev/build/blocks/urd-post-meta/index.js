@@ -132,6 +132,7 @@ const PostChooserModal = props => {
     orderby: 'date',
     order: 'desc'
   });
+  const [searchType, setSearchType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('default');
 
   // Initial query for recent posts
   const [posts, isLoading, invalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', {
@@ -170,7 +171,9 @@ const PostChooserModal = props => {
     setSortOrder: setSortOrder,
     isLoading: isLoading || isSearchLoading,
     label: label,
-    placeholder: placeholder
+    placeholder: placeholder,
+    searchType: searchType,
+    setSearchType: setSearchType
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-results-container"
   }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), !searchTerm && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
@@ -348,6 +351,8 @@ const SearchUI = props => {
     setSearchTerm,
     sortOrder,
     setSortOrder,
+    searchType,
+    setSearchType,
     isLoading,
     label,
     placeholder
@@ -405,7 +410,22 @@ const SearchUI = props => {
       onSearch();
       onClose();
     }
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Title Descending'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sort by')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Title Descending'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sort by')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RadioControl, {
+    label: "Search By",
+    help: "How do you want to find things?",
+    selected: searchType,
+    options: [{
+      label: 'Standard Default Search',
+      value: 'default'
+    }, {
+      label: 'Post Slug',
+      value: 'slug'
+    }, {
+      label: 'Post id',
+      value: 'id'
+    }],
+    onChange: value => setSearchType(value)
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-search-bar"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     label: label,

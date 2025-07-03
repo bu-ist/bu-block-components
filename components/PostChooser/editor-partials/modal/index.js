@@ -23,6 +23,7 @@ export const PostChooserModal = ( props ) => {
 		orderby: 'date',
 		order: 'desc',
 	} );
+	const [ searchType, setSearchType ] = useState( 'default' );
 
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
@@ -75,6 +76,8 @@ export const PostChooserModal = ( props ) => {
 					isLoading={ isLoading || isSearchLoading }
 					label={ label }
 					placeholder={ placeholder }
+					searchType={ searchType }
+					setSearchType={ setSearchType }
 				/>
 				<div className="bu-components-post-chooser-results-container">
 					{ ( isLoading || isSearchLoading ) && <Spinner /> }
