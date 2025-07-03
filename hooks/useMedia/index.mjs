@@ -11,8 +11,6 @@ import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
 export function useMedia( id ) {
-	console.log( 'useMedia id: ' );
-	console.log( id );
 	return useSelect(
 		( select ) => {
 			const { getMedia, isResolving, hasFinishedResolution } =
@@ -21,7 +19,7 @@ export function useMedia( id ) {
 			const mediaParameters = [ id, { context: 'view' } ];
 
 			return {
-				media: getMedia( ...mediaParameters ),
+				mediaObj: getMedia( ...mediaParameters ),
 				isResolvingMedia: isResolving( 'getMedia', mediaParameters ),
 				hasResolvedMedia: hasFinishedResolution(
 					'getMedia',

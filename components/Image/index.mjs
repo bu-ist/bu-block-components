@@ -5,10 +5,6 @@
 // External dependencies.
 import classnames from 'classnames';
 
-import { useSelect } from '@wordpress/data';
-
-import { store as coreStore } from '@wordpress/core-data';
-
 import {
 	MediaPlaceholder,
 	InspectorControls,
@@ -30,7 +26,7 @@ import { more } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 // BU dependencies.
-import { useMedia } from '../../index.js';
+import { useMedia, LoadingSpinner } from '../../index.js';
 
 // Import CSS.
 import './editor.scss';
@@ -73,39 +69,77 @@ export const Image = ( props ) => {
 		...rest
 	} = props;
 
-	console.log( props );
-
 	// Is an image set already?
 	const hasImage = mediaId ? true : false;
 
-	const media = useSelect(
-		( select ) => {
-			const mediaObj = select( coreStore ).getMedia( mediaId, {
-				context: 'view',
-			} ); // undefined
-			return mediaObj;
-		},
-		[ mediaId ]
-	);
+	// Fetch the media object based on the `mediaId`.
+	const { mediaObj, isResolvingMedia, hasResolvedMedia } = useMedia( mediaId );
 
-	if ( ! media ) {
-		return <div>Loading... { mediaId }</div>;
+	/**
+	 * If there is no image set, and the user can't edit the image show placeholder.
+	 *
+	 * @see https://developer.wordpress.org/block-editor/reference-guides/components/Placeholder/
+	 * @todo allow user mod?
+	 */
+	if ( ! hasImage && ! canEditImage ) {
+		return (
+			<Placeholder
+				className="bu-components-image-media-placeholder"
+				icon={ more }
+				label="Placeholder"
+				withIllustration
+			/>
+		);
 	}
-	return <div>loadededee... { media }</div>;
 
-	const { mediaObj, isResolvingMedia, hasResolvedMedia } =
-		useMedia( mediaId );
-	console.log( 'mediaObj is ' );
-	console.log( mediaObj );
+	/**
+	 * If there is no image set, and the user can edit the image, show Media Placeholder.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-placeholder/README.md
+	 */
+	if ( ! hasImage && canEditImage ) {
+		return (
+			<MediaPlaceholder
+				labels={ labels }
+				onSelect={ onSelect }
+				accept="image/*"
+				multiple={ false }
+				allowedTypes={ allowedTypes }
+			/>
+		);
+	}
 
-	// Get the media object.
-	const { sadfasdf } = useSelect( ( select ) => ( {
-		image: select( coreStore ).getMedia( [ 381626, { context: 'view' } ] ),
-	} ) );
-	console.log( 'useSelect is ' );
-	console.log( sadfasdf );
+	// hasImage && canEditImage are both true, proceed...
 
-	// JUST END IT ALREADY
-	return <div>nargs</div>;
+	// If Debug is set to true, output some helpful information to the console for block developers to utilize media object info in their block development.
+	if ( debug ) {
+		if ( isResolvingMedia ) {
+			console.log( 'Image Media Fetch in Progress: ', isResolvingMedia );
+		}
+		if ( hasResolvedMedia ) {
+			console.log( 'Image Media Fetched: ', mediaObj );
+		}
+	}
+
+	/**
+	 * If media is being fetched, just show the spinner.
+	 *
+	 * @see https://github.com/bu-ist/block-imports/tree/develop/components/LoadingSpinner
+	 */
+	if ( isResolvingMedia ) {
+		return <LoadingSpinner text="Loading..." />;
+	}
+
+	/**
+	 * If media is being fetched, just show the spinner.
+	 *
+	 * @see https://github.com/bu-ist/block-imports/tree/develop/components/LoadingSpinner
+	 * @todo this doesn't seem to update/useState?
+	 */
+	if ( ! mediaObj ) {
+		return <p>mediaObj undefined for { mediaId }</p>;
+	}
+
+	return <div>nots... { mediaId }</div>;
 };
 // npx wp-scripts lint-js ./utils --fix
