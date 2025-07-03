@@ -159,22 +159,16 @@ const PostChooserModal = props => {
     className: "bu-components-post-chooser-modal"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-modal-container"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-search-controls"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-search-bar"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_search_ui_index_js__WEBPACK_IMPORTED_MODULE_6__.SearchUI, {
+    onSearch: handleSearch,
+    searchTerm: searchTerm,
+    setSearchTerm: setSearchTerm,
+    searchType: searchType,
+    setSearchType: setSearchType,
+    isLoading: isLoading || isSearchLoading,
     label: label,
-    value: searchTerm,
-    onChange: value => setSearchTerm(value),
-    placeholder: placeholder,
-    className: "bu-components-post-chooser-search-field"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-    isPrimary: true,
-    className: "bu-components-post-chooser-search-button",
-    onClick: handleSearch,
-    disabled: !searchTerm
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    placeholder: placeholder
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-post-chooser-results-container"
   }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), !searchTerm && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "bu-components-post-chooser-results-title"
@@ -330,8 +324,50 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/search-ui/editor.scss");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SearchUI: () => (/* binding */ SearchUI)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/search-ui/editor.scss");
 
+
+
+
+const SearchUI = props => {
+  const {
+    onSearch,
+    searchTerm,
+    setSearchTerm,
+    searchType,
+    setSearchType,
+    isLoading,
+    label,
+    placeholder
+  } = props;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-search-ui"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-search-controls"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-search-bar"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    label: label,
+    value: searchTerm,
+    onChange: value => setSearchTerm(value),
+    placeholder: placeholder,
+    className: "bu-components-post-chooser-search-field"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    isPrimary: true,
+    className: "bu-components-post-chooser-search-button",
+    onClick: onSearch,
+    disabled: !searchTerm
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search')))));
+};
 
 /***/ }),
 

@@ -5,7 +5,7 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 import { Results } from '../results/index.js';
-import '../search-ui/index.js';
+import { SearchUI } from '../search-ui/index.js';
 import './editor.scss';
 
 export const PostChooserModal = ( props ) => {
@@ -63,28 +63,16 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
-				<div className="bu-components-search-controls">
-					{
-						// Add Search controls
-					}
-					<div className="bu-components-post-chooser-search-bar">
-						<TextControl
-							label={ label }
-							value={ searchTerm }
-							onChange={ ( value ) => setSearchTerm( value ) }
-							placeholder={ placeholder }
-							className="bu-components-post-chooser-search-field"
-						/>
-						<Button
-							isPrimary
-							className="bu-components-post-chooser-search-button"
-							onClick={ handleSearch }
-							disabled={ ! searchTerm }
-						>
-							{ __( 'Search' ) }
-						</Button>
-					</div>
-				</div>
+				<SearchUI
+					onSearch={ handleSearch }
+					searchTerm={ searchTerm }
+					setSearchTerm={ setSearchTerm }
+					searchType={ searchType }
+					setSearchType={ setSearchType }
+					isLoading={ isLoading || isSearchLoading }
+					label={ label }
+					placeholder={ placeholder }
+				/>
 				<div className="bu-components-post-chooser-results-container">
 					{ ( isLoading || isSearchLoading ) && <Spinner /> }
 					{ ! searchTerm && (
