@@ -1,6 +1,4 @@
 .bu-components-help-wrapper {
-	--bu_components_help_wrapper_icon_color: gray;
-	--bu_components_help_wrapper_icon_hover_color: var(--wp-admin-theme-color);
 	position: relative;
 
 	&.has-offset-label {
@@ -17,7 +15,10 @@
 	display: flex;
 	justify-content: flex-end;
 
-	.dashicon {
+	.bu-components-help-wrapper-icon {
+		--bu_components_help_wrapper_icon_color: gray;
+		--bu_components_help_wrapper_icon_hover_color: var(--wp-admin-theme-color);
+
 		color: var(--bu_components_help_wrapper_icon_color);
 
 		&:hover {
@@ -28,8 +29,7 @@
 }
 
 .bu-components-help-wrapper-popover {
-
-	.components-popover__content {
+	.bu-components-help-wrapper-popover-content {
 		padding: 1em;
 		min-width: 300px;
 	}
