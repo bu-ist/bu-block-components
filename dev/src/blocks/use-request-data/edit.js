@@ -65,9 +65,18 @@ export default function Edit( props ) {
 					<PanelRow>
 						<HelpWrapper
 							offset="label"
-							text={ <p>Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Donec sed odio dui. Sed posuere consectetur est at lobortis.
-
-Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum id ligula porta felis euismod semper. <a href="https://wpdocs.bu.edu">Read More</a> </p>}
+							title="Post ID"
+							text={
+								<>
+									<p>Enter the post ID of the post you want to retrieve data for.</p>
+									<p>The Post ID can be found in the URL of the post, for example:</p>
+									<p>https://example.com/wp-admin/post.php??post=123</p>
+									<p>In this case, the post ID is <strong>123</strong>.</p>
+									<p>
+										<strong>Documentation is available:</strong> <a href="https://wpdocs.bu.edu">Read More</a>
+									</p>
+								</>
+							}
 						>
 							<TextControl
 								label="Post ID"
