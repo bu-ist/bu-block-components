@@ -1,0 +1,27 @@
+.bu-components-post-chooser-results-container {
+	padding: 12px;
+	overflow: auto;
+}
+
+
+.bu-components-post-chooser-results {
+	min-height: 10vh;
+	position: relative;
+	margin: 0;
+	padding: 0;
+
+
+	.bu-components-loading-spinner {
+		left: 50%;
+		transform: translate(-50%, -50%);
+		position: absolute;
+		top: 50%;
+		z-index: 2;
+	}
+
+}
+
+.bu-components-post-chooser-results-title {
+	margin: 0 0 0.5em 0;
+    font-size: 1.1em;
+}

@@ -1,0 +1,53 @@
+.bu-components-search-controls {
+	position: sticky;
+	top: 0px;
+	left: 0;
+	right: 0;
+	z-index: 2;
+	background-color: #fff;
+	padding: 2em;
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.25);
+}
+
+
+.bu-components-post-chooser-searchtype {
+	.components-base-control__field {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+
+		.components-base-control__label {
+			margin-right: 1em;
+		}
+
+		.components-radio-control__option {
+			margin-right: 1em;
+		}
+
+	}
+}
+
+
+
+.bu-components-post-chooser-search-bar {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	width: 100%;
+	gap: 1em;
+
+	.bu-components-post-chooser-search-field {
+		width: 100%;
+		.components-base-control__field {
+			margin-bottom: 0;
+		}
+		.components-text-control__input {
+			font-size: 18px;
+		}
+	}
+
+
+	.bu-components-post-chooser-search-button {
+		display: block;
+	}
+}

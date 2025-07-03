@@ -1,0 +1,26 @@
+:where(html) {
+	--bu-components-modal-header-height: 60px;
+}
+
+.bu-components-post-chooser-modal {
+	background-color: #fef8ee;
+	border-radius: 10px;
+	max-height:50vh;
+	overflow: hidden;
+	position: relative;
+    max-width: 768px;
+    width: 100%;
+
+	.components-modal__header {
+		height: var(--bu-components-modal-header-height, 60px);
+		margin-bottom: 0;
+	}
+}
+
+.bu-components-post-chooser-modal-container {
+	height: calc(50vh - var(--bu-components-modal-header-height) ); // subtract header height
+	margin: 0 -32px 24px;
+	overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
