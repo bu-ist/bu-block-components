@@ -5,7 +5,8 @@ import classnames from 'classnames';
 import { useState } from '@wordpress/element';
 import {
 	Popover,
-	Icon
+	Icon,
+	Button
 } from '@wordpress/components';
 
 
@@ -56,23 +57,42 @@ export const HelpWrapper = ( props ) => {
 		<div className={ getClasses( className, offset ) }>
 			<div className="bu-components-help-wrapper-container">
 				{ ! popoverVisible && (
-					<Icon
-						onClick={ toggleVisible }
-						icon="editor-help"
-						size="20"
-						className="bu-components-help-wrapper-icon"
-					/>
+					<>
+						<Button
+							onClick={ toggleVisible }
+							role="button"
+							icon="editor-help"
+							className="bu-components-help-wrapper-icon"
+							iconSize="20"
+							label="Help"
+							description="Click to toggle help popover"
+							size="small"
+							variant="link"
+						></Button>
+						{/* <Icon
+							onClick={ toggleVisible }
+							role="button"
+							icon="editor-help"
+							size="20"
+							className="bu-components-help-wrapper-icon"
+						/> */}
+					</>
 				)}
 				{ popoverVisible && (
 					<>
-						<Icon
-							icon="dismiss"
-							size="20"
-							className="bu-components-help-wrapper-icon"
+						<Button
 							onClick={ () => {
 								setPopoverVisible( false );
 							} }
-						/>
+							role="button"
+							icon="dismiss"
+							className="bu-components-help-wrapper-icon"
+							iconSize="20"
+							label="Close Help"
+							description="Click to hide help popover"
+							size="small"
+							variant="link"
+						></Button>
 						<Popover
 							className="bu-components-help-wrapper-popover"
 							noArrow={false}

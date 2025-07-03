@@ -19,7 +19,12 @@
 		--bu_components_help_wrapper_icon_color: gray;
 		--bu_components_help_wrapper_icon_hover_color: var(--wp-admin-theme-color);
 
+		border: none;
 		color: var(--bu_components_help_wrapper_icon_color);
+		height: 20px;
+		min-width: 20px;
+		padding: 0;
+		width: 20px;
 
 		&:hover {
 			cursor: pointer;
