@@ -23,6 +23,218 @@
   background-color: var(--wp-admin-theme-color);
   font-weight: normal;
 }
+/*!**************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/search-ui/editor.scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************/
+.bu-components-search-controls {
+  position: sticky;
+  top: 0px;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  background-color: #fff;
+  padding: 2em;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.bu-components-post-chooser-searchtype .components-base-control__field {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.bu-components-post-chooser-searchtype .components-base-control__field .components-base-control__label {
+  margin-left: 1em;
+}
+.bu-components-post-chooser-searchtype .components-base-control__field .components-radio-control__option {
+  margin-left: 1em;
+}
+
+.bu-components-post-chooser-search-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1em;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field {
+  width: 100%;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-base-control__field {
+  margin-bottom: 0;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-field .components-text-control__input {
+  font-size: 18px;
+}
+.bu-components-post-chooser-search-bar .bu-components-post-chooser-search-button {
+  display: block;
+}
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/results/editor.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+.bu-components-post-chooser-results-container {
+  padding: 12px;
+  overflow: auto;
+}
+
+.bu-components-post-chooser-results {
+  min-height: 10vh;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.bu-components-post-chooser-results .bu-components-loading-spinner {
+  right: 50%;
+  transform: translate(50%, -50%);
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+}
+
+.bu-components-post-chooser-results-title {
+  margin: 0 0 0.5em 0;
+  font-size: 1.1em;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/results-item/editor.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************/
+.bu-components-post-chooser-results-item-container {
+  border: 1px solid #c7b9a7;
+  border-radius: 4px;
+  padding: 3px 5px 3px 10px;
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: "content select";
+  transition: all 300ms ease-in-out 0s;
+}
+.bu-components-post-chooser-results-item-placeholder .bu-components-post-chooser-results-item-container {
+  background-color: lightgray;
+  opacity: 0.35;
+}
+.bu-components-post-chooser-results-item-container:hover {
+  border-color: #b1a495;
+  background: #f4ede4;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1411764706);
+}
+
+.bu-components-post-chooser-results-item-inner {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: content;
+  padding: 4px;
+  margin-left: 5px;
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: "postdetails posttype";
+}
+
+.bu-components-post-chooser-results-item-postdetails {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: postdetails;
+}
+.bu-components-post-chooser-results-item-postdetails .bu-components-post-chooser-results-item-title {
+  font-weight: bold;
+}
+.bu-components-post-chooser-results-item-postdetails .bu-components-post-chooser-results-item-metadata {
+  display: flex;
+  gap: 2em;
+}
+.bu-components-post-chooser-results-item-postdetails .bu-components-post-chooser-results-item-modified,
+.bu-components-post-chooser-results-item-postdetails .bu-components-post-chooser-results-item-status {
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.bu-components-post-chooser-results-item-link {
+  margin-right: 2ch;
+  font-size: 0.75em;
+}
+.bu-components-post-chooser-results-item-link .components-external-link {
+  opacity: 0.5;
+  color: black;
+  transition: all 300ms ease-in-out 0s;
+}
+.bu-components-post-chooser-results-item-link .components-external-link:hover {
+  opacity: 1;
+  color: #2271b1;
+}
+
+.bu-components-post-chooser-results-item-posttype {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  grid-area: posttype;
+  align-self: center;
+  justify-content: flex-end;
+  text-align: left;
+}
+
+.bu-components-post-chooser-results-item-type {
+  background: #73959e;
+  border-radius: 5px;
+  padding: 3px 6px;
+  color: white;
+  text-transform: capitalize;
+  font-size: 0.9em;
+  margin: 0 5px;
+}
+.bu-components-post-chooser-results-item-placeholder .bu-components-post-chooser-results-item-type {
+  min-width: 5ch;
+  display: inline-block;
+  min-height: 2ch;
+}
+
+.bu-components-post-chooser-item-select-button {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  grid-area: select;
+  text-align: center;
+  align-self: center;
+  transition: all 300ms ease-in-out 0s;
+}
+.bu-components-post-chooser-item-select-button:hover {
+  background: var(--wp-admin-theme-color);
+  color: #fff;
+}
+.bu-components-post-chooser-results-item-placeholder .bu-components-post-chooser-item-select-button {
+  min-width: 5ch;
+  background-color: #73959e;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/modal/editor.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************/
+:where(html) {
+  --bu-components-modal-header-height: 60px;
+}
+
+.bu-components-post-chooser-modal {
+  background-color: #fef8ee;
+  border-radius: 10px;
+  max-height: 50vh;
+  overflow: hidden;
+  position: relative;
+  max-width: 768px;
+  width: 100%;
+}
+.bu-components-post-chooser-modal .components-modal__header {
+  height: var(--bu-components-modal-header-height, 60px);
+  margin-bottom: 0;
+}
+
+.bu-components-post-chooser-modal-container {
+  height: calc(50vh - var(--bu-components-modal-header-height));
+  margin: 0 -32px 24px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+/*!************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************/
+
 /*!*************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/urd-post-list/editor.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************************/

@@ -5,8 +5,8 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 import '../search-ui/index.js';
-import '../results/index.js';
-import '../results-item/index.js';
+import  '../results/index.js';
+import {ResultsItem} from '../results-item/index.js';
 
 
 import './editor.scss';
@@ -84,7 +84,7 @@ export const PostChooserModal = ( props ) => {
 										post.modified
 									).toLocaleDateString() }
 								</span>
-							T	<span className="bu-components-post-chooser-results-item-status">
+								<span className="bu-components-post-chooser-results-item-status">
 									{ post.status }
 								</span>
 							</div>
@@ -143,6 +143,7 @@ export const PostChooserModal = ( props ) => {
 					</h2>
 					<ul className="bu-components-post-chooser-results">
 						{ ( isLoading || isSearchLoading ) && <Spinner /> }
+						<ResultsItem/>
 						{ searchTerm
 							? renderPostResults( searchPosts )
 							: renderPostResults( posts )

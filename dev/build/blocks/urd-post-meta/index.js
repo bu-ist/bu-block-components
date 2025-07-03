@@ -72,6 +72,260 @@ const LoadingSpinner = props => {
 
 /***/ }),
 
+/***/ "../components/PostChooser/editor-partials/modal/editor.scss":
+/*!*******************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/modal/editor.scss ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/modal/index.js":
+/*!****************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/modal/index.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PostChooserModal: () => (/* binding */ PostChooserModal)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/* harmony import */ var _search_ui_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../search-ui/index.js */ "../components/PostChooser/editor-partials/search-ui/index.js");
+/* harmony import */ var _results_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../results/index.js */ "../components/PostChooser/editor-partials/results/index.js");
+/* harmony import */ var _results_item_index_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../results-item/index.js */ "../components/PostChooser/editor-partials/results-item/index.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
+
+
+
+
+
+// Internal dependencies
+
+
+
+
+
+const PostChooserModal = props => {
+  const {
+    onClose,
+    label = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search query'),
+    onSelectPost,
+    postTypes = ['posts', 'pages'],
+    placeholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search term...'),
+    title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Choose a Post')
+  } = props;
+  const [searchTerm, setSearchTerm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('');
+  const [searchType, setSearchType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('title');
+
+  // Initial query for recent posts
+  const [posts, isLoading, invalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', {
+    per_page: 10,
+    orderby: 'date',
+    order: 'desc',
+    status: 'publish'
+  });
+
+  // Search query
+  // Todo: Add support for searching by more than one post type that
+  // is passed in by the postTypes prop.
+  const [searchPosts, isSearchLoading] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', searchTerm ? {
+    search: searchTerm,
+    per_page: 10,
+    orderby: searchType === 'title' ? 'title' : 'date',
+    order: 'desc',
+    status: 'publish'
+  } : {});
+  const handleSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    // Trigger search by updating the query
+    invalidateResolver();
+  }, [invalidateResolver]);
+
+  // Todo turn this into a component and move it to a separate file.
+  // This function renders the post results based on the search term.
+  // We also need to show the link to the post, more data about the post,
+  // and add a specific "select" button to handle the onSelectPost action.
+  // Data to add: publish date, last updated date, post type, post status
+  const renderPostResults = postsToRender => {
+    if (!postsToRender || postsToRender.length === 0) {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No posts found.'));
+    }
+    return postsToRender.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "bu-components-post-chooser-results-item",
+      key: post.id
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-container"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-inner"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-postdetails"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-title"
+    }, post.title.rendered), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-metadata"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "bu-components-post-chooser-results-item-modified"
+    }, new Date(post.modified).toLocaleDateString()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "bu-components-post-chooser-results-item-status"
+    }, post.status))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bu-components-post-chooser-results-item-posttype"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "bu-components-post-chooser-results-item-type"
+    }, post.type))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+      className: "bu-components-post-chooser-item-select-button",
+      onClick: () => onSelectPost(post)
+    }, "Select"))));
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Modal, {
+    title: title,
+    onRequestClose: onClose,
+    isOpen: false,
+    className: "bu-components-post-chooser-modal"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-modal-container"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-search-controls"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-search-bar"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: label,
+    value: searchTerm,
+    onChange: value => setSearchTerm(value),
+    placeholder: placeholder,
+    className: "bu-components-post-chooser-search-field"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    isPrimary: true,
+    className: "bu-components-post-chooser-search-button",
+    onClick: handleSearch,
+    disabled: !searchTerm
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-post-chooser-results-container"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "bu-components-post-chooser-results-title"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Recently Published')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "bu-components-post-chooser-results"
+  }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_item_index_js__WEBPACK_IMPORTED_MODULE_7__.ResultsItem, null), searchTerm ? renderPostResults(searchPosts) : renderPostResults(posts)))));
+};
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/results-item/editor.scss":
+/*!**************************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/results-item/editor.scss ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/results-item/index.js":
+/*!***********************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/results-item/index.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ResultsItem: () => (/* binding */ ResultsItem)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results-item/editor.scss");
+
+
+const ResultsItem = props => {
+  const {
+    post
+  } = props;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "\"I'm a result item.\"");
+};
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/results/editor.scss":
+/*!*********************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/results/editor.scss ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/results/index.js":
+/*!******************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/results/index.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/results/editor.scss");
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/search-ui/editor.scss":
+/*!***********************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/search-ui/editor.scss ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor-partials/search-ui/index.js":
+/*!********************************************************************!*\
+  !*** ../components/PostChooser/editor-partials/search-ui/index.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/search-ui/editor.scss");
+
+
+/***/ }),
+
+/***/ "../components/PostChooser/editor.scss":
+/*!*********************************************!*\
+  !*** ../components/PostChooser/editor.scss ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "../components/PostChooser/index.mjs":
 /*!*******************************************!*\
   !*** ../components/PostChooser/index.mjs ***!
@@ -104,13 +358,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _editor_partials_modal_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor-partials/modal/index.js */ "../components/PostChooser/editor-partials/modal/index.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor.scss");
 
 /**
  * Component: Post Chooser
@@ -126,80 +381,43 @@ __webpack_require__.r(__webpack_exports__);
 
 // Internal dependencies
 
-const PostChooser = ({
-  onSelectPost
-}) => {
-  const [searchTerm, setSearchTerm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('');
-  const [searchType, setSearchType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('title');
 
-  // Initial query for recent posts
-  const [posts, isLoading, invalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', {
-    per_page: 10,
-    orderby: 'date',
-    order: 'desc',
-    status: 'publish'
-  });
+// Import Editor Styles for this Component.
 
-  // Search query
-  const [searchPosts, isSearchLoading] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', searchTerm ? {
-    search: searchTerm,
-    per_page: 10,
-    orderby: searchType === 'title' ? 'title' : 'date',
-    order: 'desc',
-    status: 'publish'
-  } : {});
-  const handleSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
-    // Trigger search by updating the query
-    invalidateResolver();
-  }, [invalidateResolver]);
-  const renderPostResults = postsToRender => {
-    if (!postsToRender || postsToRender.length === 0) {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No posts found.'));
+const PostChooser = props => {
+  const {
+    onSelectPost,
+    modalLabel,
+    modalTitle,
+    buttonLabel = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select Post'),
+    postTypes = ['posts', 'pages'],
+    // Default post types to search.
+    searchPlaceholder,
+    minCharacters = 3
+  } = props;
+
+  /**
+   * Modal State Handlers.
+   *
+   * Manages the open/closed state of the Modal
+   * that contains the Post Chooser UI.
+   */
+  const [isModalOpen, setIsModalOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    isPrimary: true,
+    className: "bu-components-post-chooser-button",
+    onClick: () => {
+      setIsModalOpen(true);
     }
-    return postsToRender.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: post.id,
-      className: "bu-components-post-chooser-results-item-container",
-      onClick: () => onSelectPost(post)
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-inner"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-postdetails"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-title"
-    }, post.title.rendered), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-metadata"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-modified"
-    }, new Date(post.modified).toLocaleDateString()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-status"
-    }, post.status))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bu-components-post-chooser-results-item-posttype"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "bu-components-post-chooser-results-item-type"
-    }, post.type)))));
-  };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-modal"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-search-controls"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-search-bar"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-search-field"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search Posts'),
-    value: searchTerm,
-    onChange: value => setSearchTerm(value),
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter search term')
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-search-button"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-    variant: "primary",
-    onClick: handleSearch,
-    disabled: !searchTerm
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bu-components-post-chooser-results"
-  }, (isLoading || isSearchLoading) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null), searchTerm ? renderPostResults(searchPosts) : renderPostResults(posts)));
+  }, buttonLabel), isModalOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_editor_partials_modal_index_js__WEBPACK_IMPORTED_MODULE_4__.PostChooserModal, {
+    onSelectPost: onSelectPost,
+    label: modalLabel,
+    title: modalTitle,
+    postTypes: postTypes,
+    placeholder: searchPlaceholder,
+    minCharacters: minCharacters,
+    onClose: () => setIsModalOpen(false)
+  }));
 };
 
 /***/ }),
