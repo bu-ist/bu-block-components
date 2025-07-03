@@ -4,8 +4,12 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import '../search-ui/index.js';
+import '../results/index.js';
+import '../results-item/index.js';
 
 
+import './editor.scss';
 
 export const PostChooserModal = ( props ) => {
 	const {
@@ -134,6 +138,9 @@ export const PostChooserModal = ( props ) => {
 					</div>
 				</div>
 				<div className="bu-components-post-chooser-results-container">
+					<h2 className="bu-components-post-chooser-results-title">
+						{ __( 'Recently Published' ) }
+					</h2>
 					<ul className="bu-components-post-chooser-results">
 						{ ( isLoading || isSearchLoading ) && <Spinner /> }
 						{ searchTerm
