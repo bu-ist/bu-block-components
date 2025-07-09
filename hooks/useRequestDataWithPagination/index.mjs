@@ -94,7 +94,14 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
 	 */
 	useEffect(() => {
-		if ( entityConfig ) {
+		const loadPaginationData = async () => {
+			// If no records or entityConfig is available, skip fetching pagination data.
+			if ( ! records || ! entityConfig ) return;
+
+			// Set default values for total items and pages.
+			let totalItems = 0;
+			let totalPages = 0;
+
 			// Construct the same API path that getEntityRecords uses.
 			const path = addQueryArgs( entityConfig.baseURL, {
 				...entityConfig.baseURLParams,
@@ -105,34 +112,37 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 				page: 1, // Only request the first page to get total items and pages.
 			});
 
-			// Make a direct fetch to the REST API.
-			apiFetch( {
-				path,
-				parse: false
-			}).then( response => {
+			try {
+				// Make a direct fetch to the REST API.
+				const response = await apiFetch( {
+					path,
+					parse: false
+				} );
+
 				// Extract pagination info from the response headers.
 				const totalItemsHeader = response.headers.get('X-WP-Total');
 				const totalPagesHeader = response.headers.get('X-WP-TotalPages');
 
-				const totalItems = totalItemsHeader !== null ? parseInt(totalItemsHeader, 10) : 0;
-				const totalPages = totalPagesHeader !== null ? parseInt(totalPagesHeader, 10) : 0;
+				totalItems = totalItemsHeader !== null ? parseInt(totalItemsHeader, 10) : 0;
+				totalPages = totalPagesHeader !== null ? parseInt(totalPagesHeader, 10) : 0;
 
+			} catch ( error ) {
+				console.error('Error fetching pagination data:', error);
+				totalItems = 0;
+				totalPages = 0;
+			} finally {
 				// Update the pagination state.
 				setPagination(prev => ({
 					...prev,
-					totalItems,
-					totalPages,
+					totalItems: totalItems,
+					totalPages: totalPages,
 				}));
-			}).catch( error => {
-				console.error('Error fetching pagination data:', error);
-				// Handle error appropriately, e.g., set pagination to zero.
-				setPagination(prev => ({
-					...prev,
-					totalItems: 0,
-					totalPages: 0,
-				}));
-			});
-		}
+			}
+		};
+		// Call the function to load pagination data.
+		// This will run whenever records, entity, kind, query, or entityConfig changes
+		loadPaginationData();
+
 	}, [records, entity, kind, JSON.stringify(query), entityConfig]);
 
 	// Return the records, loading state, and pagination information
