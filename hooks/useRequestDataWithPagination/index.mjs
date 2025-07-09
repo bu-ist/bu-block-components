@@ -15,7 +15,7 @@ import { useRequestData } from '../useRequestData/index.mjs';
  *
  * @param {string} entity           The entity to retrieve. Defaults to postType.
  * @param {string} kind             The entity kind to retrieve. Defaults to post.
- * @param {object | number} [query] Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+ * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @return {Object}            	    Object with records and pagination info
  */
 /**
