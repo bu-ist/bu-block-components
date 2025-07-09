@@ -4,6 +4,7 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import { useRequestDataWithPagination } from '../../../../hooks/useRequestDataWithPagination/index.mjs';
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import './editor.scss';
@@ -40,7 +41,12 @@ export const PostChooserModal = ( props ) => {
 	// Search query
 	// Todo: Add support for searching by more than one post type that
 	// is passed in by the postTypes prop.
-	const [ searchPosts, isSearchLoading ] = useRequestData(
+	const {
+		records: searchPosts,
+		isLoading: isSearchLoading,
+		invalidateResolver: searchInValidateResolver,
+		pagination: searchPagination
+	} = useRequestDataWithPagination(
 		'postType',
 		'post',
 		searchTerm
@@ -53,6 +59,14 @@ export const PostChooserModal = ( props ) => {
 			  }
 			: {}
 	);
+
+	// Access pagination information
+	const { totalItems, totalPages } = searchPagination;
+
+	console.log( 'Search Pagination:', {
+		totalItems,
+		totalPages,
+	} );
 
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query
@@ -95,7 +109,17 @@ export const PostChooserModal = ( props ) => {
 					{ searchTerm && (
 						<>
 							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Search Results' ) }
+								{ __( 'Search Results ' ) }
+								<em>
+									{ totalItems > 0 && (
+										<span className="bu-components-post-chooser-results-count">
+											{
+												__( 'Found: ' )
+												+ ` ${ totalItems } ${ totalItems > 1 ? __( 'items' ) : __( 'item' ) }`
+											}
+										</span>
+									) }
+								</em>
 							</h2>
 							<Results
 								posts={ searchPosts }
