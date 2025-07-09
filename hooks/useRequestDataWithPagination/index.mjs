@@ -48,6 +48,7 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 	const [pagination, setPagination] = useState({
 		totalItems: 0,
 		totalPages: 0,
+		perPage: query.per_page || 10, // Default to 10 items per page if not specified
 	});
 
 	// Use the existing useRequestData hook to fetch records
@@ -90,7 +91,7 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 	 * the getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors.
 	 *
 	 * @effect
-	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig]
+	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
 	 */
 	useEffect(() => {
 		if ( entityConfig ) {
@@ -98,8 +99,10 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 			const path = addQueryArgs( entityConfig.baseURL, {
 				...entityConfig.baseURLParams,
 				...query,
-				// Request just one item to minimize the data fetched.
-				per_page: 1,
+				// Request the same number of records per page as specified in the query,
+				// or default to 10 if not specified.
+				per_page: pagination.perPage,
+				page: 1, // Only request the first page to get total items and pages.
 			});
 
 			// Make a direct fetch to the REST API.
@@ -128,7 +131,7 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 				});
 			});
 		}
-	}, [records, entity, kind, JSON.stringify(query), entityConfig]);
+	}, [records, entity, kind, JSON.stringify(query), entityConfig, pagination]);
 
 	// Return the records, loading state, and pagination information
 	return {

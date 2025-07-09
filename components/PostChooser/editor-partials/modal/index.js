@@ -7,6 +7,9 @@ import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 import { useRequestDataWithPagination } from '../../../../hooks/useRequestDataWithPagination/index.mjs';
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
+import { Pagination } from '../../../../components/Pagination/index.mjs';
+
+// Import CSS
 import './editor.scss';
 
 export const PostChooserModal = ( props ) => {
@@ -25,6 +28,9 @@ export const PostChooserModal = ( props ) => {
 		order: 'desc',
 	} );
 	const [ searchType, setSearchType ] = useState( 'default' );
+
+	// Handle search Pagination.
+	const [ searchCurrentPage, setSearchCurrentPage ] = useState( 1 );
 
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
@@ -56,6 +62,7 @@ export const PostChooserModal = ( props ) => {
 					orderby: sortOrder.orderby,
 					order: sortOrder.order,
 					status: 'publish',
+					page: searchCurrentPage,
 			  }
 			: {}
 	);
@@ -63,10 +70,7 @@ export const PostChooserModal = ( props ) => {
 	// Access pagination information
 	const { totalItems, totalPages } = searchPagination;
 
-	console.log( 'Search Pagination:', {
-		totalItems,
-		totalPages,
-	} );
+	console.log( 'Pagination:', 'Pages: ' + totalPages + ' Items: ' + totalItems );
 
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query
@@ -126,6 +130,18 @@ export const PostChooserModal = ( props ) => {
 								onSelectPost={ onSelectPost }
 							/>
 						</>
+					) }
+					{ searchTerm && totalPages > 1 && searchPosts && (
+						<Pagination
+							currentPage={ searchCurrentPage } // This should be managed by the hook or state
+							totalPages={ totalPages }
+							onChange={ ( newPage ) => {
+								// Handle page change logic here
+								console.log( 'New page:', newPage );
+								setSearchCurrentPage( newPage );
+								searchInValidateResolver();
+							} }
+						/>
 					) }
 				</div>
 			</div>

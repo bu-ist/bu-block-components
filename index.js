@@ -26,6 +26,7 @@ export { PostChooserSidebar } from './components/PostChooser/index.mjs';
 // export { ShareTools } from './components/ShareTools';
 // export { StyledComponentContext } from './components/styled-components-context';
 // export { TermSelector } from './components/TermSelector';
+export { Pagination } from './components/Pagination/index.mjs';
 
 // Hooks
 // A React Hook is a special function that lets you "hook into" React state and lifecycle features from within functional components. Hooks enable stateful logic and side effects within functional components, offering a way to reuse logic across components. Crucially, hooks can only be called inside React functional components or custom hooks, and they must follow the "rules of hooks," such as being called at the top level of a component and not within loops or conditional statements.

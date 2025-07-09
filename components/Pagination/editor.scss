@@ -1,0 +1,27 @@
+.bu-components-pagination {
+	display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+	&-info {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-evenly;
+		padding-inline: 0.5em;
+	}
+
+	&-first,
+	&-last {
+		flex: 0 0 auto;
+	}
+
+	&-of {
+		text-align: center;
+		padding-inline: 1em;
+	}
+}
