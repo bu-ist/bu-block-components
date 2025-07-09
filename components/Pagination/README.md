@@ -16,6 +16,7 @@ A customizable pagination component that provides navigation controls for data t
 - Page number display
 - Fully customizable display options
 - Accessible navigation controls with proper button labels
+- Icons from the Noun Project
 
 ## Usage
 
