@@ -118,17 +118,19 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 				const totalPages = totalPagesHeader !== null ? parseInt(totalPagesHeader, 10) : 0;
 
 				// Update the pagination state.
-				setPagination({
+				setPagination(prev => ({
+					...prev,
 					totalItems,
 					totalPages,
-				});
+				}));
 			}).catch( error => {
 				console.error('Error fetching pagination data:', error);
 				// Handle error appropriately, e.g., set pagination to zero.
-				setPagination({
+				setPagination(prev => ({
+					...prev,
 					totalItems: 0,
 					totalPages: 0,
-				});
+				}));
 			});
 		}
 	}, [records, entity, kind, JSON.stringify(query), entityConfig, pagination]);
