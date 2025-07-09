@@ -133,7 +133,7 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 				}));
 			});
 		}
-	}, [records, entity, kind, JSON.stringify(query), entityConfig, pagination]);
+	}, [records, entity, kind, JSON.stringify(query), entityConfig]);
 
 	// Return the records, loading state, and pagination information
 	return {
