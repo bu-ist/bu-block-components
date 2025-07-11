@@ -23,7 +23,7 @@ import {
 	IconSortTitleDescending,
 	IconSortDateAscending,
 	IconSortDateDescending
-} from '../search-ui/assets/icons.mjs';
+} from '../assets/icons.mjs';
 
 
 import './editor.scss';
