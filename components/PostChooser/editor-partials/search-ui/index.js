@@ -52,7 +52,7 @@ export const SearchUI = ( props ) => {
 										onChange={ ( event ) => setSearchTerm( event.target.value ) }
 										placeholder={ placeholder }
 										className="bu-components-post-chooser-search-field"
-										tabIndex="0"
+										tabIndex="0" // Todo: this is not working to set the focus on the search field when the modal opens.
 									/>
 
 									{ searchTerm && (
