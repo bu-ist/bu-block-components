@@ -1,5 +1,8 @@
 :where(html) {
 	--bu-components-modal-header-height: 60px;
+	--bu-components-post-chooser-results-border-color: #c7b9a7;
+	--bu-components-post-chooser-results-border-color-darker: #b1a495;
+	--bu-components-post-chooser-results-text-color-darker: #7c7063;
 }
 
 .bu-components-post-chooser-modal {
@@ -23,4 +26,25 @@
 	overflow: auto;
     display: flex;
     flex-direction: column;
+}
+
+.bu-components-post-chooser-search-type {
+	width: 100%;
+	text-align: center;
+}
+
+// Results container div in the post chooser modal.
+.bu-components-post-chooser-results-container {
+	padding: 12px;
+	overflow: auto;
+	position: relative;
+	height: 100%;
+
+	.bu-components-loading-spinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 2;
+	}
 }

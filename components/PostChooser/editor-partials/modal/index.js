@@ -1,17 +1,26 @@
 import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
+import { TextControl, Button, Spinner, Modal,
+	__experimentalRadio as Radio,
+	__experimentalRadioGroup as RadioGroup,
+	Flex,
+	FlexItem,
+	FlexBlock,
+} from '@wordpress/components';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
+import { ResultsControls } from '../results-controls/index.mjs';
+
 import './editor.scss';
+import { useEffect } from 'react';
 
 export const PostChooserModal = ( props ) => {
 	const {
 		onClose,
-		label = __( 'Enter a search query' ),
+		label,
 		onSelectPost,
 		postTypes = [ 'posts', 'pages' ],
 		placeholder = __( 'Enter a search term…' ),
@@ -23,7 +32,7 @@ export const PostChooserModal = ( props ) => {
 		orderby: 'date',
 		order: 'desc',
 	} );
-	const [ searchType, setSearchType ] = useState( 'default' );
+	const [ searchType, setSearchType ] = useState( 'recent' );
 
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
@@ -31,16 +40,17 @@ export const PostChooserModal = ( props ) => {
 		'post',
 		{
 			per_page: 10,
-			orderby: sortOrder.orderby,
-			order: sortOrder.order,
+			orderby: 'modified',
+			order: 'desc',
 			status: 'publish',
 		}
 	);
+	console.log( 'posts', posts );
 
 	// Search query
 	// Todo: Add support for searching by more than one post type that
 	// is passed in by the postTypes prop.
-	const [ searchPosts, isSearchLoading ] = useRequestData(
+	const [searchPosts, isSearchLoading, searchInValidateResolver ] = useRequestData(
 		'postType',
 		'post',
 		searchTerm
@@ -54,10 +64,42 @@ export const PostChooserModal = ( props ) => {
 			: {}
 	);
 
+	console.log( 'searchPosts', searchTerm,searchPosts );
+
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query
 		invalidateResolver();
 	}, [ invalidateResolver ] );
+
+	useEffect( () => {
+		if ( searchType === 'recent' && searchTerm && searchPosts?.length > 0 ) {
+			setSearchType( 'default' );
+		}
+	}, [ searchTerm, searchPosts ] );
+
+
+	// Handles passing the search results array to the Results component.
+	// @todo: Add support for slug and ID search results arrays.
+	const handleResultsSearch = () => {
+		if ( searchType === 'recent' || ! searchTerm ) {
+			// Return recently updated posts.
+			return posts;
+		} else if ( searchType === 'default' ) {
+			// Return default text search results.
+			return searchPosts;
+		} else if ( searchType === 'slug' ) {
+			// Return slug search results.
+			// Note: This is a placeholder for slug search results array.
+			return searchPosts;
+		} else if ( searchType === 'id' ) {
+			// Return ID search results.
+			// Note: This is a placeholder for ID search results array.
+			return searchPosts;
+		} else {
+			return [];
+		}
+	};
+
 
 	return (
 		<Modal
@@ -79,30 +121,20 @@ export const PostChooserModal = ( props ) => {
 					searchType={ searchType }
 					setSearchType={ setSearchType }
 				/>
+				<ResultsControls
+					searchTerm={ searchTerm }
+					onSearch={ handleSearch }
+					searchType={ searchType }
+					setSearchType={ setSearchType }
+					sortOrder={ sortOrder }
+					setSortOrder={ setSortOrder }
+				/>
 				<div className="bu-components-post-chooser-results-container">
-					{ ( isLoading || isSearchLoading ) && <Spinner /> }
-					{ ! searchTerm && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Recently Published' ) }
-							</h2>
-							<Results
-								posts={ posts }
-								onSelectPost={ onSelectPost }
-							/>
-						</>
-					) }
-					{ searchTerm && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Search Results' ) }
-							</h2>
-							<Results
-								posts={ searchPosts }
-								onSelectPost={ onSelectPost }
-							/>
-						</>
-					) }
+					<Results
+						posts={ handleResultsSearch() }
+						onSelectPost={ onSelectPost }
+						loading={ isLoading || isSearchLoading }
+					/>
 				</div>
 			</div>
 		</Modal>

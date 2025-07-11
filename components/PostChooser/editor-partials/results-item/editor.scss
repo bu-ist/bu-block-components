@@ -1,5 +1,5 @@
 .bu-components-post-chooser-results-item-container {
-	border: 1px solid #c7b9a7;
+	border: 1px solid var(--bu-components-post-chooser-results-border-color, #c7b9a7);
 	border-radius: 4px;
 	padding: 3px 10px 3px 5px;
 	display: grid;
@@ -15,7 +15,7 @@
 	}
 
 	&:hover {
-		border-color: #b1a495;
+		border-color: var(--bu-components-post-chooser-results-border-color-darker, #b1a495);
 		background: #f4ede4;
 		box-shadow: 0 0 10px 0 #00000024;
 	}

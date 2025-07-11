@@ -1,19 +1,49 @@
-import './editor.scss';
-import { ResultsItem } from '../results-item/index.js';
+// WordPress dependencies
 import { __ } from '@wordpress/i18n';
+import { useState, useCallback, useEffect } from '@wordpress/element';
+
+// Internal dependencies
+import { ResultsItem } from '../results-item/index.mjs';
+import { LoadingSpinner } from '../../../LoadingSpinner/index.mjs';
+
+// Import CSS.
+import './editor.scss';
 
 export const Results = ( props ) => {
-	const { posts, onSelectPost } = props;
+	const { posts, onSelectPost, loading } = props;
+
+	// State to manage loading state
+
+	const [ spinnerVisible, setSpinnerVisible ] = useState( false );
+
+	// Effect to handle animating the spinner
+	useEffect( () => {
+		if ( loading ) {
+			setSpinnerVisible( true );
+		} else {
+			// Delay hiding to allow for fade-out animation
+			const timer = setTimeout( () => {
+				setSpinnerVisible( false );
+			}, 300 );
+			return () => clearTimeout( timer );
+		}
+	}, [ loading ] );
 
 	return (
 		<>
+			<div
+				className="bu-components-post-chooser-results-spinner"
+				data-spinnervisible={ spinnerVisible }
+			>
+				<LoadingSpinner />
+			</div>
 			<ul className="bu-components-post-chooser-results">
 				{ ! posts && (
 					<li className="bu-components-post-chooser-results-item">
 						{ __( 'No posts found.' ) }
 					</li>
 				) }
-				{ posts && (
+				{ posts && Array.isArray( posts ) && posts.length > 0 && (
 					<>
 						{ posts.map( ( post ) => (
 							<ResultsItem

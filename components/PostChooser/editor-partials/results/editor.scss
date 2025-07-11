@@ -1,9 +1,3 @@
-.bu-components-post-chooser-results-container {
-	padding: 12px;
-	overflow: auto;
-}
-
-
 .bu-components-post-chooser-results {
 	min-height: 10vh;
 	position: relative;
@@ -24,4 +18,25 @@
 .bu-components-post-chooser-results-title {
 	margin: 0 0 0.5em 0;
     font-size: 1.1em;
+}
+
+// Container for the Loading Spinner in the Results component.
+// Sits on top of the results list.
+// This spinner is used to indicate that results are being loaded or searched.
+.bu-components-post-chooser-results-spinner {
+	left: 50%;
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	transition: opacity 300ms ease-in-out;
+	z-index: 2;
+
+	&[data-spinnervisible="true"] {
+		opacity: 1;
+	}
+	&[data-spinnervisible="false"] {
+		opacity: 0;
+	}
 }

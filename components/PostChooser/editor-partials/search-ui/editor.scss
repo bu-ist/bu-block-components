@@ -5,29 +5,9 @@
 	right: 0;
 	z-index: 2;
 	background-color: #fff;
-	padding: 2em;
+	padding: 24px;
 	box-shadow: 0 0 3px 0 rgba(0,0,0,0.25);
 }
-
-
-.bu-components-post-chooser-searchtype {
-	.components-base-control__field {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-
-		.components-base-control__label {
-			margin-right: 1em;
-		}
-
-		.components-radio-control__option {
-			margin-right: 1em;
-		}
-
-	}
-}
-
-
 
 .bu-components-post-chooser-search-bar {
 	display: flex;
@@ -35,19 +15,93 @@
 	justify-content: space-between;
 	width: 100%;
 	gap: 1em;
+	position: relative;
+}
 
-	.bu-components-post-chooser-search-field {
-		width: 100%;
-		.components-base-control__field {
-			margin-bottom: 0;
-		}
-		.components-text-control__input {
-			font-size: 18px;
-		}
-	}
+// Base control for the search field.
+// This is a WordPress BaseControl component that wraps the search input field.
+// It provides a label and a description for the search field.
+// It is used to create a consistent look and feel for the search field.
+.bu-components-post-chooser-search-field-base-control {
+	width: 100%;
 
-
-	.bu-components-post-chooser-search-button {
-		display: block;
+	.components-base-control__field {
+		margin: 0;
 	}
 }
+
+// Inner container for the search input field.
+.bu-components-post-chooser-search-field-container-inner {
+	position: relative;
+}
+
+// The search input field.
+// This is the main input field for searching posts.
+// It has a search icon on the left and a clear button on the right.
+input.bu-components-post-chooser-search-field {
+	border-radius: 2px;
+	border: 1px solid #757575;
+	box-shadow: 0 0 0 transparent;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 24px;
+	line-height: normal;
+	padding-block: 6px;
+	padding-inline-end: 44px; /* space for icon */
+	padding-inline-start: 36px;
+	position: relative;
+	transition: box-shadow 0.1s linear;
+	width: 100%;
+	z-index: 1;
+}
+
+// Container for icons positioned on top of the search input field.
+.bu-components-post-chooser-search-field-icon-container {
+	align-items: center;
+	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	left: 0;
+	padding: 6px;
+	position: absolute;
+	top: 0;
+	z-index: 2;
+
+	// Clear Icon Container.
+	input.bu-components-post-chooser-search-field ~ & {
+		left: auto;
+		right: 0;
+	}
+}
+
+// Loading spinner for the search input field.
+.bu-components-post-chooser-search-field-spinner {
+	padding: 6px;
+}
+
+// Search icon for the search input field.
+.bu-components-post-chooser-search-icon {
+	font-size: 30px;
+	width: 30px;
+	height: 30px;
+}
+
+// Clear button for the search input field.
+.bu-components-post-chooser-search-clear-button {
+	&.has-icon.has-text .dashicon {
+		margin-inline-end: 0;
+		color: gray;
+	}
+}
+
+// Hide the label from sighted users, but keep it accessible for screen readers.
+// This is used to provide a label for the clear button that is not visible to sighted users.
+// This is useful for accessibility purposes, as it allows screen readers to read the label.
+.bu-components-post-chooser-search-clear-button-label {
+	font-size: 0;
+	line-height: 0;
+	width: 1px;
+	height: 1px;
+}
+
