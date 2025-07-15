@@ -40,3 +40,16 @@
 		opacity: 0;
 	}
 }
+
+.bu-components-post-chooser-results-message {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	background: white;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	z-index: 2;
+}

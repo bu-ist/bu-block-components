@@ -54,6 +54,33 @@ export const Results = ( props ) => {
 						) ) }
 					</>
 				) }
+
+				{ ! posts || posts.length === 0 && (
+					<>
+						{ ! loading && (
+							<div className="bu-components-post-chooser-results-message">
+								<h3>{ __( 'No posts found.' ) }</h3>
+								<p>{ __( 'Your search term might be too specific. Try broadening your search.' ) }</p>
+								<p>{ __( 'If you have a specific post in mind, try searching for its title. Alternatively, you can try entering the post ID or slug.' ) }</p>
+							</div>
+						)}
+						<ResultsItem
+							placeholder={ true }
+						/>
+						<ResultsItem
+							placeholder={ true }
+						/>
+						<ResultsItem
+							placeholder={ true }
+						/>
+						<ResultsItem
+							placeholder={ true }
+						/>
+						<ResultsItem
+							placeholder={ true }
+						/>
+					</>
+				) }
 			</ul>
 		</>
 	);
