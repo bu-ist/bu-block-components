@@ -16,7 +16,6 @@ import './editor.scss';
 
 export const SearchUI = ( props ) => {
 	const {
-		onSearch,
 		searchTerm,
 		setSearchTerm,
 		searchType,
@@ -25,13 +24,10 @@ export const SearchUI = ( props ) => {
 		label = __( 'Enter a search query' ),
 		hideLabelFromVision = true,
 		placeholder,
-		selectedPostType,
-		setSelectedPostType,
 		postTypes = [
 			{ label: 'Posts', value: 'post' },
 			{ label: 'Pages', value: 'page' },
 		],
-		defaultPostType = 'post',
 	} = props;
 
 

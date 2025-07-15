@@ -31,7 +31,6 @@ import './editor.scss';
 export const ResultsControls = ( props ) => {
 	const {
 		searchTerm,
-		onSearch,
 		searchType,
 		setSearchType,
 		sortOrder,

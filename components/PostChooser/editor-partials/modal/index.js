@@ -45,7 +45,6 @@ export const PostChooserModal = ( props ) => {
 			status: 'publish',
 		}
 	);
-	console.log( 'posts', posts );
 
 	// Search query
 	// Todo: Add support for searching by more than one post type that
@@ -64,13 +63,17 @@ export const PostChooserModal = ( props ) => {
 			: {}
 	);
 
-	console.log( 'searchPosts', searchTerm,searchPosts );
-
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query
 		invalidateResolver();
 	}, [ invalidateResolver ] );
 
+
+	/**
+	 * When the search term changes we want to check if the searchPosts array
+	 * is empty or not. If it has results we want to set the searchType state to 'default'.
+	 * This will flip the view for the user to show the search results.
+	 */
 	useEffect( () => {
 		if ( searchType === 'recent' && searchTerm && searchPosts?.length > 0 ) {
 			setSearchType( 'default' );
@@ -119,7 +122,6 @@ export const PostChooserModal = ( props ) => {
 					 */
 				}
 				<SearchUI
-					onSearch={ handleSearch }
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
 					sortOrder={ sortOrder }
