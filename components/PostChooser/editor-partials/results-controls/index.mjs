@@ -19,10 +19,10 @@ import { useState } from '@wordpress/element';
 // Internal dependencies
 import {
 	IconSortMenu,
-	IconSortTitleAscending,
-	IconSortTitleDescending,
-	IconSortDateAscending,
-	IconSortDateDescending
+	IconPostChooserTextSearch,
+	IconPostChooserRecentlyUpdated,
+	IconPostChooserSlugSearch,
+	IconPostChooserId
 } from '../assets/icons.mjs';
 
 
@@ -54,7 +54,7 @@ export const ResultsControls = ( props ) => {
 					>
 						<Radio
 							value="recent"
-							icon="calendar"
+							icon={ IconPostChooserRecentlyUpdated }
 							iconPosition="right"
 						>
 							{ __( 'Recently Updated' ) }
@@ -62,7 +62,7 @@ export const ResultsControls = ( props ) => {
 						<Radio
 							value="default"
 							disabled={ searchTerm ? false : true }
-							icon="media-text"
+							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
 						>
 							{ __( 'Content' ) }
@@ -71,7 +71,7 @@ export const ResultsControls = ( props ) => {
 						<Radio
 							value="slug"
 							disabled={ searchTerm ? false : true }
-							icon="admin-links"
+							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
 						>
 							{ __( 'Post Slug' ) }
@@ -80,7 +80,7 @@ export const ResultsControls = ( props ) => {
 						<Radio
 							value="id"
 							disabled={ searchTerm ? false : true }
-							icon="admin-post"
+							icon={ IconPostChooserId }
 							iconPosition="right"
 						>
 							{ __( 'Post ID' ) }
