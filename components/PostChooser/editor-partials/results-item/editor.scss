@@ -9,7 +9,7 @@
 	grid-template-areas: "content select";
 	transition: all 300ms ease-in-out 0s;
 
-	.bu-components-post-chooser-results-item-placeholder & {
+	[data-placeholder="true"] & {
 		background-color: lightgray;
 		opacity: 0.35;
 	}
@@ -84,7 +84,7 @@
 	font-size: 0.9em;
 	margin: 0 5px;
 
-	.bu-components-post-chooser-results-item-placeholder & {
+	[data-placeholder="true"] &{
 		min-width: 5ch;
 		display: inline-block;
 		min-height: 2ch;
@@ -101,7 +101,7 @@
 		background: var(--wp-admin-theme-color);
 		color: #fff;
 	}
-	.bu-components-post-chooser-results-item-placeholder & {
+	[data-placeholder="true"] & {
 		min-width: 5ch;
 		background-color: #73959e;
 	}
