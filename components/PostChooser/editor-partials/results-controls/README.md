@@ -26,41 +26,10 @@ The `ResultsControls` component provides filtering and sorting options for the p
 | `slugResultsCount` | Number | 0 | Count of slug search results |
 | `idResultsCount` | Number | 0 | Count of ID search results |
 
-## Usage
-
-```jsx
-import { ResultsControls } from '@components/PostChooser/editor-partials/results-controls';
-import { useState } from '@wordpress/element';
-
-const MyFilterComponent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState('recent');
-  const [sortOrder, setSortOrder] = useState({ orderby: 'date', order: 'desc' });
-
-  const handleSearch = () => {
-    // Perform search with updated parameters
-    console.log('Searching with:', { searchType, sortOrder });
-  };
-
-  return (
-    <ResultsControls
-      searchTerm={searchTerm}
-      onSearch={handleSearch}
-      searchType={searchType}
-      setSearchType={setSearchType}
-      sortOrder={sortOrder}
-      setSortOrder={setSortOrder}
-      contentResultsCount={10}
-      slugResultsCount={5}
-      idResultsCount={2}
-    />
-  );
-};
-```
 
 ## Implementation Details
 
 - Uses WordPress `RadioGroup` and `Radio` components for search type selection
+  - This will be deprecated in future WP and replaced with ToggleControlGroup or similar.
 - Uses WordPress `Dropdown` component for sort controls
-- Controls are automatically disabled when no search term is present
-- Includes commented-out alternative implementation using `DropdownMenu`
+- Sort Controls are automatically disabled when no search term is present

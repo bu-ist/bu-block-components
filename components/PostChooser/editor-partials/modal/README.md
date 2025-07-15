@@ -22,35 +22,6 @@ The `PostChooserModal` component serves as the main container for the post selec
 | `placeholder` | String | "Enter a search term…" | Placeholder text for the search field |
 | `title` | String | "Choose a Post" | Title of the modal |
 
-## Usage
-
-```jsx
-import { PostChooserModal } from '@components/PostChooser/editor-partials/modal';
-
-const MyComponent = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handlePostSelect = (post) => {
-    console.log('Selected post:', post);
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <Button onClick={() => setIsModalOpen(true)}>Choose a Post</Button>
-
-      {isModalOpen && (
-        <PostChooserModal
-          onClose={() => setIsModalOpen(false)}
-          onSelectPost={handlePostSelect}
-          postTypes={['posts', 'pages']}
-          title="Select Content"
-        />
-      )}
-    </>
-  );
-};
-```
 
 ## Internal Components
 

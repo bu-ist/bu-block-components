@@ -19,36 +19,6 @@ The `Results` component displays the list of posts returned from a search or que
 | `onSelectPost` | Function | Required | Function to call when a post is selected |
 | `loading` | Boolean | false | Whether posts are currently being loaded |
 
-## Usage
-
-```jsx
-import { Results } from '@components/PostChooser/editor-partials/results';
-
-const MyPostList = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Fetch posts
-    fetchPosts().then(data => {
-      setPosts(data);
-      setLoading(false);
-    });
-  }, []);
-
-  const handleSelectPost = (post) => {
-    console.log('Selected post:', post);
-  };
-
-  return (
-    <Results
-      posts={posts}
-      onSelectPost={handleSelectPost}
-      loading={loading}
-    />
-  );
-};
-```
 
 ## Implementation Details
 

@@ -1,53 +1,57 @@
-# Search UI Assets
+# Icon Assets
 
 ## Overview
 
-This directory contains SVG icons and related assets used by the PostChooser component's search and sorting interfaces.
+This directory contains SVG icons and related assets used by the PostChooser component's search, filtering, and sorting interfaces.
 
 ## Contents
 
 ### icons.mjs
 
-Exports a collection of SVG icons used for the sort controls in the PostChooser interface.
+Exports a collection of SVG icons used throughout the PostChooser interface, including sort controls and search type indicators.
 
 #### Exported Icons
 
 - `IconSortMenu`: Icon for the sort dropdown toggle button
-- `IconSortTitleAscending`: Icon for sorting by title in ascending order
-- `IconSortTitleDescending`: Icon for sorting by title in descending order
-- `IconSortDateAscending`: Icon for sorting by date in ascending order
-- `IconSortDateDescending`: Icon for sorting by date in descending order
+- `IconPostChooserTextSearch`: Icon for text content search option
+- `IconPostChooserRecentlyUpdated`: Icon for recently updated posts filter
+- `IconPostChooserSlugSearch`: Icon for searching by post slug
+- `IconPostChooserId`: Icon for searching by post ID
 
 #### Usage
 
 ```jsx
 import {
   IconSortMenu,
-  IconSortTitleAscending,
-  IconSortTitleDescending,
-  IconSortDateAscending,
-  IconSortDateDescending
+  IconPostChooserTextSearch,
+  IconPostChooserRecentlyUpdated,
+  IconPostChooserSlugSearch,
+  IconPostChooserId
 } from './assets/icons.mjs';
 
-// Use with WordPress Icon component
-<Icon icon={IconSortMenu} />
+// Use with WordPress components
+<Button icon={IconSortMenu} />
 
-// Use directly
-{IconSortDateAscending}
+// Use directly in JSX
+{IconPostChooserRecentlyUpdated}
+
+// Use with Radio components
+<Radio
+  value="recent"
+  icon={IconPostChooserRecentlyUpdated}
+  iconPosition="right"
+>
+  Recently Updated
+</Radio>
 ```
 
-### SVG Files
+## Implementation Details
 
-The directory also contains original SVG files from The Noun Project:
+All icons are implemented using WordPress's native SVG components from `@wordpress/primitives` and wrapped with the `Icon` component from `@wordpress/components`. This ensures compatibility with WordPress styling and accessibility standards.
 
-- `noun-sort-576642.svg`: Generic sort icon
-- `noun-a-to-z-72773.svg`: Alphabetical ascending sort icon
-- `noun-z-to-a-72788.svg`: Alphabetical descending sort icon
-- `noun-ascending-by-time-6967060.svg`: Chronological ascending sort icon
-- `noun-descending-by-time-6967061.svg`: Chronological descending sort icon
-- `noun-sort-up-3646432.svg`: Upward sort icon
-- `noun-sort-down-3646413.svg`: Downward sort icon
+Each icon is defined with:
+- Clean SVG paths
+- Proper viewBox attributes
+- Consistent 24×24 size
 
-## Attribution
 
-Icons used in this component are sourced from [The Noun Project](https://thenounproject.com/) and have been modified to fit the WordPress icon system using the SVG and Path components from `@wordpress/primitives`.

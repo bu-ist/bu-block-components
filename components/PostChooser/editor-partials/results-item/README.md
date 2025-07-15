@@ -18,32 +18,6 @@ The `ResultsItem` component renders an individual post in the search results lis
 | `post` | Object | Required | WordPress post object with title, modified date, status, and type |
 | `onSelectPost` | Function | Required | Function to call when the post is selected |
 
-## Usage
-
-```jsx
-import { ResultsItem } from '@components/PostChooser/editor-partials/results-item';
-
-const MyPostItem = () => {
-  const post = {
-    id: 123,
-    title: { rendered: 'Sample Post Title' },
-    modified: '2023-07-15T10:30:45',
-    status: 'publish',
-    type: 'post'
-  };
-
-  const handleSelectPost = (selectedPost) => {
-    console.log('Selected:', selectedPost.title.rendered);
-  };
-
-  return (
-    <ResultsItem
-      post={post}
-      onSelectPost={handleSelectPost}
-    />
-  );
-};
-```
 
 ## Implementation Details
 

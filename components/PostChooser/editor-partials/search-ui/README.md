@@ -25,36 +25,6 @@ The `SearchUI` component provides a search input field with clear functionality 
 | `hideLabelFromVision` | Boolean | true | Whether to visually hide the label |
 | `placeholder` | String | - | Placeholder text for the search input |
 
-## Usage
-
-```jsx
-import { SearchUI } from '@components/PostChooser/editor-partials/search-ui';
-import { useState } from '@wordpress/element';
-
-const MySearchComponent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState('recent');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSearch = () => {
-    setIsLoading(true);
-    // Perform search...
-    setTimeout(() => setIsLoading(false), 1000); // Simulate search
-  };
-
-  return (
-    <SearchUI
-      onSearch={handleSearch}
-      searchTerm={searchTerm}
-      setSearchTerm={setSearchTerm}
-      searchType={searchType}
-      setSearchType={setSearchType}
-      isLoading={isLoading}
-      placeholder="Search posts..."
-    />
-  );
-};
-```
 
 ## Implementation Details
 
