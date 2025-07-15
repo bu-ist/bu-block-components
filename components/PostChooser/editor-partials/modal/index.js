@@ -109,6 +109,15 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
+				{
+					/**
+					 * These sub-components are currently using a lot of props that are being passed down into them.
+					 * This should be improved in the future to reduce prop drilling.
+					 *
+					 * @todo: Refactor how these props are passed down to the sub-components by using a context provider.
+					 * This will avoid having to pass down so many props and make the code cleaner.
+					 */
+				}
 				<SearchUI
 					onSearch={ handleSearch }
 					searchTerm={ searchTerm }
