@@ -101,7 +101,6 @@ export const ResultsControls = ( props ) => {
 						renderToggle={ ( { isOpen, onToggle, onClose } ) => (
 							<Button
 								onClick={ () => {
-									//setIsSortDropdownOpen( !isSortDropdownOpen );
 									onToggle();
 								} }
 								aria-expanded={ isOpen }
