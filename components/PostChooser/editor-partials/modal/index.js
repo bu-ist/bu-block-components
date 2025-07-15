@@ -7,6 +7,7 @@ import { TextControl, Button, Spinner, Modal,
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
+import { useEffect } from 'react';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
@@ -14,15 +15,15 @@ import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import { ResultsControls } from '../results-controls/index.mjs';
 
+// Import CSS
 import './editor.scss';
-import { useEffect } from 'react';
 
 export const PostChooserModal = ( props ) => {
 	const {
 		onClose,
 		label,
 		onSelectPost,
-		postTypes = [ 'posts', 'pages' ],
+		postTypes,
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 	} = props;
@@ -98,8 +99,6 @@ export const PostChooserModal = ( props ) => {
 			// Return ID search results.
 			// Note: This is a placeholder for ID search results array.
 			return searchPosts;
-		} else {
-			return [];
 		}
 	};
 
