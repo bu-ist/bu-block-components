@@ -4,7 +4,8 @@ import {
 	FlexItem,
 	FlexBlock,
 	Icon,
-	BaseControl
+	BaseControl,
+	SelectControl
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
@@ -24,6 +25,13 @@ export const SearchUI = ( props ) => {
 		label = __( 'Enter a search query' ),
 		hideLabelFromVision = true,
 		placeholder,
+		selectedPostType,
+		setSelectedPostType,
+		postTypes = [
+			{ label: 'Posts', value: 'post' },
+			{ label: 'Pages', value: 'page' },
+		],
+		defaultPostType = 'post',
 	} = props;
 
 
@@ -75,6 +83,19 @@ export const SearchUI = ( props ) => {
 								</div>
 							</BaseControl>
 						</div>
+					</FlexBlock>
+
+				</Flex>
+				<Flex className="bu-components-post-chooser-posttype-select" justify="space-between" align="center">
+					<FlexBlock>
+						<SelectControl
+							label={ __( 'Filter by Post Type' ) }
+							value='post' // Todo make this dynamic
+							options={ [
+								{ label: 'Posts', value: 'post' },
+								{ label: 'Pages', value: 'page' },
+							] } // ToDo: make this dynamic so it can be set by the block for the postchooser.
+						/>
 					</FlexBlock>
 				</Flex>
 			</div>
