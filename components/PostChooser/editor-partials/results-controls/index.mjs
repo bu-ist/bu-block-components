@@ -149,55 +149,6 @@ export const ResultsControls = ( props ) => {
 							</div>
 						) }
 					/>
-
-					{/* <DropdownMenu icon={ IconSortMenu } label="Sort By:">
-						{ ( { onClose } ) => (
-							<>
-								<MenuGroup>
-									<MenuItem
-										icon={ IconSortDateAscending }
-										disabled={ sortOrder.orderby === 'date' && sortOrder.order === 'asc' ? true : false }
-										onClick={ () => {
-											setSortOrder( { orderby: 'date', order: 'asc' } );
-											onSearch();
-											onClose();
-										} }>
-										{ __( 'Published' ) }
-									</MenuItem>
-									<MenuItem
-										icon={ IconSortDateDescending }
-										disabled={ sortOrder.orderby === 'date' && sortOrder.order === 'desc' ? true : false }
-										onClick={ () => {
-											setSortOrder( { orderby: 'date', order: 'desc' } );
-											onSearch();
-											onClose();
-										} }>
-										{ __( 'Published' ) }
-									</MenuItem>
-									<MenuItem
-										icon={ IconSortTitleAscending }
-										disabled={ sortOrder.orderby === 'title' && sortOrder.order === 'asc' ? true : false }
-										onClick={ () => {
-											setSortOrder( { orderby: 'title', order: 'asc' } );
-											onSearch();
-											onClose();
-										} }>
-										{ __( 'Title' ) }
-									</MenuItem>
-									<MenuItem
-										icon={ IconSortTitleDescending }
-										disabled={ sortOrder.orderby === 'title' && sortOrder.order === 'desc' ? true : false }
-										onClick={ () => {
-											setSortOrder( { orderby: 'title', order: 'desc' } );
-											onSearch();
-											onClose();
-										} }>
-										{ __( 'Title' ) }
-									</MenuItem>
-								</MenuGroup>
-							</>
-						) }
-					</DropdownMenu> */}
 				</FlexItem>
 			</Flex>
 		</div>
