@@ -86,18 +86,20 @@ export const SearchUI = ( props ) => {
 					</FlexBlock>
 
 				</Flex>
-				<Flex className="bu-components-post-chooser-posttype-select" justify="space-between" align="center">
-					<FlexBlock>
-						<SelectControl
-							label={ __( 'Filter by Post Type' ) }
-							value='post' // Todo make this dynamic
-							options={ [
-								{ label: 'Posts', value: 'post' },
-								{ label: 'Pages', value: 'page' },
-							] } // ToDo: make this dynamic so it can be set by the block for the postchooser.
-						/>
-					</FlexBlock>
-				</Flex>
+				{ postTypes.length > 1 && (
+					<Flex className="bu-components-post-chooser-posttype-select" justify="space-between" align="center">
+						<FlexBlock>
+							<SelectControl
+								label={ __( 'Filter by Post Type' ) }
+								value='post' // Todo make this dynamic
+								options={ [
+									{ label: 'Posts', value: 'post' },
+									{ label: 'Pages', value: 'page' },
+								] } // ToDo: make this dynamic so it can be set by the block for the postchooser.
+							/>
+						</FlexBlock>
+					</Flex>
+				)}
 			</div>
 		</div>
 	);
