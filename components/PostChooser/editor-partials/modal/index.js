@@ -4,10 +4,10 @@ import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
-import { useRequestDataWithPagination } from '../../../../hooks/useRequestDataWithPagination/index.mjs';
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import { Pagination } from '../../../../components/Pagination/index.mjs';
+import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 
 // Import CSS
 import './editor.scss';
@@ -47,12 +47,11 @@ export const PostChooserModal = ( props ) => {
 	// Search query
 	// Todo: Add support for searching by more than one post type that
 	// is passed in by the postTypes prop.
-	const {
-		records: searchPosts,
-		isLoading: isSearchLoading,
-		invalidateResolver: searchInValidateResolver,
-		pagination: searchPagination
-	} = useRequestDataWithPagination(
+	const [
+		searchPosts,
+		isSearchLoading,
+		searchInValidateResolver,
+	 ] = useRequestData(
 		'postType',
 		'post',
 		searchTerm
@@ -67,10 +66,25 @@ export const PostChooserModal = ( props ) => {
 			: {}
 	);
 
-	// Access pagination information
-	const { totalItems, totalPages } = searchPagination;
+	// Get pagination information by using useGetPagination hook.
+	// This hook will return the total items and total pages for the search results.
+	const { pagination, isLoading: paginationLoading } = useGetPagination( 'postType',
+		'post',
+		searchTerm
+			? {
+					search: searchTerm,
+					per_page: 10,
+					orderby: sortOrder.orderby,
+					order: sortOrder.order,
+					status: 'publish'
+			  }
+			: {}
+	);
 
-	console.log( 'Pagination:', 'Pages: ' + totalPages + ' Items: ' + totalItems );
+	console.log( 'useGetPagination:', pagination );
+
+	// Access pagination information
+	const { totalItems, totalPages } = pagination;
 
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query

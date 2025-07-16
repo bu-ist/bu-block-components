@@ -1,14 +1,21 @@
 /**
  * WordPress dependencies
  */
-import { store as coreStore } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
+import { store as coreStore, getEntityRecords, getEntityRecordsTotalItems, getEntityRecordsTotalPages } from '@wordpress/core-data';
+import { select, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
-// Internal dependencies
-import { useRequestData } from '../useRequestData/index.mjs';
+
+// Add a check for the existence of getEntityRecordsTotalItems and getEntityRecordsTotalPages
+// These are only available in WordPress 6.5 and later.
+// If they are not available, we will use apiFetch to get the pagination information.
+const hasNewSelectors = typeof select(coreStore).getEntityRecordsTotalItems === 'function' && typeof select(coreStore).getEntityRecordsTotalPages === 'function';
+if ( ! hasNewSelectors) {
+	console.warn('getEntityRecordsTotalItems and getEntityRecordsTotalPages are not available in @wordpress/core-data for this Version of WordPress. Using apiFetch instead.');
+}
+
 
 /**
  * Hook for retrieving data from the WordPress REST API.
@@ -18,31 +25,7 @@ import { useRequestData } from '../useRequestData/index.mjs';
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @return {Object}            	    Object with records and pagination info
  */
-/**
- * Custom hook to fetch entity records with pagination information.
- *
- * This hook extends the functionality of useRequestData by also fetching
- * pagination metadata from the WordPress REST API, such as total items and total pages.
- *
- * @param {string} entity - The entity type to fetch (e.g., 'postType', 'taxonomy'). Default: 'postType'.
- * @param {string} kind - The kind of entity to fetch (e.g., 'post', 'page', 'category'). Default: 'post'.
- * @param {Object|number} query - Query parameters for fetching records or a specific record ID. Default: {}.
- * @returns {Object} Object containing:
- *   - records: The fetched entity records
- *   - isLoading: Boolean indicating if data is being loaded
- *   - invalidateResolver: Function to invalidate the current data and trigger a refetch
- *   - pagination: Object containing pagination information:
- *     - totalItems: Total number of items matching the query
- *     - totalPages: Total number of pages available for the query
- *
- * @example
- * // Fetch posts with pagination
- * const { records, isLoading, pagination } = useRequestDataWithPagination('postType', 'post', { per_page: 10, page: 2 });
- *
- * // Access pagination info
- * console.log(`Showing page 2 of ${pagination.totalPages} (${pagination.totalItems} total items)`);
- */
-export const useRequestDataWithPagination = (entity='postType', kind='post', query = {} ) => {
+export const useGetPagination = (entity='postType', kind='post', query = {} ) => {
 	// State to hold pagination information
 	// This will hold total items and total pages.
 	const [pagination, setPagination] = useState({
@@ -51,17 +34,58 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 		perPage: query.per_page || 10, // Default to 10 items per page if not specified
 	});
 
-	// Use the existing useRequestData hook to fetch records
-	// This will return the records and loading state.
-	// The query can be an object or a number (for single record).
-	// If a number is passed, it will use getEntityRecord instead of getEntityRecords
-	// to fetch a single record.
-	// If an object is passed, it will use getEntityRecords to fetch multiple records.
-	const [ records, isLoading, invalidateResolver ] = useRequestData(entity, kind, query);
+
+
+	/**
+	 * Only runs in WordPress 6.5 and later.
+	 * Uses the new getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors
+	 * to get the total items and total pages for the specified entity and kind.
+	 *
+	 * Returns an object with totalItems, totalPages, and isLoading.
+	 *
+	 * If the new selectors are not available, this effect will return an object with
+	 * totalItems and totalPages set to 0, and isLoading set to false.
+	 */
+	const { totalItems, totalPages, isLoading } = useSelect(
+		(select) => {
+			const coreSelect = select(coreStore);
+
+			return {
+				totalItems: hasNewSelectors ? coreSelect.getEntityRecordsTotalItems(entity, kind, query) : 0,
+				totalPages: hasNewSelectors ? coreSelect.getEntityRecordsTotalPages(entity, kind, query) : 0,
+				isLoading: hasNewSelectors ? select('core/data').isResolving(
+					coreStore,
+					'getEntityRecords', [
+						entity,
+						kind,
+						query,
+					]) : false, // Return false if the new selectors are not available.
+			};
+		},
+		[entity, kind, query, hasNewSelectors],
+	);
+
+	/**
+	 * Updates the pagination state with the total items and total pages
+	 * if the new selectors are available and the data is loaded.
+	 */
+	useEffect(() => {
+		if ( ! hasNewSelectors ) return; // If the new selectors are not available, skip this effect.
+
+		if ( ! isLoading && totalItems && totalPages ) {
+			// Update the pagination state with total items and pages.
+			setPagination(prev => ({
+				...prev,
+				totalItems: totalItems,
+				totalPages: totalPages,
+			}));
+		}
+	}, [totalItems, totalPages, hasNewSelectors, isLoading]);
+
 
 	/**
 	 * Fetches the entity configuration for the specified entity and kind.
-	 * This allows us to construct the API endpoint for fetching pagination information.
+	 * This allows us to construct the API endpoint for fetching pagination information via apiFetch.
 	 *
 	 * @effect
 	 * @dependency {string} entity
@@ -80,7 +104,16 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 	/**
 	 * Fetches pagination information from the WordPress REST API.
 	 *
-	 * This effect runs whenever records, entity, kind, query, or entityConfig changes.
+	 * This effect runs whenever records, entity, kind, query, or entityConfig changes. It returns
+	 * the total items and total pages for the specified entity and kind in the same format as
+	 * the newer getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors that we don't
+	 * have access to yet in this version of WordPress.
+	 *
+	 * It will not run if the new getEntityRecordsTotalItems and getEntityRecordsTotalPages
+	 * selectors are available (WordPress 6.5+).
+	 *
+	 * After we upgrade to WordPress 6.5 or later, this effect should be able to be removed.
+	 *
 	 * It makes a direct API request to the same endpoint that getEntityRecords uses,
 	 * but with a minimal per_page setting to reduce data transfer.
 	 *
@@ -94,9 +127,12 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
 	 */
 	useEffect(() => {
+		// Only run this effect if the new selectors are not available, such as before WordPress 6.5.
+		if ( hasNewSelectors ) return;
+
 		const loadPaginationData = async () => {
-			// If no records or entityConfig is available, skip fetching pagination data.
-			if ( ! records || ! entityConfig ) return;
+			// If  entityConfig is available, skip fetching pagination data.
+			if ( ! entityConfig ) return;
 
 			// Set default values for total items and pages.
 			let totalItems = 0;
@@ -132,24 +168,26 @@ export const useRequestDataWithPagination = (entity='postType', kind='post', que
 				totalPages = 0;
 			} finally {
 				// Update the pagination state.
+				console.log( 'Updating Pagination State via apiFetch:' );
 				setPagination(prev => ({
 					...prev,
 					totalItems: totalItems,
 					totalPages: totalPages,
 				}));
+
 			}
 		};
 		// Call the function to load pagination data.
 		// This will run whenever records, entity, kind, query, or entityConfig changes
 		loadPaginationData();
 
-	}, [records, entity, kind, JSON.stringify(query), entityConfig]);
 
-	// Return the records, loading state, and pagination information
+	}, [ JSON.stringify(query), entityConfig]);
+
+
+
+	// Return the pagination information
 	return {
-		records,
-		isLoading,
-		invalidateResolver,
 		pagination
 	};
 };
