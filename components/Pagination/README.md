@@ -23,6 +23,7 @@ A customizable pagination component that provides navigation controls for data t
 
 ## Layout Options
 ![Pagination component screenshot](BU_Pagination_Layout_Options.png)
+
 This screenshot shows 6 different ways to customize the layout of the Pagination component.
 
 ## Usage
