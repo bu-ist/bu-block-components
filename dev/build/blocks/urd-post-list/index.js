@@ -29,12 +29,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "../node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "../components/HelpWrapper/editor.scss");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "../components/HelpWrapper/editor.scss");
 
 // External dependencies.
 
+
+// WordPress dependencies.
 
 
 
@@ -45,36 +49,95 @@ __webpack_require__.r(__webpack_exports__);
  * Returns the class list for the component based on the current settings.
  *
  * @param {string} className  Additional classes assigned to the component.
+ * @param {boolean} offset    If true, adds the 'has-offset-label' class to the component.
+ * @returns {string}          The computed class list for the component.
  */
 const getClasses = (className, offset) => classnames__WEBPACK_IMPORTED_MODULE_1___default()('bu-components-help-wrapper', {
   [className]: className,
   [`has-offset-label`]: offset
 });
+
+/**
+ * Help Wrapper Component
+ *
+ * A component that wraps children elements and provides a help icon button
+ * that shows a popover with help information when clicked.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.text] - Help text content to be displayed in the popover.
+ * @param {string} [props.title] - Optional title for the help popover.
+ * @param {string} [props.className] - Additional CSS class name for the wrapper element.
+ * @param {string|Object} [props.offset] - Offset positioning for the help icon.
+ * @param {React.ReactNode} [props.children] - Child elements to be wrapped by this component.
+ *
+ * @returns {JSX.Element} The HelpWrapper component.
+ */
 const HelpWrapper = props => {
   const {
-    text = undefined,
-    className = undefined,
-    offset = undefined,
+    text,
+    title,
+    className,
+    offset,
     children
   } = props;
-  const [popoverVisible, setPopoverVisible] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const toggleVisible = () => {
-    setPopoverVisible(state => !state);
+
+  // State to manage the visibility of the popover.
+  // Initially, the popover is not visible.
+  const [popoverVisible, setPopoverVisible] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+
+  // Function to toggle the visibility of the popover.
+  // This function is called when the icon is clicked.
+  const toggleVisible = event => {
+    // If the click is on the icon, toggle the popover visibility.
+    if (popoverVisible) {
+      // If the popover is already visible, hide it.
+      setPopoverVisible(false);
+    } else {
+      // If the popover is not visible, show it.
+      setPopoverVisible(true);
+    }
   };
-  console.log('HelpWrapper', props);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: getClasses(className, offset)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bu-components-help-wrapper-container"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
+  }, !popoverVisible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
     onClick: toggleVisible,
+    role: "button",
     icon: "editor-help",
-    size: "20"
-  }, popoverVisible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Popover, {
+    className: "bu-components-help-wrapper-icon",
+    iconSize: "20",
+    label: "Help",
+    size: "small" // For Future WP 6.x compatibility.
+    ,
+    isSmall: true // for WP 5.8 compatibility
+    ,
+    variant: "link"
+  }), popoverVisible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    onClick: () => {
+      setPopoverVisible(false);
+    },
+    role: "button",
+    icon: "dismiss",
+    className: "bu-components-help-wrapper-icon",
+    iconSize: "20",
+    label: "Close Help",
+    size: "small" // For Future WP 6.x compatibility.
+    ,
+    isSmall: true // for WP 5.8 compatibility
+    ,
+    variant: "link"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Popover, {
     className: "bu-components-help-wrapper-popover",
-    noArrow: false,
-    onFocusOutside: toggleVisible
-  }, text)))), children));
+    noArrow: true,
+    onFocusOutside: () => {
+      setPopoverVisible(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-help-wrapper-popover-content"
+  }, title && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+    className: "bu-components-help-wrapper-popover-title"
+  }, title), text)))), children);
 };
 
 /***/ }),
