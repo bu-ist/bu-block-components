@@ -19,6 +19,8 @@ import {
 	LoadingSpinner,
 } from '@bostonuniversity/block-imports';
 
+import { HelpWrapper } from '../../../../components/HelpWrapper';
+
 import { TextControl, PanelBody, PanelRow } from '@wordpress/components';
 
 /**
@@ -66,13 +68,29 @@ export default function Edit( props ) {
 			<InspectorControls>
 				<PanelBody title="Post Settings">
 					<PanelRow>
-						<TextControl
-							label="Post ID"
-							value={ postID }
-							onChange={ ( value ) =>
-								setAttributes( { postID: value } )
+						<HelpWrapper
+							offset="label"
+							title="Post ID"
+							text={
+								<>
+									<p>Enter the post ID of the post you want to retrieve data for.</p>
+									<p>The Post ID can be found in the URL of the post, for example:</p>
+									<p>https://example.com/wp-admin/post.php??post=123</p>
+									<p>In this case, the post ID is <strong>123</strong>.</p>
+									<p>
+										<strong>Documentation is available:</strong> <a href="https://wpdocs.bu.edu">Read More</a>
+									</p>
+								</>
 							}
-						/>
+						>
+							<TextControl
+								label="Post ID"
+								value={ postID }
+								onChange={ ( value ) =>
+									setAttributes( { postID: value } )
+								}
+							/>
+						</HelpWrapper>
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
