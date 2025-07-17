@@ -36,6 +36,7 @@ export { Pagination } from './components/Pagination/index.mjs';
 export { useMedia } from './hooks/useMedia/index.mjs';
 // export { useRenderAppenderWithBlockLimit } from './hooks/useRenderAppenderWithBlockLimit';
 export { useRequestData } from './hooks/useRequestData/index.mjs';
+export { useRequestComplexData } from './hooks/useRequestComplexData/index.mjs';
 export { useGetPagination } from './hooks/useGetPagination/index.mjs';
 
 // Utils
