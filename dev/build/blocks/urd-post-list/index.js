@@ -72,6 +72,235 @@ const LoadingSpinner = props => {
 
 /***/ }),
 
+/***/ "../components/Pagination/editor.scss":
+/*!********************************************!*\
+  !*** ../components/Pagination/editor.scss ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/Pagination/icons.mjs":
+/*!******************************************!*\
+  !*** ../components/Pagination/icons.mjs ***!
+  \******************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PaginationIcons: () => (/* binding */ PaginationIcons)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+
+
+
+const PaginationIcons = {
+  previous: {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+      width: "1200pt",
+      height: "1200pt",
+      version: "1.1",
+      viewBox: "0 0 1200 1200",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m723.74 918.19 70.703-70.703-247.48-247.48 247.48-247.48-70.703-70.703-318.19 318.19z"
+    })),
+    label: 'Previous Page'
+  },
+  next: {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+      width: "1200pt",
+      height: "1200pt",
+      version: "1.1",
+      viewBox: "0 0 1200 1200",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m476.26 918.19-70.703-70.703 247.48-247.48-247.48-247.48 70.703-70.703 318.19 318.19z"
+    })),
+    label: 'Next Page'
+  },
+  first: {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+      width: "1200pt",
+      height: "1200pt",
+      version: "1.1",
+      viewBox: "0 0 1200 1200",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m873.74 918.19 70.703-70.703-247.48-247.48 247.48-247.48-70.703-70.703-318.19 318.19z"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m450 950h-100v-700h100z"
+    })),
+    label: 'First Page'
+  },
+  last: {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+      width: "1200pt",
+      height: "1200pt",
+      version: "1.1",
+      viewBox: "0 0 1200 1200",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m326.26 918.19-70.703-70.703 247.48-247.48-247.48-247.48 70.703-70.703 318.19 318.19z"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+      d: "m750 250h100v700h-100z"
+    })),
+    label: 'Last Page'
+  }
+};
+
+/***/ }),
+
+/***/ "../components/Pagination/index.mjs":
+/*!******************************************!*\
+  !*** ../components/Pagination/index.mjs ***!
+  \******************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Pagination: () => (/* binding */ Pagination)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "../node_modules/@wordpress/icons/build-module/icon/index.js");
+/* harmony import */ var _icons_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./icons.mjs */ "../components/Pagination/icons.mjs");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "../components/Pagination/editor.scss");
+
+/**
+ * A custom pagination component that can be used to build pagination
+ * controls for data that spans multiple pages.
+ */
+
+// WordPress dependencies
+
+
+
+
+
+// Internal dependencies
+
+
+// Import CSS.
+
+const Pagination = props => {
+  const {
+    currentPage = 1,
+    // Default to page 1 if not provided.
+    totalPages = 1,
+    // Default to 1 page if not provided.
+    onChange = () => {},
+    // Default to an empty function if not provided.
+    showPageNumbers = true,
+    showFirstLastButtons = true,
+    showPrevNextButtons = true,
+    showJumpToPage = false,
+    margin = {
+      marginBlock: '1em',
+      marginInline: 0
+    }
+  } = props;
+
+  // Track the current page in state.
+  // This allows the component to re-render when the current page changes.
+  const [page, setPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(currentPage);
+
+  // Update the current page state when the currentPage prop changes.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    setPage(currentPage);
+  }, [currentPage]);
+
+  // Handle a change to the pagination component when user clicks on a button or changes the page number.
+  // This function will update the page state and call the onChange callback with the new page number.
+  // It is called when the user clicks on the "Previous", "Next", "First", "Last" buttons or changes the page number in the input field.
+  const handleChange = newPage => {
+    setPage(newPage);
+    onChange(newPage);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("nav", {
+    className: "bu-components-pagination"
+    // Use the margin prop to conditionally apply margin styles
+    // marginBlock and marginInline are optional props
+    // If they are not provided, they will not be applied.
+    ,
+    style: {
+      ...(margin.marginBlock ? {
+        marginBlock: margin.marginBlock
+      } : {}),
+      ...(margin.marginInline ? {
+        marginInline: margin.marginInline
+      } : {})
+    }
+  }, showPrevNextButtons && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    isSecondary: true,
+    disabled: page <= 1,
+    onClick: () => handleChange(page - 1)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    icon: _icons_mjs__WEBPACK_IMPORTED_MODULE_4__.PaginationIcons.previous.icon
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Previous'))), (showFirstLastButtons || showPageNumbers || showJumpToPage) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-pagination-info"
+  }, showFirstLastButtons && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-pagination-first"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    isSecondary: true,
+    disabled: page <= 1,
+    onClick: () => handleChange(1),
+    label: "First Page"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    icon: _icons_mjs__WEBPACK_IMPORTED_MODULE_4__.PaginationIcons.first.icon
+  }))), showPageNumbers && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-pagination-of"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Page'), ' ', showJumpToPage ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-pagination-jump-to"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    value: page,
+    onChange: value => handleChange(value),
+    type: "number",
+    min: 1,
+    max: totalPages,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Jump to page'),
+    hideLabelFromVision: true
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, page), ' ', (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('of'), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, totalPages)), showJumpToPage && !showPageNumbers && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-pagination-jump-to"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    value: page,
+    onChange: value => handleChange(value),
+    type: "number",
+    min: 1,
+    max: totalPages,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Jump to page'),
+    hideLabelFromVision: true
+  })), showFirstLastButtons && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-pagination-last"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    isSecondary: true,
+    disabled: page >= totalPages,
+    onClick: () => handleChange(totalPages),
+    label: "Last Page"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    icon: _icons_mjs__WEBPACK_IMPORTED_MODULE_4__.PaginationIcons.last.icon
+  })))), showPrevNextButtons && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    isSecondary: true,
+    disabled: page >= totalPages,
+    onClick: () => handleChange(page + 1)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Next'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    icon: _icons_mjs__WEBPACK_IMPORTED_MODULE_4__.PaginationIcons.next.icon
+  }))));
+};
+
+/***/ }),
+
 /***/ "../components/PostChooser/editor-partials/modal/editor.scss":
 /*!*******************************************************************!*\
   !*** ../components/PostChooser/editor-partials/modal/editor.scss ***!
@@ -107,7 +336,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
 /* harmony import */ var _results_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../results/index.js */ "../components/PostChooser/editor-partials/results/index.js");
 /* harmony import */ var _search_ui_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../search-ui/index.js */ "../components/PostChooser/editor-partials/search-ui/index.js");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
+/* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
+/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
 
 
 
@@ -117,6 +348,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+// Import CSS
 
 const PostChooserModal = props => {
   const {
@@ -134,6 +369,9 @@ const PostChooserModal = props => {
   });
   const [searchType, setSearchType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('default');
 
+  // Handle search Pagination.
+  const [searchCurrentPage, setSearchCurrentPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(1);
+
   // Initial query for recent posts
   const [posts, isLoading, invalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', {
     per_page: 10,
@@ -145,13 +383,34 @@ const PostChooserModal = props => {
   // Search query
   // Todo: Add support for searching by more than one post type that
   // is passed in by the postTypes prop.
-  const [searchPosts, isSearchLoading] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', searchTerm ? {
+  const [searchPosts, isSearchLoading, searchInValidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)('postType', 'post', searchTerm ? {
+    search: searchTerm,
+    per_page: 10,
+    orderby: sortOrder.orderby,
+    order: sortOrder.order,
+    status: 'publish',
+    page: searchCurrentPage
+  } : {});
+
+  // Get pagination information by using useGetPagination hook.
+  // This hook will return the total items and total pages for the search results.
+  const {
+    pagination,
+    isLoading: paginationLoading
+  } = (0,_hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_8__.useGetPagination)('postType', 'post', searchTerm ? {
     search: searchTerm,
     per_page: 10,
     orderby: sortOrder.orderby,
     order: sortOrder.order,
     status: 'publish'
   } : {});
+  console.log('useGetPagination:', pagination);
+
+  // Access pagination information
+  const {
+    totalItems,
+    totalPages
+  } = pagination;
   const handleSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
     // Trigger search by updating the query
     invalidateResolver();
@@ -183,10 +442,22 @@ const PostChooserModal = props => {
     onSelectPost: onSelectPost
   })), searchTerm && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "bu-components-post-chooser-results-title"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search Results')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_index_js__WEBPACK_IMPORTED_MODULE_5__.Results, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search Results '), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("em", null, totalItems > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "bu-components-post-chooser-results-count"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Found: ') + ` ${totalItems} ${totalItems > 1 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('items') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('item')}`))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_results_index_js__WEBPACK_IMPORTED_MODULE_5__.Results, {
     posts: searchPosts,
     onSelectPost: onSelectPost
-  })))));
+  })), searchTerm && totalPages > 1 && searchPosts && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_7__.Pagination, {
+    currentPage: searchCurrentPage // This should be managed by the hook or state
+    ,
+    totalPages: totalPages,
+    onChange: newPage => {
+      // Handle page change logic here
+      console.log('New page:', newPage);
+      setSearchCurrentPage(newPage);
+      searchInValidateResolver();
+    }
+  }))));
 };
 
 /***/ }),
@@ -623,6 +894,195 @@ const PostChooserSidebar = function (props) {
 
 /***/ }),
 
+/***/ "../hooks/useGetPagination/index.mjs":
+/*!*******************************************!*\
+  !*** ../hooks/useGetPagination/index.mjs ***!
+  \*******************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useGetPagination: () => (/* binding */ useGetPagination)
+/* harmony export */ });
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/url */ "@wordpress/url");
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+// Add a check for the existence of getEntityRecordsTotalItems and getEntityRecordsTotalPages
+// These are only available in WordPress 6.5 and later.
+// If they are not available, we will use apiFetch to get the pagination information.
+const hasNewSelectors = typeof (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__.store).getEntityRecordsTotalItems === 'function' && typeof (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__.store).getEntityRecordsTotalPages === 'function';
+if (!hasNewSelectors) {
+  console.warn('getEntityRecordsTotalItems and getEntityRecordsTotalPages are not available in @wordpress/core-data for this Version of WordPress. Using apiFetch instead.');
+}
+
+/**
+ * Hook for retrieving data from the WordPress REST API.
+ *
+ * @param {string} entity           The entity to retrieve. Defaults to postType.
+ * @param {string} kind             The entity kind to retrieve. Defaults to post.
+ * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+ * @return {Object}            	    Object with records and pagination info
+ */
+const useGetPagination = (entity = 'postType', kind = 'post', query = {}) => {
+  // State to hold pagination information
+  // This will hold total items and total pages.
+  const [pagination, setPagination] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)({
+    totalItems: 0,
+    totalPages: 0,
+    perPage: query.per_page || 10 // Default to 10 items per page if not specified
+  });
+
+  /**
+   * Only runs in WordPress 6.5 and later.
+   * Uses the new getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors
+   * to get the total items and total pages for the specified entity and kind.
+   *
+   * Returns an object with totalItems, totalPages, and isLoading.
+   *
+   * If the new selectors are not available, this effect will return an object with
+   * totalItems and totalPages set to 0, and isLoading set to false.
+   */
+  const {
+    totalItems,
+    totalPages,
+    isLoading
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
+    const coreSelect = select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__.store);
+    return {
+      totalItems: hasNewSelectors ? coreSelect.getEntityRecordsTotalItems(entity, kind, query) : 0,
+      totalPages: hasNewSelectors ? coreSelect.getEntityRecordsTotalPages(entity, kind, query) : 0,
+      isLoading: hasNewSelectors ? select('core/data').isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__.store, 'getEntityRecords', [entity, kind, query]) : false // Return false if the new selectors are not available.
+    };
+  }, [entity, kind, query, hasNewSelectors]);
+
+  /**
+   * Updates the pagination state with the total items and total pages
+   * if the new selectors are available and the data is loaded.
+   */
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (!hasNewSelectors) return; // If the new selectors are not available, skip this effect.
+
+    if (!isLoading && totalItems && totalPages) {
+      // Update the pagination state with total items and pages.
+      setPagination(prev => ({
+        ...prev,
+        totalItems: totalItems,
+        totalPages: totalPages
+      }));
+    }
+  }, [totalItems, totalPages, hasNewSelectors, isLoading]);
+
+  /**
+   * Fetches the entity configuration for the specified entity and kind.
+   * This allows us to construct the API endpoint for fetching pagination information via apiFetch.
+   *
+   * @effect
+   * @dependency {string} entity
+   * @dependency {string} kind
+   * @returns {Object} The entity configuration object, or undefined if not found.
+   */
+  const entityConfig = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
+    // Use getEntitiesByKind to get the entity config.
+    const entities = select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_0__.store).getEntitiesByKind(entity);
+    return entities?.find(e => e.name === kind);
+  }, [entity, kind]);
+
+  /**
+   * Fetches pagination information from the WordPress REST API.
+   *
+   * This effect runs whenever records, entity, kind, query, or entityConfig changes. It returns
+   * the total items and total pages for the specified entity and kind in the same format as
+   * the newer getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors that we don't
+   * have access to yet in this version of WordPress.
+   *
+   * It will not run if the new getEntityRecordsTotalItems and getEntityRecordsTotalPages
+   * selectors are available (WordPress 6.5+).
+   *
+   * After we upgrade to WordPress 6.5 or later, this effect should be able to be removed.
+   *
+   * It makes a direct API request to the same endpoint that getEntityRecords uses,
+   * but with a minimal per_page setting to reduce data transfer.
+   *
+   * The effect extracts total items and total pages from the response headers
+   * (X-WP-Total and X-WP-TotalPages) and updates the pagination state.
+   *
+   * ToDo: In future WordPress versions (6.4+), this might be replaceable with
+   * the getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors.
+   *
+   * @effect
+   * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
+   */
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    // Only run this effect if the new selectors are not available, such as before WordPress 6.5.
+    if (hasNewSelectors) return;
+    const loadPaginationData = async () => {
+      // If  entityConfig is available, skip fetching pagination data.
+      if (!entityConfig) return;
+
+      // Set default values for total items and pages.
+      let totalItems = 0;
+      let totalPages = 0;
+
+      // Construct the same API path that getEntityRecords uses.
+      const path = (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_4__.addQueryArgs)(entityConfig.baseURL, {
+        ...entityConfig.baseURLParams,
+        ...query,
+        // Request the same number of records per page as specified in the query,
+        // or default to 10 if not specified.
+        per_page: pagination.perPage,
+        page: 1 // Only request the first page to get total items and pages.
+      });
+      try {
+        // Make a direct fetch to the REST API.
+        const response = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__({
+          path,
+          parse: false
+        });
+
+        // Extract pagination info from the response headers.
+        const totalItemsHeader = response.headers.get('X-WP-Total');
+        const totalPagesHeader = response.headers.get('X-WP-TotalPages');
+        totalItems = totalItemsHeader !== null ? parseInt(totalItemsHeader, 10) : 0;
+        totalPages = totalPagesHeader !== null ? parseInt(totalPagesHeader, 10) : 0;
+      } catch (error) {
+        console.error('Error fetching pagination data:', error);
+        totalItems = 0;
+        totalPages = 0;
+      } finally {
+        // Update the pagination state.
+        console.log('Updating Pagination State via apiFetch:');
+        setPagination(prev => ({
+          ...prev,
+          totalItems: totalItems,
+          totalPages: totalPages
+        }));
+      }
+    };
+    // Call the function to load pagination data.
+    // This will run whenever records, entity, kind, query, or entityConfig changes
+    loadPaginationData();
+  }, [JSON.stringify(query), entityConfig]);
+
+  // Return the pagination information
+  return {
+    pagination
+  };
+};
+
+/***/ }),
+
 /***/ "../hooks/useMedia/index.mjs":
 /*!***********************************!*\
   !*** ../hooks/useMedia/index.mjs ***!
@@ -655,6 +1115,81 @@ function useMedia(id) {
     };
   }, [id]);
 }
+
+/***/ }),
+
+/***/ "../hooks/useRequestComplexData/index.mjs":
+/*!************************************************!*\
+  !*** ../hooks/useRequestComplexData/index.mjs ***!
+  \************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useRequestComplexData: () => (/* binding */ useRequestComplexData)
+/* harmony export */ });
+/* harmony import */ var lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/isObject.js */ "../node_modules/lodash/isObject.js");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line import/no-extraneous-dependencies
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Hook for retrieving data from multiple kinds of the same entity type.
+ *
+ * @param {string} entity           The entity to retrieve. Defaults to postType.
+ * @param {string[]} kinds          Array of entity kinds to retrieve. Defaults to ['post'].
+ * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object.
+ * @returns {Array} Array containing [mergedData, isLoading, invalidateResolvers] where mergedData is a flat array combining all entities from different kinds
+ */
+const useRequestComplexData = (entity = 'postType', kinds = ['post'], query = {}) => {
+  // Create an object to store results for each kind
+  const results = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => {
+    return kinds.map(kind => {
+      const [data, isLoading, invalidateResolver] = (0,_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)(entity, kind, query);
+      return {
+        kind,
+        data,
+        isLoading,
+        invalidateResolver
+      };
+    });
+  }, [entity, kinds, query]);
+
+  // Merge all data into a single array
+  const data = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => {
+    return results.reduce((acc, {
+      data
+    }) => {
+      return data ? [...acc, ...data] : acc;
+    }, []);
+  }, [results]);
+
+  // Determine overall loading state - if any kind is loading, the whole thing is loading
+  const isLoading = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => {
+    return results.some(result => result.isLoading);
+  }, [results]);
+
+  // Create a function to invalidate all resolvers
+  const invalidateResolvers = () => {
+    results.forEach(result => result.invalidateResolver());
+  };
+  return [data, isLoading, invalidateResolvers];
+};
 
 /***/ }),
 
@@ -724,15 +1259,21 @@ const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   LoadingSpinner: () => (/* reexport safe */ _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_0__.LoadingSpinner),
+/* harmony export */   Pagination: () => (/* reexport safe */ _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__.Pagination),
 /* harmony export */   PostChooser: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooser),
 /* harmony export */   PostChooserSidebar: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooserSidebar),
-/* harmony export */   useMedia: () => (/* reexport safe */ _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_2__.useMedia),
-/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useRequestData)
+/* harmony export */   useGetPagination: () => (/* reexport safe */ _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__.useGetPagination),
+/* harmony export */   useMedia: () => (/* reexport safe */ _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useMedia),
+/* harmony export */   useRequestComplexData: () => (/* reexport safe */ _hooks_useRequestComplexData_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useRequestComplexData),
+/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)
 /* harmony export */ });
 /* harmony import */ var _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/LoadingSpinner/index.mjs */ "../components/LoadingSpinner/index.mjs");
 /* harmony import */ var _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/PostChooser/index.mjs */ "../components/PostChooser/index.mjs");
-/* harmony import */ var _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hooks/useMedia/index.mjs */ "../hooks/useMedia/index.mjs");
-/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
+/* harmony import */ var _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hooks/useMedia/index.mjs */ "../hooks/useMedia/index.mjs");
+/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/* harmony import */ var _hooks_useRequestComplexData_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hooks/useRequestComplexData/index.mjs */ "../hooks/useRequestComplexData/index.mjs");
+/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
 // Components
 // export { AllowedBlocks } from './components/AllowedBlocks';
 // export { Background } from './components/Background';
@@ -762,6 +1303,7 @@ __webpack_require__.r(__webpack_exports__);
 // export { StyledComponentContext } from './components/styled-components-context';
 // export { TermSelector } from './components/TermSelector';
 
+
 // Hooks
 // A React Hook is a special function that lets you "hook into" React state and lifecycle features from within functional components. Hooks enable stateful logic and side effects within functional components, offering a way to reuse logic across components. Crucially, hooks can only be called inside React functional components or custom hooks, and they must follow the "rules of hooks," such as being called at the top level of a component and not within loops or conditional statements.
 // export { useFilteredList } from './hooks/use-filtered-list';
@@ -771,9 +1313,58 @@ __webpack_require__.r(__webpack_exports__);
 // export { useRenderAppenderWithBlockLimit } from './hooks/useRenderAppenderWithBlockLimit';
 
 
+
+
 // Utils
 // A utility function is a standard JavaScript function that performs a specific task and is not tied to any particular framework or library. Utility functions are often used for tasks like data formatting, calculations, or other operations that don't require access to React's state or lifecycle. They can be called from anywhere in your code, including within React components or hooks.
 // export { parseMedia } from './utils/parseMedia/index.mjs';
+
+/***/ }),
+
+/***/ "../node_modules/@wordpress/icons/build-module/icon/index.js":
+/*!*******************************************************************!*\
+  !*** ../node_modules/@wordpress/icons/build-module/icon/index.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * WordPress dependencies
+ */
+
+
+/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+
+/**
+ * Return an SVG icon.
+ *
+ * @param {IconProps}                                 props icon is the SVG component to render
+ *                                                          size is a number specifying the icon size in pixels
+ *                                                          Other props will be passed to wrapped SVG component
+ * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
+ *
+ * @return {JSX.Element}  Icon component
+ */
+function Icon({
+  icon,
+  size = 24,
+  ...props
+}, ref) {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.cloneElement)(icon, {
+    width: size,
+    height: size,
+    ...props,
+    ref
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(Icon));
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -1210,6 +1801,17 @@ const ThePost = props => {
 
 /***/ }),
 
+/***/ "@wordpress/api-fetch":
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["wp"]["apiFetch"];
+
+/***/ }),
+
 /***/ "@wordpress/block-editor":
 /*!*************************************!*\
   !*** external ["wp","blockEditor"] ***!
@@ -1295,6 +1897,28 @@ module.exports = window["wp"]["htmlEntities"];
 
 "use strict";
 module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "@wordpress/primitives":
+/*!************************************!*\
+  !*** external ["wp","primitives"] ***!
+  \************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["wp"]["primitives"];
+
+/***/ }),
+
+/***/ "@wordpress/url":
+/*!*****************************!*\
+  !*** external ["wp","url"] ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["wp"]["url"];
 
 /***/ }),
 

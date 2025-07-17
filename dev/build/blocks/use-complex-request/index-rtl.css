@@ -13,10 +13,10 @@
 }
 .bu-components-loading-spinner .bu-components-loading-spinner--label {
   font-weight: bold;
-  margin-right: 1ch;
+  margin-left: 1ch;
 }
 .bu-components-loading-spinner.bu-components-loading-spinner--has-shadow {
-  box-shadow: 3.4px 4.7px 2.7px rgba(0, 0, 0, 0.043), 8.7px 11.8px 6.9px rgba(0, 0, 0, 0.062), 17.7px 24.1px 14.2px rgba(0, 0, 0, 0.078), 36.5px 49.6px 29.2px rgba(0, 0, 0, 0.097), 100px 136px 80px rgba(0, 0, 0, 0.14);
+  box-shadow: -3.4px 4.7px 2.7px rgba(0, 0, 0, 0.043), -8.7px 11.8px 6.9px rgba(0, 0, 0, 0.062), -17.7px 24.1px 14.2px rgba(0, 0, 0, 0.078), -36.5px 49.6px 29.2px rgba(0, 0, 0, 0.097), -100px 136px 80px rgba(0, 0, 0, 0.14);
 }
 .bu-components-loading-spinner .components-spinner {
   margin: 0;
@@ -38,8 +38,8 @@
   padding: 0;
 }
 .bu-components-post-chooser-results .bu-components-loading-spinner {
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 50%;
+  transform: translate(50%, -50%);
   position: absolute;
   top: 50%;
   z-index: 2;
@@ -55,7 +55,7 @@
 .bu-components-post-chooser-results-item-container {
   border: 1px solid #c7b9a7;
   border-radius: 4px;
-  padding: 3px 10px 3px 5px;
+  padding: 3px 5px 3px 10px;
   display: grid;
   grid-template-columns: 1fr 60px;
   grid-template-rows: 1fr;
@@ -78,7 +78,7 @@
   -ms-grid-column: 1;
   grid-area: content;
   padding: 4px;
-  margin-right: 5px;
+  margin-left: 5px;
   display: grid;
   grid-template-columns: 1fr 60px;
   grid-template-rows: 1fr;
@@ -105,7 +105,7 @@
 }
 
 .bu-components-post-chooser-results-item-link {
-  margin-left: 2ch;
+  margin-right: 2ch;
   font-size: 0.75em;
 }
 .bu-components-post-chooser-results-item-link .components-external-link {
@@ -124,7 +124,7 @@
   grid-area: posttype;
   align-self: center;
   justify-content: flex-end;
-  text-align: right;
+  text-align: left;
 }
 
 .bu-components-post-chooser-results-item-type {
@@ -164,8 +164,8 @@
 .bu-components-post-chooser-search-controls {
   position: sticky;
   top: 0px;
-  left: 0;
   right: 0;
+  left: 0;
   z-index: 2;
   background-color: #fff;
   padding: 2em;
@@ -178,10 +178,10 @@
   justify-content: flex-start;
 }
 .bu-components-post-chooser-searchtype .components-base-control__field .components-base-control__label {
-  margin-right: 1em;
+  margin-left: 1em;
 }
 .bu-components-post-chooser-searchtype .components-base-control__field .components-radio-control__option {
-  margin-right: 1em;
+  margin-left: 1em;
 }
 
 .bu-components-post-chooser-search-bar {
@@ -202,6 +202,44 @@
 }
 .bu-components-post-chooser-search-bar .bu-components-post-chooser-search-button {
   display: block;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/Pagination/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.bu-components-pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+.bu-components-pagination-info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1em;
+}
+.bu-components-pagination-first, .bu-components-pagination-last {
+  flex: 0 0 auto;
+}
+.bu-components-pagination-of {
+  text-align: center;
+}
+
+.bu-components-pagination .bu-components-pagination-of:has(.bu-components-pagination-jump-to) {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.bu-components-pagination .bu-components-pagination-jump-to .components-base-control__field {
+  margin: 0;
 }
 /*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/modal/editor.scss ***!
@@ -235,9 +273,9 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor.scss ***!
   \************************************************************************************************************************************************************************************************************************************************************/
 
-/*!*************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/urd-post-list/editor.scss ***!
-  \*************************************************************************************************************************************************************************************************************************************************************/
+/*!*******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/use-complex-request/editor.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************/
 /**
  * The following styles get applied inside the editor only.
  *
@@ -246,5 +284,3 @@
 .wp-block-imports-dev-urd-post-list .post-container {
   border: 1px dotted #f00;
 }
-
-/*# sourceMappingURL=index.css.map*/

@@ -203,6 +203,44 @@
 .bu-components-post-chooser-search-bar .bu-components-post-chooser-search-button {
   display: block;
 }
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/Pagination/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.bu-components-pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+.bu-components-pagination-info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1em;
+}
+.bu-components-pagination-first, .bu-components-pagination-last {
+  flex: 0 0 auto;
+}
+.bu-components-pagination-of {
+  text-align: center;
+}
+
+.bu-components-pagination .bu-components-pagination-of:has(.bu-components-pagination-jump-to) {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.bu-components-pagination .bu-components-pagination-jump-to .components-base-control__field {
+  margin: 0;
+}
 /*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!../components/PostChooser/editor-partials/modal/editor.scss ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************/

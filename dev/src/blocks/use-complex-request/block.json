@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/wp/5.8/block.json",
+	"apiVersion": 2,
+	"name": "imports-dev/use-complex-request",
+	"version": "0.1.0",
+	"title": "Using useRequestComplexData to get a list of posts and pages",
+	"category": "widgets",
+	"icon": "database-add",
+	"description": "Use that Request Data to get posts and pages from the REST API. This block uses the useRequestComplexData hook to fetch data from the REST API and display it in a list format.",
+	"example": {},
+	"attributes":{},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "imports-dev/use-complex-request",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

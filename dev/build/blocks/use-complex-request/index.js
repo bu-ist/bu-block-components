@@ -1495,21 +1495,21 @@ module.exports = isObject;
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/block.json":
-/*!********************************************!*\
-  !*** ./src/blocks/post-chooser/block.json ***!
-  \********************************************/
+/***/ "./src/blocks/use-complex-request/block.json":
+/*!***************************************************!*\
+  !*** ./src/blocks/use-complex-request/block.json ***!
+  \***************************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/wp/5.8/block.json","apiVersion":2,"name":"imports-dev/imports-dev-post-chooser","version":"0.1.0","title":"Post Chooser","category":"text","icon":"embed-post","description":"Search for and choose posts from a list.","example":{},"supports":{"html":false},"textdomain":"imports-dev-post-chooser","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/wp/5.8/block.json","apiVersion":2,"name":"imports-dev/use-complex-request","version":"0.1.0","title":"Using useRequestComplexData to get a list of posts and pages","category":"widgets","icon":"database-add","description":"Use that Request Data to get posts and pages from the REST API. This block uses the useRequestComplexData hook to fetch data from the REST API and display it in a list format.","example":{},"attributes":{},"supports":{"html":false},"textdomain":"imports-dev/use-complex-request","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/edit.js":
-/*!*****************************************!*\
-  !*** ./src/blocks/post-chooser/edit.js ***!
-  \*****************************************/
+/***/ "./src/blocks/use-complex-request/edit.js":
+/*!************************************************!*\
+  !*** ./src/blocks/use-complex-request/edit.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1519,23 +1519,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/html-entities */ "@wordpress/html-entities");
-/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @bostonuniversity/block-imports */ "../index.js");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/post-chooser/editor.scss");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @bostonuniversity/block-imports */ "../index.js");
+/* harmony import */ var _thepost__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./thepost */ "./src/blocks/use-complex-request/thepost.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/use-complex-request/editor.scss");
 
 /**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
-
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -1559,138 +1555,78 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
- * @param  root0
- * @param  root0.attributes
- * @param  root0.setAttributes
- * @param  root0.isSelected
+ *
+ * @param  props
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
- * @return {Element} Element to render.
+ * @return {JSX.Element} Element to render.
  */
-function Edit({
-  attributes,
-  setAttributes,
-  isSelected
-}) {
+function Edit(props) {
   const {
-    title,
-    excerpt,
-    selectedPostID,
-    selectedPostTitle,
-    selectedPostURL,
-    selectedPostIMG,
-    selectedPostExcerpt,
-    focalPoint
-  } = attributes;
-  const onChangeTitle = newTitle => {
-    setAttributes({
-      title: newTitle
-    });
+    attributes,
+    setAttributes
+  } = props;
+  const [page, setPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(1);
+  const [isLastPage, setIsLastPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const perPage = 15;
+  const query = {
+    per_page: perPage,
+    page
   };
-  const onChangeExcerpt = newExcerpt => {
-    setAttributes({
-      excerpt: newExcerpt
-    });
-  };
-  const calloutRemovePostHandler = e => {
-    console.log('remove things in block');
-    setAttributes({
-      selectedPostID: undefined,
-      selectedPostTitle: undefined,
-      selectedPostExcerpt: undefined,
-      selectedPostURL: undefined,
-      selectedPostIMG: undefined
-    });
-  };
-  const calloutSelectedPostHandler = post => {
-    console.log(post);
-    setAttributes({
-      selectedPostID: post.id,
-      selectedPostTitle: post.title.rendered,
-      selectedPostExcerpt: post.excerpt.rendered,
-      selectedPostURL: post.link,
-      selectedPostIMG: post.featured_media
-    });
-  };
-  function handleFocalPointChange(value) {
-    setAttributes({
-      focalPoint: value
-    });
-  }
-  const handleImageSelect = media => {
-    console.log('image Selected:', media);
-    setAttributes({
-      selectedPostIMG: media?.id
-    });
-  };
-  const handleImageRemove = () => {
-    setAttributes({
-      selectedPostIMG: undefined
-    });
-  };
+  const imageID = '';
+  const [data, isLoading, invalidateRequest] = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.useRequestComplexData)('postType', ['post', 'page'], query);
 
-  // Use the useMedia hook to get media data
-  const {
-    media,
-    isResolvingMedia,
-    hasResolvedMedia
-  } = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.useMedia)(selectedPostIMG);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "wp-block-plugin-slug-block-callout-postpicker--container"
-  }, !selectedPostID && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Post picker block, no post selected."), !selectedPostID && isSelected && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.PostChooser, {
-    modalLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose a post (postchooser block)'),
-    buttonLabel: "Choose your post if you dare...",
-    searchPlaceholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Pick something… (postchooser block)'),
-    onSelectPost: calloutSelectedPostHandler,
-    modalTitle: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose a post (postchooser block)')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "wp-block-plugin-slug-block-callout-postpicker--image"
-  }, isResolvingMedia && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.LoadingSpinner, null), hasResolvedMedia && media && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: media.source_url,
-    alt: media.alt_text || ''
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-    isDestructive: true,
-    onClick: handleImageRemove,
-    className: "remove-image-button"
-  }, "Remove Image"), !media && isSelected && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUploadCheck, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUpload, {
-    onSelect: handleImageSelect,
-    allowedTypes: ['image'],
-    value: selectedPostIMG,
-    render: ({
-      open
-    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-      isPrimary: true,
-      onClick: open
-    }, "Select Image")
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    className: "wp-block-plugin-slug-block-callout-postpicker--title"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: selectedPostURL
-  }, (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3__.decodeEntities)(selectedPostTitle))), selectedPostExcerpt && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "wp-block-plugin-slug-block-callout-postpicker--excerpt"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    dangerouslySetInnerHTML: {
-      __html: selectedPostExcerpt
+  // Check if we're on the last page (fewer posts than per_page)
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (data && data.length < perPage && data.length > 0) {
+      setIsLastPage(true);
+    } else {
+      setIsLastPage(false);
     }
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.PostChooserSidebar, {
-    postTitle: selectedPostTitle,
-    postID: selectedPostID,
-    postURL: selectedPostURL,
-    onRemovePost: calloutRemovePostHandler
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_5__.PostChooser, {
-    onSelectPost: calloutSelectedPostHandler,
-    buttonLabel: selectedPostID ? 'Change' : 'Select Post'
-  }))));
+  }, [data]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)()
+  }, isLoading && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.LoadingSpinner, {
+    text: "Loading" // Default is undefined.
+    ,
+    shadow: false // Default is true.
+    ,
+    className: "a-custom-classname-to-add"
+  })), data && data.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, data.map(post => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_thepost__WEBPACK_IMPORTED_MODULE_4__.ThePost, {
+      post: post
+    });
+  }), isLastPage ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "last-page-message"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "You've reached the last page of posts."), page > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    onClick: () => {
+      setPage(1);
+      invalidateRequest();
+    }
+  }, "Back to first page")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    onClick: () => {
+      setPage(page + 1);
+      invalidateRequest();
+    }
+  }, "Refresh list")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, !isLoading && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "no-posts"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "No posts to display."), page > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    onClick: () => {
+      setPage(1);
+      invalidateRequest();
+    }
+  }, "Back to first page")))));
 }
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/editor.scss":
-/*!*********************************************!*\
-  !*** ./src/blocks/post-chooser/editor.scss ***!
-  \*********************************************/
+/***/ "./src/blocks/use-complex-request/editor.scss":
+/*!****************************************************!*\
+  !*** ./src/blocks/use-complex-request/editor.scss ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1700,20 +1636,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/index.js":
-/*!******************************************!*\
-  !*** ./src/blocks/post-chooser/index.js ***!
-  \******************************************/
+/***/ "./src/blocks/use-complex-request/index.js":
+/*!*************************************************!*\
+  !*** ./src/blocks/use-complex-request/index.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/blocks/post-chooser/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/blocks/post-chooser/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/blocks/post-chooser/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/blocks/post-chooser/block.json");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/blocks/use-complex-request/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/blocks/use-complex-request/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/blocks/use-complex-request/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/blocks/use-complex-request/block.json");
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
@@ -1755,10 +1691,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/save.js":
-/*!*****************************************!*\
-  !*** ./src/blocks/post-chooser/save.js ***!
-  \*****************************************/
+/***/ "./src/blocks/use-complex-request/save.js":
+/*!************************************************!*\
+  !*** ./src/blocks/use-complex-request/save.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1778,6 +1714,7 @@ __webpack_require__.r(__webpack_exports__);
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 
+//import { useRequestData } from '@bostonuniversity/block-imports';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -1786,26 +1723,81 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
  *
- * @return {Element} Element to render.
+ * @return {JSX.Element} Element to render.
  */
 function save() {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
-  }, 'Super Fun Static Block -- hello from the saved content!');
+  });
 }
 
 /***/ }),
 
-/***/ "./src/blocks/post-chooser/style.scss":
-/*!********************************************!*\
-  !*** ./src/blocks/post-chooser/style.scss ***!
-  \********************************************/
+/***/ "./src/blocks/use-complex-request/style.scss":
+/*!***************************************************!*\
+  !*** ./src/blocks/use-complex-request/style.scss ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
+
+/***/ }),
+
+/***/ "./src/blocks/use-complex-request/thepost.js":
+/*!***************************************************!*\
+  !*** ./src/blocks/use-complex-request/thepost.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ThePost: () => (/* binding */ ThePost)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @bostonuniversity/block-imports */ "../index.js");
+
+
+
+
+const ThePost = props => {
+  const {
+    post
+  } = props;
+  const {
+    media,
+    isResolvingMedia,
+    hasResolvedMedia
+  } = (0,_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.useMedia)(post.featured_media);
+  console.log(post);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: post.id,
+    className: "post-container",
+    style: {
+      border: '1px dotted #f00',
+      margin: '10px',
+      padding: '10px'
+    }
+  }, media && isResolvingMedia && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bostonuniversity_block_imports__WEBPACK_IMPORTED_MODULE_3__.LoadingSpinner, {
+    text: "Loading",
+    shadow: false,
+    className: "a-clever-classname"
+  }), media && hasResolvedMedia && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: media.source_url,
+    alt: media.alt_text,
+    width: "150"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, post.title.rendered), post?.excerpt?.raw && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "excerpt-something"
+  }, post.excerpt.raw));
+};
 
 /***/ }),
 
@@ -2051,8 +2043,8 @@ module.exports = window["React"];
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"blocks/post-chooser/index": 0,
-/******/ 			"blocks/post-chooser/style-index": 0
+/******/ 			"blocks/use-complex-request/index": 0,
+/******/ 			"blocks/use-complex-request/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -2102,7 +2094,7 @@ module.exports = window["React"];
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["blocks/post-chooser/style-index"], () => (__webpack_require__("./src/blocks/post-chooser/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["blocks/use-complex-request/style-index"], () => (__webpack_require__("./src/blocks/use-complex-request/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

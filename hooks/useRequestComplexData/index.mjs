@@ -10,7 +10,7 @@ import isObject from 'lodash/isObject.js';
 import { store as coreStore } from '@wordpress/core-data';
 import { useSelect, useDispatch } from '@wordpress/data';
 import {useMemo} from '@wordpress/element';
-import {useRequestData} from './useRequestData/index.mjs';
+import {useRequestData} from '../useRequestData/index.mjs';
 
 /**
  * Hook for retrieving data from multiple kinds of the same entity type.
@@ -18,7 +18,7 @@ import {useRequestData} from './useRequestData/index.mjs';
  * @param {string} entity           The entity to retrieve. Defaults to postType.
  * @param {string[]} kinds          Array of entity kinds to retrieve. Defaults to ['post'].
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object.
- * @returns {Array} Array containing [data, isLoading, invalidateResolvers]
+ * @returns {Array} Array containing [mergedData, isLoading, invalidateResolvers] where mergedData is a flat array combining all entities from different kinds
  */
 export const useRequestComplexData = (entity='postType', kinds=['post'], query = {}) => {
     // Create an object to store results for each kind
@@ -29,12 +29,11 @@ export const useRequestComplexData = (entity='postType', kinds=['post'], query =
         });
     }, [entity, kinds, query]);
 
-    // Extract the data into an object where keys are the kinds
+    // Merge all data into a single array
     const data = useMemo(() => {
-        return results.reduce((acc, { kind, data }) => {
-            acc[kind] = data;
-            return acc;
-        }, {});
+        return results.reduce((acc, { data }) => {
+            return data ? [...acc, ...data] : acc;
+        }, []);
     }, [results]);
 
     // Determine overall loading state - if any kind is loading, the whole thing is loading
