@@ -5,6 +5,7 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+	gap: 1em;
 
 	&-info {
 		display: flex;
@@ -12,7 +13,7 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: space-evenly;
-		padding-inline: 0.5em;
+		gap: 1em;
 	}
 
 	&-first,
@@ -22,6 +23,21 @@
 
 	&-of {
 		text-align: center;
-		padding-inline: 1em;
+	}
+}
+
+// When jump to page input is present, display the text as a flex container
+.bu-components-pagination .bu-components-pagination-of:has(.bu-components-pagination-jump-to) {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+}
+
+// In 5.8 this TextControl wrapper div has margin-bottom set, this removes it.
+.bu-components-pagination .bu-components-pagination-jump-to {
+	.components-base-control__field {
+		margin: 0;
 	}
 }

@@ -7,16 +7,23 @@
 
 ## Status: BETA
 
-A customizable pagination component that provides navigation controls for data that spans multiple pages. This component works well with the `useRequestDataWithPagination` hook to handle fetching and navigating through paginated data.
+A customizable pagination component that provides navigation controls for data that spans multiple pages. This component works well with the `useGetPagination` hook to handle fetching pagination information for WordPress data.
 
 ## Features
 
 - First/Last page buttons
 - Previous/Next navigation
 - Page number display
+- Jump-to-page input field
 - Fully customizable display options
 - Accessible navigation controls with proper button labels
 - Icons from the Noun Project
+- Configurable inline style margins - margin styles can be passed as props to the component to avoid having to write styles for the component itself.
+
+
+## Layout Options
+![Pagination component screenshot](BU_Pagination_Layout_Options.png)
+This screenshot shows 6 different ways to customize the layout of the Pagination component.
 
 ## Usage
 
@@ -48,6 +55,8 @@ const MyComponent = () => {
 | `showPageNumbers` | Boolean | `true` | Whether to show the current page and total pages |
 | `showFirstLastButtons` | Boolean | `true` | Whether to show first/last page buttons |
 | `showPrevNextButtons` | Boolean | `true` | Whether to show previous/next buttons |
+| `showJumpToPage` | Boolean | `false` | Whether to show a text input for jumping to a specific page |
+| `margin` | Object | `{}` | Custom margin settings with optional `marginBlock` and `marginInline` properties |
 
 ## Examples
 
@@ -73,21 +82,49 @@ const MyComponent = () => {
 />
 ```
 
-### Combined with useRequestDataWithPagination
+### With Jump-to-Page Input
+
+```jsx
+<Pagination
+  currentPage={3}
+  totalPages={10}
+  onChange={(page) => console.log(`Jumped to page ${page}`)}
+  showJumpToPage={true}
+/>
+```
+
+### With Custom Margins
+
+```jsx
+<Pagination
+  currentPage={1}
+  totalPages={5}
+  onChange={(page) => console.log(`Navigated to page ${page}`)}
+  margin={{
+    marginBlock: '2rem',
+    marginInline: '1rem'
+  }}
+/>
+```
+
+### Combined with useGetPagination and useRequestData
 
 ```jsx
 import { Pagination } from '@bostonuniversity/block-components';
-import { useRequestDataWithPagination } from '@bostonuniversity/block-imports';
+import { useGetPagination, useRequestData } from '@bostonuniversity/block-imports';
 import { useState } from '@wordpress/element';
 
 const PostList = () => {
   const [page, setPage] = useState(1);
 
-  const {
-    records: posts,
-    isLoading,
-    pagination: { totalItems, totalPages }
-  } = useRequestDataWithPagination('postType', 'post', {
+  // Get pagination information
+  const { pagination } = useGetPagination('postType', 'post', {
+    per_page: 10,
+    status: 'publish'
+  });
+
+  // Get posts for current page
+  const [posts, isLoading] = useRequestData('postType', 'post', {
     per_page: 10,
     page: page,
     status: 'publish'
@@ -95,16 +132,27 @@ const PostList = () => {
 
   return (
     <div>
-      {/* Display posts here */}
-      {posts && posts.map(post => (
-        <div key={post.id}>{post.title.rendered}</div>
-      ))}
+      {isLoading ? (
+        <p>Loading posts...</p>
+      ) : (
+        <>
+          {/* Display posts here */}
+          {posts && posts.map(post => (
+            <div key={post.id}>{post.title.rendered}</div>
+          ))}
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onChange={setPage}
-        />
+          {pagination.totalPages > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={pagination.totalPages}
+              onChange={setPage}
+              showJumpToPage={true}
+              margin={{ marginBlock: '1.5rem' }}
+            />
+          )}
+        </>
       )}
     </div>
+  );
+};
+```
