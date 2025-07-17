@@ -21,7 +21,8 @@ or TextControl in the InspectorControls.
 | `className` | Allows you to pass a class to apply to the component |
 | `text` | The text string to display in the popover. Can also be a JSX component |
 | `offset` | Pass a value of `label` to offset the help icon to position it to the right of the label on core components such as TextControl |
-| `title` | Optional title for the popover |
+| `title` | Optional, title for the popover |
+| `children` | Optional. Child components to render inside the HelpWrapper. Don't pass this, just wrap the component like markup around other components. |
 
 ## Usage
 ```js
