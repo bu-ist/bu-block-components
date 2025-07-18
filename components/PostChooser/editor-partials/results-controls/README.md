@@ -17,7 +17,6 @@ The `ResultsControls` component provides filtering and sorting options for the p
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `searchTerm` | String | Required | Current search term |
-| `onSearch` | Function | Required | Function to trigger a new search |
 | `searchType` | String | Required | Current search type (recent, content, slug, ID) |
 | `setSearchType` | Function | Required | Function to update the search type |
 | `sortOrder` | Object | Required | Current sort configuration with `orderby` and `order` properties |

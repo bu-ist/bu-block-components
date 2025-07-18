@@ -18,7 +18,6 @@ export const SearchUI = ( props ) => {
 	const {
 		searchTerm,
 		setSearchTerm,
-		searchType,
 		setSearchType,
 		isLoading,
 		label = __( 'Enter a search query' ),

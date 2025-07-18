@@ -17,6 +17,7 @@ The `ResultsItem` component renders an individual post in the search results lis
 |------|------|---------|-------------|
 | `post` | Object | Required | WordPress post object with title, modified date, status, and type |
 | `onSelectPost` | Function | Required | Function to call when the post is selected |
+| `placeholder` | Boolean | false | If true, renders a placeholder element without any content but has the ResultItem's shape to indicate data will be loaded in it's place. |
 
 
 ## Implementation Details

@@ -10,7 +10,7 @@ import { LoadingSpinner } from '../../../LoadingSpinner/index.mjs';
 import './editor.scss';
 
 export const Results = ( props ) => {
-	const { posts, onSelectPost, loading } = props;
+	const { posts, onSelectPost, loading, totalItems } = props;
 
 	// State to manage loading state
 
@@ -57,7 +57,7 @@ export const Results = ( props ) => {
 
 				{ ! posts || posts.length === 0 && (
 					<>
-						{ ! loading && (
+						{ ( ! loading && totalItems === 0 ) && (
 							<div className="bu-components-post-chooser-results-message">
 								<h3>{ __( 'No posts found.' ) }</h3>
 								<p>{ __( 'Your search term might be too specific. Try broadening your search.' ) }</p>

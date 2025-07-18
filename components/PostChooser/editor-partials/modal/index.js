@@ -153,12 +153,9 @@ export const PostChooserModal = ( props ) => {
 				<SearchUI
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
-					sortOrder={ sortOrder }
-					setSortOrder={ setSortOrder }
 					isLoading={ isLoading || isSearchLoading }
 					label={ label }
 					placeholder={ placeholder }
-					searchType={ searchType }
 					setSearchType={ setSearchType }
 				/>
 				<ResultsControls
@@ -200,6 +197,7 @@ export const PostChooserModal = ( props ) => {
 							<Results
 								posts={ searchPosts }
 								onSelectPost={ onSelectPost }
+								totalItems={ totalItems }
 							/>
 						</>
 					) }
