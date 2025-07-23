@@ -1,11 +1,19 @@
 import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { TextControl, Button, Spinner, Modal } from '@wordpress/components';
+import { TextControl, Button, Spinner, Modal,
+	__experimentalRadio as Radio,
+	__experimentalRadioGroup as RadioGroup,
+	Flex,
+	FlexItem,
+	FlexBlock,
+} from '@wordpress/components';
+import { useEffect } from 'react';
 
 // Internal dependencies
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
+import { ResultsControls } from '../results-controls/index.mjs';
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 
@@ -15,9 +23,9 @@ import './editor.scss';
 export const PostChooserModal = ( props ) => {
 	const {
 		onClose,
-		label = __( 'Enter a search query' ),
+		label,
 		onSelectPost,
-		postTypes = [ 'posts', 'pages' ],
+		postTypes,
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 	} = props;
@@ -27,7 +35,7 @@ export const PostChooserModal = ( props ) => {
 		orderby: 'date',
 		order: 'desc',
 	} );
-	const [ searchType, setSearchType ] = useState( 'default' );
+	const [ searchType, setSearchType ] = useState( 'recent' );
 
 	// Handle search Pagination.
 	const [ searchCurrentPage, setSearchCurrentPage ] = useState( 1 );
@@ -38,8 +46,8 @@ export const PostChooserModal = ( props ) => {
 		'post',
 		{
 			per_page: 10,
-			orderby: sortOrder.orderby,
-			order: sortOrder.order,
+			orderby: 'modified',
+			order: 'desc',
 			status: 'publish',
 		}
 	);
@@ -91,6 +99,40 @@ export const PostChooserModal = ( props ) => {
 		invalidateResolver();
 	}, [ invalidateResolver ] );
 
+
+	/**
+	 * When the search term changes we want to check if the searchPosts array
+	 * is empty or not. If it has results we want to set the searchType state to 'default'.
+	 * This will flip the view for the user to show the search results.
+	 */
+	useEffect( () => {
+		if ( searchType === 'recent' && searchTerm && searchPosts?.length > 0 ) {
+			setSearchType( 'default' );
+		}
+	}, [ searchTerm, searchPosts ] );
+
+
+	// Handles passing the search results array to the Results component.
+	// @todo: Add support for slug and ID search results arrays.
+	const handleResultsSearch = () => {
+		if ( searchType === 'recent' || ! searchTerm ) {
+			// Return recently updated posts.
+			return posts;
+		} else if ( searchType === 'default' ) {
+			// Return default text search results.
+			return searchPosts;
+		} else if ( searchType === 'slug' ) {
+			// Return slug search results.
+			// Note: This is a placeholder for slug search results array.
+			return searchPosts;
+		} else if ( searchType === 'id' ) {
+			// Return ID search results.
+			// Note: This is a placeholder for ID search results array.
+			return searchPosts;
+		}
+	};
+
+
 	return (
 		<Modal
 			title={ title }
@@ -99,17 +141,30 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
+				{
+					/**
+					 * These sub-components are currently using a lot of props that are being passed down into them.
+					 * This should be improved in the future to reduce prop drilling.
+					 *
+					 * @todo: Refactor how these props are passed down to the sub-components by using a context provider.
+					 * This will avoid having to pass down so many props and make the code cleaner.
+					 */
+				}
 				<SearchUI
-					onSearch={ handleSearch }
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
-					sortOrder={ sortOrder }
-					setSortOrder={ setSortOrder }
 					isLoading={ isLoading || isSearchLoading }
 					label={ label }
 					placeholder={ placeholder }
+					setSearchType={ setSearchType }
+				/>
+				<ResultsControls
+					searchTerm={ searchTerm }
+					onSearch={ handleSearch }
 					searchType={ searchType }
 					setSearchType={ setSearchType }
+					sortOrder={ sortOrder }
+					setSortOrder={ setSortOrder }
 				/>
 				<div className="bu-components-post-chooser-results-container">
 					{ ( isLoading || isSearchLoading ) && <Spinner /> }
@@ -142,6 +197,7 @@ export const PostChooserModal = ( props ) => {
 							<Results
 								posts={ searchPosts }
 								onSelectPost={ onSelectPost }
+								totalItems={ totalItems }
 							/>
 						</>
 					) }

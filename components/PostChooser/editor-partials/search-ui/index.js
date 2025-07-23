@@ -1,110 +1,100 @@
 import {
-	TextControl,
 	Button,
-	Spinner,
-	Modal,
-	DropdownMenu,
-	MenuItem,
-	MenuGroup,
-	RadioControl
+	Flex,
+	FlexItem,
+	FlexBlock,
+	Icon,
+	BaseControl,
+	SelectControl
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+
+import { LoadingSpinner } from '../../../../components/LoadingSpinner/index.mjs';
+
 
 import './editor.scss';
 
 export const SearchUI = ( props ) => {
 	const {
-		onSearch,
 		searchTerm,
 		setSearchTerm,
-		sortOrder,
-		setSortOrder,
-		searchType,
 		setSearchType,
 		isLoading,
-		label,
+		label = __( 'Enter a search query' ),
+		hideLabelFromVision = true,
 		placeholder,
+		postTypes = [
+			{ label: 'Posts', value: 'post' },
+			{ label: 'Pages', value: 'page' },
+		],
 	} = props;
+
 
 	return (
 		<div className="bu-components-post-chooser-search-ui">
 			<div className="bu-components-post-chooser-search-controls">
-				<DropdownMenu icon="sort" label="Select a direction">
-					{ ( { onClose } ) => (
-						<>
-							<MenuGroup>
-								<MenuItem
-									icon="calendar"
-									disabled={ sortOrder.orderby === 'date' && sortOrder.order === 'asc' ? true : false }
-									onClick={ () => {
-										setSortOrder( { orderby: 'date', order: 'asc' } );
-										onSearch();
-										onClose();
-									} }>
-									{ __( 'Date Ascending' ) }
-								</MenuItem>
-								<MenuItem
-									icon="calendar"
-									disabled={ sortOrder.orderby === 'date' && sortOrder.order === 'desc' ? true : false }
-									onClick={ () => {
-										setSortOrder( { orderby: 'date', order: 'desc' } );
-										onSearch();
-										onClose();
-									} }>
-									{ __( 'Date Descending' ) }
-								</MenuItem>
-								<MenuItem
-									icon="heading"
-									disabled={ sortOrder.orderby === 'title' && sortOrder.order === 'asc' ? true : false }
-									onClick={ () => {
-										setSortOrder( { orderby: 'title', order: 'asc' } );
-										onSearch();
-										onClose();
-									} }>
-									{ __( 'Title Ascending' ) }
-								</MenuItem>
-								<MenuItem
-									icon="heading"
-									disabled={ sortOrder.orderby === 'title' && sortOrder.order === 'desc' ? true : false }
-									onClick={ () => {
-										setSortOrder( { orderby: 'title', order: 'desc' } );
-										onSearch();
-										onClose();
-									} }>
-									{ __( 'Title Descending' ) }
-								</MenuItem>
-							</MenuGroup>
-						</>
-					) }
-				</DropdownMenu><span>{ __( 'Sort by' ) }</span>
-				<RadioControl
-					label="Search By"
-					help="How do you want to find things?"
-					selected={ searchType }
-					options={ [
-						{ label: 'Standard Default Search', value: 'default' },
-						{ label: 'Post Slug', value: 'slug' },
-						{ label: 'Post id', value: 'id' },
-					] }
-					onChange={ ( value ) => setSearchType( value ) }
-				/>
-				<div className="bu-components-post-chooser-search-bar">
-					<TextControl
-						label={ label }
-						value={ searchTerm }
-						onChange={ ( value ) => setSearchTerm( value ) }
-						placeholder={ placeholder }
-						className="bu-components-post-chooser-search-field"
-					/>
-					<Button
-						isPrimary
-						className="bu-components-post-chooser-search-button"
-						onClick={ onSearch }
-						disabled={ ! searchTerm }
-					>
-						{ __( 'Search' ) }
-					</Button>
-				</div>
+				<Flex justify="space-between" align="start" className="bu-components-post-chooser-search-settings">
+					<FlexBlock>
+						<div className="bu-components-post-chooser-search-bar">
+							<BaseControl
+								className="bu-components-post-chooser-search-field-base-control"
+								label={ label}
+								hideLabelFromVision={ hideLabelFromVision }
+							>
+								<div className="bu-components-post-chooser-search-field-container-inner">
+									<div className="bu-components-post-chooser-search-field-icon-container">
+										{ isLoading ? (
+											<LoadingSpinner shadow={false} className="bu-components-post-chooser-search-field-spinner" />
+										) : (
+											<Icon icon="search" size={ 26 }className="bu-components-post-chooser-search-icon" />
+										) }
+									</div>
+									<input
+										type="text"
+										value={ searchTerm }
+										onChange={ ( event ) => setSearchTerm( event.target.value ) }
+										placeholder={ placeholder }
+										className="bu-components-post-chooser-search-field"
+										tabIndex="0" // Todo: this is not working to set the focus on the search field when the modal opens.
+									/>
+
+									{ searchTerm && (
+										<div className="bu-components-post-chooser-search-field-icon-container">
+											<Button
+												label={ __( 'Clear search' ) }
+												onClick={ () => {
+													setSearchTerm( '' );
+													setSearchType( 'recent' );
+												} }
+												icon="dismiss"
+												size={ 26 }
+												className="bu-components-post-chooser-search-clear-button"
+											>
+												<span className="bu-components-post-chooser-search-clear-button-label">{ __( 'Clear' ) }</span>
+											</Button>
+										</div>
+									)}
+
+								</div>
+							</BaseControl>
+						</div>
+					</FlexBlock>
+
+				</Flex>
+				{ postTypes.length > 1 && (
+					<Flex className="bu-components-post-chooser-posttype-select" justify="space-between" align="center">
+						<FlexBlock>
+							<SelectControl
+								label={ __( 'Filter by Post Type' ) }
+								value='post' // Todo make this dynamic
+								options={ [
+									{ label: 'Posts', value: 'post' },
+									{ label: 'Pages', value: 'page' },
+								] } // ToDo: make this dynamic so it can be set by the block for the postchooser.
+							/>
+						</FlexBlock>
+					</Flex>
+				)}
 			</div>
 		</div>
 	);

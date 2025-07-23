@@ -1,0 +1,155 @@
+
+.bu-components-post-chooser-results-controls {
+	width: 100%;
+	//justify-content: center;
+	//background: #fefcf8;
+    margin: 0;
+    //width: auto;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--bu-components-post-chooser-results-border-color, #b1a495);
+	//box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
+
+	// WordPress Flex Component.
+	.components-flex {
+		width: 100%;
+		background: #fef7eb;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0;
+	}
+}
+
+// WordPress RadioGroup for search type
+.bu-components-post-chooser-search-type {
+    width: fit-content;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	// WordPress RadioGroup Button (Button Component)
+	.components-button {
+		padding-inline: 10px;
+		padding: 20px;
+		background: transparent;
+		color: black;
+		border: none;
+		height: auto;
+		box-shadow: none;
+		position: relative;
+
+		&:disabled {
+			background: #fef7eb;
+			color: var(--bu-components-post-chooser-results-text-color-darker, #7c7063);
+			cursor: not-allowed;
+		}
+
+		// Inactive Button in RadioGroup
+		&.is-secondary {
+
+		}
+
+		// Active button in RadioGroup
+		&.is-primary {
+			box-shadow: none;
+			color: var( --wp-admin-theme-color-darker-10, #2271b1 );
+
+			&::after{
+				content: '';
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: -2px;
+				height: 1px;
+				border-bottom: 3px solid var(--wp-admin-theme-color, #2271b1);
+			}
+
+			&:focus:not(:disabled) {
+				box-shadow: 0 0 0 1px var(--bu-components-post-chooser-results-border-color);
+			}
+		}
+
+		&:hover,
+		&:hover:not(:disabled) {
+			box-shadow: none;
+		}
+
+
+		.bu-components-post-chooser-results-controls-type-count {
+			font-size: 0.8em;
+			margin-inline: 5px;
+			display: inline-block;
+			border-radius: 4px;
+			padding: 3px 7px;
+			background: #fef8ef;
+			box-shadow: inset 0 0 2px var(--bu-components-post-chooser-results-border-color);
+		}
+
+		&:hover:not(:disabled) .bu-components-post-chooser-results-controls-type-count {
+			background: inherit;
+			box-shadow: inset 0 0 2px inherit;
+		}
+
+		&:disabled .bu-components-post-chooser-results-controls-type-count {
+			opacity: 0.55;
+		}
+	}
+
+
+}
+
+// WordPress FlexItem Component for sort control.
+.bu-components-post-chooser-results-controls-sort {
+	padding-inline: 10px;
+	border-left: 1px solid var(--bu-components-post-chooser-results-border-color, #b1a495);
+
+	// WordPress DropdownMenu Component.
+	.components-dropdown-menu {
+
+	}
+
+}
+
+// Popover Content Div for the sort dropdown.
+.bu-components-post-chooser-results-controls-sort-dropdown-content-inner {
+	width: fit-content;
+	min-width: 140px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 20px 10px 10px 10px;
+}
+
+// Close icon for the sort dropdown
+.bu-components-post-chooser-results-controls-sort-dropdown-close-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	opacity: 0.5;
+	transition: opacity 300ms ease-in-out;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+// WordPress RadioGroup for sort direction
+.bu-components-post-chooser-results-controls-sort-direction {
+	display: flex;
+	flex-direction: row;
+	gap: 0;
+	align-items: center;
+	width: 100%;
+
+	.components-radio-group {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+	}
+
+	.components-button {
+		width: 50%;
+		justify-content: center;
+	}
+}
