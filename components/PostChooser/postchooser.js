@@ -22,7 +22,7 @@ export const PostChooser = ( props ) => {
 		postTypes = [ 'posts', 'pages' ], // Default post types to search.
 		searchPlaceholder,
 		minCharacters = 3,
-		onClose = () => {},
+		onClose,
 	} = props;
 
 	return (
