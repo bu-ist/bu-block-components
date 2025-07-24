@@ -47,9 +47,14 @@ export const PostChooserSidebar = function ( props ) {
 				{ postTitle && (
 					<PanelRow>
 						<div className="components-post-chooser-sidebar-posttitle">
-							<span className="components-post-chooser-sidebar-posttitle-label">Title:</span>
+							<span className="components-post-chooser-sidebar-posttitle-label">
+								Title:
+							</span>
 							{ postURL && showPostLink && (
-								<ExternalLink href={ postURL } className="components-post-chooser-sidebar-posttitle-link">
+								<ExternalLink
+									href={ postURL }
+									className="components-post-chooser-sidebar-posttitle-link"
+								>
 									View Post
 								</ExternalLink>
 							) }
@@ -71,23 +76,19 @@ export const PostChooserSidebar = function ( props ) {
 						</FlexItem>
 						{ postID && (
 							<FlexBlock>
-								<Button
-									isLink
-									onClick={ onRemovePost }
-								>
+								<Button isLink onClick={ onRemovePost }>
 									{ removePostButtonLabel }
 								</Button>
 							</FlexBlock>
 						) }
 					</Flex>
 				</PanelRow>
-				{
-				/*
-				* Optional. If children are passed, render them in the sidebar.
-				* This allows for additional controls or information to be displayed. This
-				* is useful for custom controls or displaying info related to the post.
-				* Example usage: <PostChooserSidebar>{ <CustomControl /> }</PostChooserSidebar>
-				*/ }
+				{ /*
+				 * Optional. If children are passed, render them in the sidebar.
+				 * This allows for additional controls or information to be displayed. This
+				 * is useful for custom controls or displaying info related to the post.
+				 * Example usage: <PostChooserSidebar>{ <CustomControl /> }</PostChooserSidebar>
+				 */ }
 				{ children && (
 					<PanelRow>
 						<div className="components-post-chooser-sidebar-children">

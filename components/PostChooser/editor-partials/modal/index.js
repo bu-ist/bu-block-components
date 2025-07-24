@@ -1,9 +1,6 @@
 import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import {
-	Spinner,
-	Modal,
-} from '@wordpress/components';
+import { Spinner, Modal } from '@wordpress/components';
 import { useEffect } from 'react';
 
 // Internal dependencies
@@ -25,6 +22,7 @@ export const PostChooserModal = ( props ) => {
 		postTypes,
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
+		minCharacters = 3,
 	} = props;
 
 	const [ searchTerm, setSearchTerm ] = useState( '' );
@@ -33,6 +31,9 @@ export const PostChooserModal = ( props ) => {
 		order: 'desc',
 	} );
 	const [ searchType, setSearchType ] = useState( 'recent' );
+	const [ selectedPostType, setSelectedPostType ] = useState(
+		postTypes && postTypes.length > 0 ? postTypes[ 0 ].value : 'post'
+	);
 
 	// Handle search Pagination.
 	const [ searchCurrentPage, setSearchCurrentPage ] = useState( 1 );
@@ -40,7 +41,7 @@ export const PostChooserModal = ( props ) => {
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
 		'postType',
-		'post',
+		selectedPostType,
 		{
 			per_page: 10,
 			orderby: 'modified',
@@ -50,15 +51,27 @@ export const PostChooserModal = ( props ) => {
 	);
 
 	// Search query
-	// Todo: Add support for searching by more than one post type that
-	// is passed in by the postTypes prop.
-	const [
-		searchPosts,
-		isSearchLoading,
-		searchInValidateResolver,
-	 ] = useRequestData(
+	const [ searchPosts, isSearchLoading, searchInValidateResolver ] =
+		useRequestData(
+			'postType',
+			selectedPostType,
+			searchTerm
+				? {
+						search: searchTerm,
+						per_page: 10,
+						orderby: sortOrder.orderby,
+						order: sortOrder.order,
+						status: 'publish',
+						page: searchCurrentPage,
+				  }
+				: {}
+		);
+
+	// Get pagination information by using useGetPagination hook.
+	// This hook will return the total items and total pages for the search results.
+	const { pagination, isLoading: paginationLoading } = useGetPagination(
 		'postType',
-		'post',
+		selectedPostType,
 		searchTerm
 			? {
 					search: searchTerm,
@@ -66,22 +79,6 @@ export const PostChooserModal = ( props ) => {
 					orderby: sortOrder.orderby,
 					order: sortOrder.order,
 					status: 'publish',
-					page: searchCurrentPage,
-			  }
-			: {}
-	);
-
-	// Get pagination information by using useGetPagination hook.
-	// This hook will return the total items and total pages for the search results.
-	const { pagination, isLoading: paginationLoading } = useGetPagination( 'postType',
-		'post',
-		searchTerm
-			? {
-					search: searchTerm,
-					per_page: 10,
-					orderby: sortOrder.orderby,
-					order: sortOrder.order,
-					status: 'publish'
 			  }
 			: {}
 	);
@@ -96,18 +93,20 @@ export const PostChooserModal = ( props ) => {
 		invalidateResolver();
 	}, [ invalidateResolver ] );
 
-
 	/**
 	 * When the search term changes we want to check if the searchPosts array
 	 * is empty or not. If it has results we want to set the searchType state to 'default'.
 	 * This will flip the view for the user to show the search results.
 	 */
 	useEffect( () => {
-		if ( searchType === 'recent' && searchTerm && searchPosts?.length > 0 ) {
+		if (
+			searchType === 'recent' &&
+			searchTerm &&
+			searchPosts?.length > 0
+		) {
 			setSearchType( 'default' );
 		}
 	}, [ searchTerm, searchPosts ] );
-
 
 	// Handles passing the search results array to the Results component.
 	// @todo: Add support for slug and ID search results arrays.
@@ -129,7 +128,6 @@ export const PostChooserModal = ( props ) => {
 		}
 	};
 
-
 	return (
 		<Modal
 			title={ title }
@@ -138,15 +136,13 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
-				{
-					/**
-					 * These sub-components are currently using a lot of props that are being passed down into them.
-					 * This should be improved in the future to reduce prop drilling.
-					 *
-					 * @todo: Refactor how these props are passed down to the sub-components by using a context provider.
-					 * This will avoid having to pass down so many props and make the code cleaner.
-					 */
-				}
+				{ /**
+						 * These sub-components are currently using a lot of props that are being passed down into them.
+						 * This should be improved in the future to reduce prop drilling.
+						 *
+						 * @todo: Refactor how these props are passed down to the sub-components by using a context provider.
+						 * This will avoid having to pass down so many props and make the code cleaner.
+						 */ }
 				<SearchUI
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
@@ -154,6 +150,9 @@ export const PostChooserModal = ( props ) => {
 					label={ label }
 					placeholder={ placeholder }
 					setSearchType={ setSearchType }
+					postTypes={ postTypes }
+					selectedPostType={ selectedPostType }
+					setSelectedPostType={ setSelectedPostType }
 				/>
 				<ResultsControls
 					searchTerm={ searchTerm }
@@ -183,10 +182,12 @@ export const PostChooserModal = ( props ) => {
 								<em>
 									{ totalItems > 0 && (
 										<span className="bu-components-post-chooser-results-count">
-											{
-												__( 'Found: ' )
-												+ ` ${ totalItems } ${ totalItems > 1 ? __( 'items' ) : __( 'item' ) }`
-											}
+											{ __( 'Found: ' ) +
+												` ${ totalItems } ${
+													totalItems > 1
+														? __( 'items' )
+														: __( 'item' )
+												}` }
 										</span>
 									) }
 								</em>

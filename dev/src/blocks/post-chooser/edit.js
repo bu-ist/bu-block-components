@@ -19,9 +19,7 @@ import {
 
 import { decodeEntities } from '@wordpress/html-entities';
 
-import {
-	Button,
-} from '@wordpress/components';
+import { Button } from '@wordpress/components';
 
 import { useState } from '@wordpress/element';
 
@@ -69,7 +67,8 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	 * Manages the open/closed state of the Modal
 	 * that contains the Post Chooser UI.
 	 */
-	const [ isPostChooserModalOpen, setIsPostChooserModalOpen ] = useState( false );
+	const [ isPostChooserModalOpen, setIsPostChooserModalOpen ] =
+		useState( false );
 
 	const onChangeTitle = ( newTitle ) => {
 		setAttributes( { title: newTitle } );
@@ -137,26 +136,37 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 				openButtonLabel={ 'Select Post Foo' }
 				changeButtonLabel={ 'Change Post Foo' }
 				panelTitle={ __( 'Pick something…' ) }
-				onOpenPostChooserModal={ () => setIsPostChooserModalOpen( true ) }
-			>
-			</PostChooserSidebar>
+				onOpenPostChooserModal={ () =>
+					setIsPostChooserModalOpen( true )
+				}
+			></PostChooserSidebar>
 
 			<div className="wp-block-plugin-slug-block-callout-postpicker--container">
-
 				{ ! selectedPostID && (
 					<>
-						<p>Post picker block, no post selected. <a href="#" onClick={ () => setIsPostChooserModalOpen( true ) }>Select Post</a></p>
+						<p>
+							Post picker block, no post selected.{ ' ' }
+							<a
+								href="#"
+								onClick={ () =>
+									setIsPostChooserModalOpen( true )
+								}
+							>
+								Select Post
+							</a>
+						</p>
 
 						{ isSelected && (
 							<Button
 								isPrimary
-								onClick={ () => setIsPostChooserModalOpen( true ) }
+								onClick={ () =>
+									setIsPostChooserModalOpen( true )
+								}
 							>
 								{ __( 'Select Post' ) }
 							</Button>
 						) }
 					</>
-
 				) }
 
 				{ isPostChooserModalOpen && (
@@ -168,8 +178,12 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 						onSelectPost={ calloutSelectedPostHandler }
 						modalTitle={ __( 'Choose a post (postchooser block)' ) }
 						onClose={ () => setIsPostChooserModalOpen( false ) }
+						postTypes={ [
+							{ label: __( 'Posts' ), value: 'post' },
+							{ label: __( 'Bob' ), value: 'import-bob' },
+						] }
 					/>
-				)}
+				) }
 				<div className="wp-block-plugin-slug-block-callout-postpicker--image">
 					{ isResolvingMedia && <LoadingSpinner /> }
 					{ hasResolvedMedia && media && (
@@ -218,7 +232,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 					</div>
 				) }
 			</div>
-
 		</div>
 	);
 }
