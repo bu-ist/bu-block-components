@@ -1,11 +1,8 @@
 import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { TextControl, Button, Spinner, Modal,
-	__experimentalRadio as Radio,
-	__experimentalRadioGroup as RadioGroup,
-	Flex,
-	FlexItem,
-	FlexBlock,
+import {
+	Spinner,
+	Modal,
 } from '@wordpress/components';
 import { useEffect } from 'react';
 
@@ -22,9 +19,9 @@ import './editor.scss';
 
 export const PostChooserModal = ( props ) => {
 	const {
-		onClose,
+		onClose = () => {}, // Function to call when the modal is closed.
 		label,
-		onSelectPost,
+		onSelectPost = () => {}, // Function to call when a post is selected.
 		postTypes,
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
