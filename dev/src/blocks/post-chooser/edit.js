@@ -145,7 +145,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 
 				{ ! selectedPostID && (
 					<>
-						<p>Post picker block, no post selected. <a href="#" onClick={ setIsPostChooserModalOpen }>Select Post</a></p>
+						<p>Post picker block, no post selected. <a href="#" onClick={ () => setIsPostChooserModalOpen( true ) }>Select Post</a></p>
 
 						{ isSelected && (
 							<Button
