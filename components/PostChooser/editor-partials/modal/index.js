@@ -47,11 +47,25 @@ export const PostChooserModal = ( props ) => {
 	// Search query
 	// Todo: Add support for searching by more than one post type that
 	// is passed in by the postTypes prop.
-	const [
-		searchPosts,
-		isSearchLoading,
-		searchInValidateResolver,
-	 ] = useRequestData(
+	const [ searchPosts, isSearchLoading, searchInValidateResolver ] =
+		useRequestData(
+			'postType',
+			'post',
+			searchTerm
+				? {
+						search: searchTerm,
+						per_page: 10,
+						orderby: sortOrder.orderby,
+						order: sortOrder.order,
+						status: 'publish',
+						page: searchCurrentPage,
+				  }
+				: {}
+		);
+
+	// Get pagination information by using useGetPagination hook.
+	// This hook will return the total items and total pages for the search results.
+	const { pagination, isLoading: paginationLoading } = useGetPagination(
 		'postType',
 		'post',
 		searchTerm
@@ -61,22 +75,6 @@ export const PostChooserModal = ( props ) => {
 					orderby: sortOrder.orderby,
 					order: sortOrder.order,
 					status: 'publish',
-					page: searchCurrentPage,
-			  }
-			: {}
-	);
-
-	// Get pagination information by using useGetPagination hook.
-	// This hook will return the total items and total pages for the search results.
-	const { pagination, isLoading: paginationLoading } = useGetPagination( 'postType',
-		'post',
-		searchTerm
-			? {
-					search: searchTerm,
-					per_page: 10,
-					orderby: sortOrder.orderby,
-					order: sortOrder.order,
-					status: 'publish'
 			  }
 			: {}
 	);
@@ -131,10 +129,12 @@ export const PostChooserModal = ( props ) => {
 								<em>
 									{ totalItems > 0 && (
 										<span className="bu-components-post-chooser-results-count">
-											{
-												__( 'Found: ' )
-												+ ` ${ totalItems } ${ totalItems > 1 ? __( 'items' ) : __( 'item' ) }`
-											}
+											{ __( 'Found: ' ) +
+												` ${ totalItems } ${
+													totalItems > 1
+														? __( 'items' )
+														: __( 'item' )
+												}` }
 										</span>
 									) }
 								</em>

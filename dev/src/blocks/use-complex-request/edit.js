@@ -51,7 +51,7 @@ export default function Edit( props ) {
 
 	const [ data, isLoading, invalidateRequest ] = useRequestComplexData(
 		'postType',
-		['post', 'page'],
+		[ 'post', 'page' ],
 		query
 	);
 
