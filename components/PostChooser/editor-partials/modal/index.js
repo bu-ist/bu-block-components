@@ -37,6 +37,23 @@ export const PostChooserModal = ( props ) => {
 	// Handle search Pagination.
 	const [ searchCurrentPage, setSearchCurrentPage ] = useState( 1 );
 
+	// State to manage Total Counts for Each Search Type.
+	const [ totalCounts, setTotalCounts ] = useState( {
+		recent: 0,
+		default: 0,
+		slug: 0,
+		id: 0,
+	} );
+
+	// State to manage total pages for search results.
+	const [ totalPages, setTotalPages ] = useState( {
+		recent: 0,
+		default: 0,
+		slug: 0,
+		id: 0,
+	} );
+
+
 	// Initial query for recent posts
 	const [ posts, isLoading, invalidateResolver ] = useRequestData(
 		'postType',
@@ -86,10 +103,7 @@ export const PostChooserModal = ( props ) => {
 			: {}
 	);
 
-	console.log( 'useGetPagination:', pagination );
 
-	// Access pagination information
-	const { totalItems, totalPages } = pagination;
 
 	const handleSearch = useCallback( () => {
 		// Trigger search by updating the query
@@ -106,8 +120,28 @@ export const PostChooserModal = ( props ) => {
 		if ( searchType === 'recent' && searchTerm && searchPosts?.length > 0 ) {
 			setSearchType( 'default' );
 		}
-	}, [ searchTerm, searchPosts ] );
 
+		if ( searchType === 'default' && ! searchTerm ) {
+			setSearchType( 'recent' );
+		}
+
+		// Update total counts for each search type.
+		if ( searchTerm && ( pagination || posts.length ) ) {
+			setTotalCounts( {
+				recent: posts ? posts.length : 0, // Todo: This could change to a call to useGetPagination hook just for Recent posts?
+				default: pagination?.totalItems ? pagination.totalItems : 0,
+				slug: 0, // Placeholder for slug search results count.
+				id: 0, // Placeholder for ID search results count.
+			} );
+
+			setTotalPages( {
+				recent: 1, // Todo: do we want pagination for recent posts?
+				default: pagination?.totalPages ? pagination.totalPages : 0,
+				slug: 0, // Placeholder for slug search results pages.
+				id: 0, // Placeholder for ID search results pages.
+			} );
+		}
+	}, [ searchTerm, searchPosts, posts, pagination ] );
 
 	// Handles passing the search results array to the Results component.
 	// @todo: Add support for slug and ID search results arrays.
@@ -157,60 +191,36 @@ export const PostChooserModal = ( props ) => {
 				/>
 				<ResultsControls
 					searchTerm={ searchTerm }
-					onSearch={ handleSearch }
 					searchType={ searchType }
 					setSearchType={ setSearchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
+					totalCounts={ totalCounts }
 				/>
 				<div className="bu-components-post-chooser-results-container">
 					{ ( isLoading || isSearchLoading ) && <Spinner /> }
-					{ ! searchTerm && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Recently Published' ) }
-							</h2>
-							<Results
-								posts={ posts }
-								onSelectPost={ onSelectPost }
-							/>
-						</>
-					) }
-					{ searchTerm && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Search Results ' ) }
-								<em>
-									{ totalItems > 0 && (
-										<span className="bu-components-post-chooser-results-count">
-											{
-												__( 'Found: ' )
-												+ ` ${ totalItems } ${ totalItems > 1 ? __( 'items' ) : __( 'item' ) }`
-											}
-										</span>
-									) }
-								</em>
-							</h2>
-							<Results
-								posts={ searchPosts }
-								onSelectPost={ onSelectPost }
-								totalItems={ totalItems }
-							/>
-						</>
-					) }
-					{ searchTerm && totalPages > 1 && searchPosts && (
-						<Pagination
-							currentPage={ searchCurrentPage } // This should be managed by the hook or state
-							totalPages={ totalPages }
-							onChange={ ( newPage ) => {
-								// Handle page change logic here
-								console.log( 'New page:', newPage );
-								setSearchCurrentPage( newPage );
-								searchInValidateResolver();
-							} }
-						/>
-					) }
+					<Results
+						posts={ handleResultsSearch() }
+						onSelectPost={ onSelectPost }
+						totalItems={ totalCounts.default }
+					/>
 				</div>
+				{ searchType === 'default' && ! paginationLoading && (
+					<>
+						{ totalPages?.default > 1 && (
+							<Pagination
+								currentPage={ searchCurrentPage } // This should be managed by the hook or state
+								totalPages={ totalPages?.default }
+								onChange={ ( newPage ) => {
+									// Handle page change logic here
+									console.log( 'New page:', newPage );
+									setSearchCurrentPage( newPage );
+									searchInValidateResolver();
+								} }
+							/>
+						) }
+					</>
+				)}
 			</div>
 		</Modal>
 	);

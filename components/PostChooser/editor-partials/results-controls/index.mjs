@@ -35,11 +35,16 @@ export const ResultsControls = ( props ) => {
 		setSearchType,
 		sortOrder,
 		setSortOrder,
-		contentResultsCount = 0, // Todo: Add support for content results count
-		slugResultsCount = 0, // Todo: Add support for slug results count
-		idResultsCount = 0, // Todo: Add support for ID results count
+		totalCounts,
 	} = props;
 
+
+	const {
+		recent: recentResultsCount = 0,
+		default: contentResultsCount = 0,
+		slug: slugResultsCount = 0,
+		id: idResultsCount = 0
+	} = totalCounts;
 
 	return (
 		<div className="bu-components-post-chooser-results-controls">
@@ -60,7 +65,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="default"
-							disabled={ searchTerm ? false : true }
+							disabled={ contentResultsCount > 0 ? false : true }
 							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
 						>
@@ -69,7 +74,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="slug"
-							disabled={ searchTerm ? false : true }
+							disabled={ slugResultsCount > 0 ? false : true }
 							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
 						>
@@ -78,7 +83,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="id"
-							disabled={ searchTerm ? false : true }
+							disabled={ idResultsCount > 0 ? false : true }
 							icon={ IconPostChooserId }
 							iconPosition="right"
 						>
