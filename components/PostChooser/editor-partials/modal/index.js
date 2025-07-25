@@ -63,7 +63,7 @@ export const PostChooserModal = ( props ) => {
 						order: sortOrder.order,
 						status: 'publish',
 						page: searchCurrentPage,
-				  }
+			}
 				: {}
 		);
 
@@ -79,7 +79,7 @@ export const PostChooserModal = ( props ) => {
 					orderby: sortOrder.orderby,
 					order: sortOrder.order,
 					status: 'publish',
-			  }
+			}
 			: {}
 	);
 
