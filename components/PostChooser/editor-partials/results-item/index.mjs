@@ -47,11 +47,11 @@ export const ResultsItem = ( props ) => {
 								)}
 							</div>
 						</div>
-						<div className="bu-components-post-chooser-results-item-posttype">
+						{/* <div className="bu-components-post-chooser-results-item-posttype">
 							<span className="bu-components-post-chooser-results-item-type">
 								{ post?.type }
 							</span>
-						</div>
+						</div> */}
 					</div>
 					<Button
 						className="bu-components-post-chooser-item-select-button"
