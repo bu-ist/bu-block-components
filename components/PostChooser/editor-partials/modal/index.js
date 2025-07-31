@@ -55,21 +55,50 @@ export const PostChooserModal = ( props ) => {
 	);
 
 	// Search query
-	const [ searchPosts, isSearchLoading, searchInValidateResolver ] =
-		useRequestData(
-			'postType',
-			selectedPostType,
-			searchTerm
-				? {
-						search: searchTerm,
-						per_page: 10,
-						orderby: sortOrder.orderby,
-						order: sortOrder.order,
-						status: 'publish',
-						page: searchCurrentPage,
+	const [recentPosts, isRecentLoading, recentInvalidateResolver] = useRequestData(
+		'postType',
+		selectedPostType,
+		searchTerm
+			? {
+				search: searchTerm,
+				per_page: 10,
+				orderby: sortOrder.orderby,
+				order: sortOrder.order,
+				status: 'publish',
+				page: searchCurrentPage,
 			}
-				: {}
-		);
+			: {}
+	);
+
+	const [slugPosts, isSlugLoading, slugInvalidateResolver] = useRequestData(
+		'postType',
+		selectedPostType,
+		searchTerm
+			? {
+				slug: searchTerm,
+				per_page: 10,
+				orderby: sortOrder.orderby,
+				order: sortOrder.order,
+				status: 'publish',
+				page: searchCurrentPage,
+			}
+			: {}
+	);
+
+	const [idPosts, isIdLoading, idInvalidateResolver] = useRequestData(
+		'postType',
+		selectedPostType,
+		searchTerm
+			? {
+				id: searchTerm,
+				per_page: 10,
+				orderby: sortOrder.orderby,
+				order: sortOrder.order,
+				status: 'publish',
+				page: searchCurrentPage,
+			}
+			: {}
+	);
 
 	// Get pagination information by using useGetPagination hook.
 	// This hook will return the total items and total pages for the search results.
@@ -86,8 +115,6 @@ export const PostChooserModal = ( props ) => {
 			}
 			: {}
 	);
-
-	console.log( 'useGetPagination:', pagination );
 
 	// Access pagination information
 	const { totalItems, totalPages } = pagination;
