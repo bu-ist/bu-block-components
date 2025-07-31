@@ -22,11 +22,9 @@ export const SearchUI = ( props ) => {
 		label = __( 'Enter a search query' ),
 		hideLabelFromVision = true,
 		placeholder,
-		postTypes = [
-			{ label: 'Posts', value: 'post' },
-			{ label: 'Pages', value: 'page' },
-		],
-		selectedPostType = 'post',
+		postTypes,
+		primaryPostType,
+		selectedPostType = primaryPostType || 'post',
 		setSelectedPostType = () => {},
 	} = props;
 

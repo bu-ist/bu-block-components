@@ -19,10 +19,8 @@ export const PostChooser = ( props ) => {
 		onSelectPost,
 		modalLabel,
 		modalTitle,
-		postTypes = [
-			{ label: __( 'Posts' ), value: 'post' },
-			{ label: __( 'Pages' ), value: 'page' },
-		], // Default post types to search.
+		postTypes,
+		primaryPostType,
 		searchPlaceholder,
 		minCharacters = 3,
 		onClose,
@@ -34,6 +32,7 @@ export const PostChooser = ( props ) => {
 			label={ modalLabel }
 			title={ modalTitle }
 			postTypes={ postTypes }
+			primaryPostType={ primaryPostType }
 			placeholder={ searchPlaceholder }
 			minCharacters={ minCharacters }
 			onClose={ onClose }

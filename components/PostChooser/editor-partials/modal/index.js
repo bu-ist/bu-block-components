@@ -19,7 +19,11 @@ export const PostChooserModal = ( props ) => {
 		onClose = () => {}, // Function to call when the modal is closed.
 		label,
 		onSelectPost = () => {}, // Function to call when a post is selected.
-		postTypes,
+		postTypes= [
+			{ label: __( 'Posts' ), value: 'post' },
+			{ label: __( 'Pages' ), value: 'page' },
+		], // Default post types to search.
+		primaryPostType = 'post', // Default primary post type.
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 		minCharacters = 3,
@@ -32,7 +36,7 @@ export const PostChooserModal = ( props ) => {
 	} );
 	const [ searchType, setSearchType ] = useState( 'recent' );
 	const [ selectedPostType, setSelectedPostType ] = useState(
-		postTypes && postTypes.length > 0 ? postTypes[ 0 ].value : 'post'
+		primaryPostType || (postTypes && postTypes.length > 0 ? postTypes[ 0 ].value : 'post')
 	);
 
 	// Handle search Pagination.
@@ -151,6 +155,7 @@ export const PostChooserModal = ( props ) => {
 					placeholder={ placeholder }
 					setSearchType={ setSearchType }
 					postTypes={ postTypes }
+					primaryPostType={ primaryPostType }
 					selectedPostType={ selectedPostType }
 					setSelectedPostType={ setSelectedPostType }
 				/>

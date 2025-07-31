@@ -182,6 +182,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 							{ label: __( 'Posts' ), value: 'post' },
 							{ label: __( 'Bob' ), value: 'import-bob' },
 						] }
+						primaryPostType="import-bob"
 					/>
 				) }
 				<div className="wp-block-plugin-slug-block-callout-postpicker--image">
