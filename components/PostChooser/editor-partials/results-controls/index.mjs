@@ -55,6 +55,7 @@ export const ResultsControls = ( props ) => {
 							value="recent"
 							icon={ IconPostChooserRecentlyUpdated }
 							iconPosition="right"
+							className={ searchType === 'recent' ? 'is-active' : '' }
 						>
 							{ __( 'Recently Updated' ) }
 						</Radio>
@@ -63,27 +64,36 @@ export const ResultsControls = ( props ) => {
 							disabled={ searchTerm ? false : true }
 							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
+							className={ searchType === 'default' ? 'is-active' : '' }
 						>
 							{ __( 'Content' ) }
-							<span className="bu-components-post-chooser-results-controls-type-count">{contentResultsCount}</span>
+							{ searchTerm && (
+								<span className="bu-components-post-chooser-results-controls-type-count">{contentResultsCount}</span>
+							)}
 						</Radio>
 						<Radio
 							value="slug"
 							disabled={ searchTerm ? false : true }
 							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
+							className={ searchType === 'slug' ? 'is-active' : '' }
 						>
 							{ __( 'Post Slug' ) }
-							<span className="bu-components-post-chooser-results-controls-type-count">{slugResultsCount}</span>
+							{ searchTerm && (
+								<span className="bu-components-post-chooser-results-controls-type-count">{slugResultsCount}</span>
+							)}
 						</Radio>
 						<Radio
 							value="id"
 							disabled={ searchTerm ? false : true }
 							icon={ IconPostChooserId }
 							iconPosition="right"
+							className={ searchType === 'id' ? 'is-active' : '' }
 						>
 							{ __( 'Post ID' ) }
-							<span className="bu-components-post-chooser-results-controls-type-count">{idResultsCount}</span>
+							{ searchTerm && (
+								<span className="bu-components-post-chooser-results-controls-type-count">{idResultsCount}</span>
+							)}
 						</Radio>
 					</RadioGroup>
 				</FlexBlock>
@@ -105,7 +115,7 @@ export const ResultsControls = ( props ) => {
 								aria-expanded={ isOpen }
 								icon={ IconSortMenu }
 								label="Sort By:"
-								disabled={ searchTerm ? false : true }
+								disabled={ searchTerm || searchType === 'recent' ? false : true }
 							>
 							</Button>
 						) }

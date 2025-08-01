@@ -49,9 +49,11 @@
 		}
 
 		// Active button in RadioGroup
-		&.is-primary {
+		&.is-primary,
+		&.is-active {
 			box-shadow: none;
 			color: var( --wp-admin-theme-color-darker-10, #2271b1 );
+			background: rgba(34, 113, 177, 0.1);
 
 			&::after{
 				content: '';
@@ -67,6 +69,12 @@
 			&:focus:not(:disabled) {
 				box-shadow: 0 0 0 1px var(--bu-components-post-chooser-results-border-color);
 			}
+
+			.bu-components-post-chooser-results-controls-type-count {
+				background: var(--wp-admin-theme-color, #2271b1);
+				color: white;
+				box-shadow: none;
+			}
 		}
 
 		&:hover,
@@ -79,15 +87,19 @@
 			font-size: 0.8em;
 			margin-inline: 5px;
 			display: inline-block;
-			border-radius: 4px;
-			padding: 3px 7px;
+			border-radius: 50%;
+			padding: 4px 8px;
 			background: #fef8ef;
 			box-shadow: inset 0 0 2px var(--bu-components-post-chooser-results-border-color);
+			font-weight: bold;
+			min-width: 20px;
+			text-align: center;
+			transition: all 0.2s ease;
 		}
 
 		&:hover:not(:disabled) .bu-components-post-chooser-results-controls-type-count {
-			background: inherit;
-			box-shadow: inset 0 0 2px inherit;
+			background: rgba(34, 113, 177, 0.2);
+			box-shadow: 0 0 5px rgba(34, 113, 177, 0.3);
 		}
 
 		&:disabled .bu-components-post-chooser-results-controls-type-count {
