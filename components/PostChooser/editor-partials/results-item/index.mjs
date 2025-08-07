@@ -10,13 +10,17 @@ export const ResultsItem = ( props ) => {
 	const {
 		post,
 		onSelectPost,
-		placeholder = false,
+		placeholder = undefined,
 	} = props;
 
 
 	return (
 		<>
-			<li className="bu-components-post-chooser-results-item" data-placeholder={ placeholder } key={ post?.id }>
+			<li
+				className="bu-components-post-chooser-results-item"
+				data-placeholder={placeholder}
+				key={post?.id}
+			>
 				<div className="bu-components-post-chooser-results-item-container">
 					<div className="bu-components-post-chooser-results-item-inner">
 						<div className="bu-components-post-chooser-results-item-postdetails">
