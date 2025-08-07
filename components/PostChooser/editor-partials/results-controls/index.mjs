@@ -32,19 +32,15 @@ export const ResultsControls = ( props ) => {
 	const {
 		searchTerm,
 		searchType,
-		setSearchType,
 		sortOrder,
 		setSortOrder,
-		totalCounts,
+		contentResultsCount = 0, // Todo: Add support for content results count
+		slugResultsCount = 0, // Todo: Add support for slug results count
+		idResultsCount = 0, // Todo: Add support for ID results count
+		onChange = () => {}, // Function to call when the search type or sort order changes.
 	} = props;
 
 
-	const {
-		recent: recentResultsCount = 0,
-		default: contentResultsCount = 0,
-		slug: slugResultsCount = 0,
-		id: idResultsCount = 0
-	} = totalCounts;
 
 	return (
 		<div className="bu-components-post-chooser-results-controls">
@@ -53,7 +49,7 @@ export const ResultsControls = ( props ) => {
 					<RadioGroup
 						className='bu-components-post-chooser-search-type'
 						label="Search Type"
-						onChange={ ( value ) => setSearchType( value ) }
+						onChange={ onChange }
 						checked={ searchType }
 					>
 						<Radio
@@ -66,7 +62,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="default"
-							disabled={ contentResultsCount > 0 ? false : true }
+							//disabled={ contentResultsCount > 0 ? false : true }
 							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
 							className={ searchType === 'default' ? 'is-active' : '' }
@@ -78,7 +74,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="slug"
-							disabled={ slugResultsCount > 0 ? false : true }
+							//disabled={ slugResultsCount > 0 ? false : true }
 							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
 							className={ searchType === 'slug' ? 'is-active' : '' }
@@ -90,7 +86,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="id"
-							disabled={ idResultsCount > 0 ? false : true }
+							//disabled={ idResultsCount > 0 ? false : true }
 							icon={ IconPostChooserId }
 							iconPosition="right"
 							className={ searchType === 'id' ? 'is-active' : '' }
