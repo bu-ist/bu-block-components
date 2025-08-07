@@ -47,8 +47,6 @@ export default function Edit( props ) {
 		postID
 	);
 
-	console.log( 'Data for Meta: ', data );
-
 	return (
 		<>
 			<InspectorControls>

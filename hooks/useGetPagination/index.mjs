@@ -168,7 +168,6 @@ export const useGetPagination = (entity='postType', kind='post', query = {} ) =>
 				totalPages = 0;
 			} finally {
 				// Update the pagination state.
-				console.log( 'Updating Pagination State via apiFetch:' );
 				setPagination(prev => ({
 					...prev,
 					totalItems: totalItems,
