@@ -275,9 +275,9 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	/**
-		* When the search term changes or when we have search results,
-		* automatically switch to the appropriate search type.
-		*/
+	* When the search term changes or when we have search results,
+	* automatically switch to the appropriate search type.
+	*/
 	useEffect( () => {
 		if (searchTerm && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
@@ -286,7 +286,7 @@ export const PostChooserModal = ( props ) => {
 			// Auto-switch back to recent when search term is cleared
 			setSearchType('recent');
 		}
-	}, [ searchTerm, searchType ] );
+	}, [ searchTerm ] );
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
@@ -302,13 +302,6 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
-				{ /**
-					* These sub-components are currently using a lot of props that are being passed down into them.
-					* This should be improved in the future to reduce prop drilling.
-					*
-					* @todo: Refactor how these props are passed down to the sub-components by using a context provider.
-					* This will avoid having to pass down so many props and make the code cleaner.
-					*/ }
 				<SearchUI
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
@@ -324,55 +317,24 @@ export const PostChooserModal = ( props ) => {
 				<ResultsControls
 					searchTerm={ searchTerm }
 					searchType={ searchType }
-					setSearchType={ setSearchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
 					contentResultsCount={ searchResults.default.totalItems || 0 }
 					slugResultsCount={ searchResults.slug.totalItems || 0 }
 					idResultsCount={ searchResults.id.totalItems || 0 }
+					onChange={ (newType) => {
+						setSearchType(newType);
+					}}
 				/>
 				<div className="bu-components-post-chooser-results-container">
-					{ currentLoading && <Spinner /> }
-					{ searchType === 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Recently Published' ) }
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								loading={ currentLoading }
-								totalItems={ currentResults.totalItems }
-							/>
-						</>
-					) }
-					{ searchType !== 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ searchType === 'default' && __( 'Content Search Results' ) }
-								{ searchType === 'slug' && __( 'Slug Search Results' ) }
-								{ searchType === 'id' && __( 'ID Search Results' ) }
-								<em>
-									{ currentResults.totalItems > 0 && (
-										<span className="bu-components-post-chooser-results-count">
-											{ __( 'Found: ' ) +
-												` ${ currentResults.totalItems } ${
-													currentResults.totalItems > 1
-														? __( 'items' )
-														: __( 'item' )
-												}` }
-										</span>
-									) }
-								</em>
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								totalItems={ currentResults.totalItems }
-								loading={ currentLoading }
-							/>
-						</>
-					) }
+					<Results
+						posts={ currentResults.posts }
+						onSelectPost={ onSelectPost }
+						totalItems={ currentResults.totalItems }
+						loading={ currentLoading }
+						searchTerm={ searchTerm }
+						searchType={ searchType }
+					/>
 					{ currentTotalPages > 1 && currentResults.posts && (
 						<Pagination
 							currentPage={ currentPage }
@@ -381,22 +343,6 @@ export const PostChooserModal = ( props ) => {
 						/>
 					) }
 				</div>
-				{ searchType === 'default' && ! paginationLoading && (
-					<>
-						{ totalPages?.default > 1 && (
-							<Pagination
-								currentPage={ searchCurrentPage } // This should be managed by the hook or state
-								totalPages={ totalPages?.default }
-								onChange={ ( newPage ) => {
-									// Handle page change logic here
-									console.log( 'New page:', newPage );
-									setSearchCurrentPage( newPage );
-									searchInValidateResolver();
-								} }
-							/>
-						) }
-					</>
-				)}
 			</div>
 		</Modal>
 	);
