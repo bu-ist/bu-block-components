@@ -79,7 +79,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	};
 
 	const calloutRemovePostHandler = ( e ) => {
-		console.log( 'remove things in block' );
 
 		setAttributes( {
 			selectedPostID: undefined,
@@ -91,7 +90,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	};
 
 	const calloutSelectedPostHandler = ( post ) => {
-		console.log( post );
 
 		setAttributes( {
 			selectedPostID: post.id,
@@ -110,7 +108,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	}
 
 	const handleImageSelect = ( media ) => {
-		console.log( 'image Selected:', media );
 		setAttributes( {
 			selectedPostIMG: media?.id,
 		} );

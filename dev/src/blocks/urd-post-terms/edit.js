@@ -55,8 +55,6 @@ export default function Edit( props ) {
 		postData ? { post: postID } : undefined
 	);
 
-	console.log( 'fishTerms: ', fishTerms );
-
 	return (
 		<>
 			<InspectorControls>

@@ -9,7 +9,7 @@ export const ThePost = ( props ) => {
 	const { media, isResolvingMedia, hasResolvedMedia } = useMedia(
 		post.featured_media
 	);
-	console.log( post );
+
 	return (
 		<div
 			id={ post.id }
