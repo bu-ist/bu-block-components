@@ -1,6 +1,6 @@
 // WordPress dependencies
 import { __ } from '@wordpress/i18n';
-import { useState, useCallback, useEffect } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
 // Internal dependencies
 import { ResultsItem } from '../results-item/index.mjs';
@@ -9,11 +9,13 @@ import { LoadingSpinner } from '../../../LoadingSpinner/index.mjs';
 // Import CSS.
 import './editor.scss';
 
+// Import Assets.
+import helpPostIdImage from './help-post-id.png';
+
 export const Results = ( props ) => {
-	const { posts, onSelectPost, loading, totalItems } = props;
+	const { posts, onSelectPost, loading, totalItems, searchTerm, searchType } = props;
 
-	// State to manage loading state
-
+	// Spinner visibility state for animation
 	const [ spinnerVisible, setSpinnerVisible ] = useState( false );
 
 	// Effect to handle animating the spinner
@@ -37,11 +39,71 @@ export const Results = ( props ) => {
 			>
 				<LoadingSpinner />
 			</div>
-			<ul className="bu-components-post-chooser-results">
-				{ ! posts && (
-					<li className="bu-components-post-chooser-results-item">
-						{ __( 'No posts found.' ) }
-					</li>
+			{ ! posts && ! searchTerm && searchType !== 'recent' && (
+				<div className="bu-components-post-chooser-before-search-message">
+					{ searchType === 'slug' && (
+						<>
+							<h3>{ __( 'Search by Slug' ) }</h3>
+							<p>{ __( 'Enter the post slug to find it quickly.' ) }</p>
+						</>
+					) }
+					{ searchType === 'default' && (
+						<>
+							<h3>{ __( 'Search Post Content' ) }</h3>
+							<p>{ __( 'Enter a search term to search the Title & Post Content. Note, post meta, taxonomies, and other metadata will not be searched.' ) }</p>
+						</>
+					) }
+					{ searchType === 'id' && (
+						<>
+							<h3>{ __( `Find post by it's ID` ) }</h3>
+							<p>
+								{ __('If looking for a specific post, enter the') } <strong>{ __('Post ID') }</strong> { __('in the search field.') }
+							</p>
+							<img className="bu-components-post-chooser-help-image" src={ helpPostIdImage } />
+							<p>{ __( 'The post ID can be found in the URL of the post edit screen.' ) }</p>
+						</>
+					) }
+				</div>
+			) }
+			{ searchTerm && ! loading && totalItems === 0 && (
+				<div className="bu-components-post-chooser-results-message">
+					<h3>{ __( 'No posts found.' ) }</h3>
+					<p>
+						{ __(
+							'Your search term might be too specific. Try broadening your search.'
+						) }
+					</p>
+					<p>
+						{ __(
+							'If you have a specific post in mind, try searching for its title. Alternatively, you can try entering the post ID or slug.'
+						) }
+					</p>
+				</div>
+			) }
+			<ul className="bu-components-post-chooser-results" data-loading={ loading }>
+				{ loading && (
+					<>
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+						<ResultsItem placeholder={ true } />
+					</>
 				) }
 				{ posts && Array.isArray( posts ) && posts.length > 0 && (
 					<>
@@ -54,32 +116,6 @@ export const Results = ( props ) => {
 						) ) }
 					</>
 				) }
-
-				{ ! posts ||
-					( posts.length === 0 && (
-						<>
-							{ ! loading && totalItems === 0 && (
-								<div className="bu-components-post-chooser-results-message">
-									<h3>{ __( 'No posts found.' ) }</h3>
-									<p>
-										{ __(
-											'Your search term might be too specific. Try broadening your search.'
-										) }
-									</p>
-									<p>
-										{ __(
-											'If you have a specific post in mind, try searching for its title. Alternatively, you can try entering the post ID or slug.'
-										) }
-									</p>
-								</div>
-							) }
-							<ResultsItem placeholder={ true } />
-							<ResultsItem placeholder={ true } />
-							<ResultsItem placeholder={ true } />
-							<ResultsItem placeholder={ true } />
-							<ResultsItem placeholder={ true } />
-						</>
-					) ) }
 			</ul>
 		</>
 	);
