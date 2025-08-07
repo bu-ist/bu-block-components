@@ -25,6 +25,7 @@
     display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
+	justify-content: space-between;
 
 	// WordPress RadioGroup Button (Button Component)
 	.components-button {
@@ -87,7 +88,7 @@
 			font-size: 0.8em;
 			margin-inline: 5px;
 			display: inline-block;
-			border-radius: 50%;
+			border-radius: 4px;
 			padding: 4px 8px;
 			background: #fef8ef;
 			box-shadow: inset 0 0 2px var(--bu-components-post-chooser-results-border-color);
@@ -98,8 +99,15 @@
 		}
 
 		&:hover:not(:disabled) .bu-components-post-chooser-results-controls-type-count {
-			background: rgba(34, 113, 177, 0.2);
-			box-shadow: 0 0 5px rgba(34, 113, 177, 0.3);
+			background: inherit;
+			box-shadow: inset 0 0 2px inherit;
+		}
+
+		&.is-active:hover .bu-components-post-chooser-results-controls-type-count {
+			// background: rgba(34, 113, 177, 0.2);
+			// box-shadow: 0 0 5px rgba(34, 113, 177, 0.3);
+			box-shadow: inset 0 0 5px rgb(19 75 121 / 74%);
+    		background: #145d82;
 		}
 
 		&:disabled .bu-components-post-chooser-results-controls-type-count {
