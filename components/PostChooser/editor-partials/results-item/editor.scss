@@ -160,7 +160,7 @@
 
 .bu-components-post-chooser-item-select-button {
 	border: 1px solid var(--bu-components-post-chooser-results-border-color);
-	background-color: none;
+	background-color: transparent;
 	color: var(--bu-components-post-chooser-results-text-color-darker);
 	grid-area: Action;
 	text-align: center;
