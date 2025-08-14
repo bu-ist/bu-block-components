@@ -32,6 +32,8 @@ function create_block_imports_dev_block_init() {
 	register_block_type( __DIR__ . '/build/blocks/urd-post-terms' );
 	register_block_type( __DIR__ . '/build/blocks/urd-post-meta' );
 	register_block_type( __DIR__ . '/build/blocks/post-chooser' );
+	register_block_type( __DIR__ . '/build/blocks/post-chooser-tax' );
+	register_block_type( __DIR__ . '/build/blocks/post-chooser-meta' );
 }
 add_action( 'init', 'create_block_imports_dev_block_init' );
 
