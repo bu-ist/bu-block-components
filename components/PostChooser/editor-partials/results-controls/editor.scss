@@ -133,8 +133,6 @@
 		}
 
 		&.is-active:hover .bu-components-post-chooser-results-controls-type-count {
-			// background: rgba(34, 113, 177, 0.2);
-			// box-shadow: 0 0 5px rgba(34, 113, 177, 0.3);
 			box-shadow: inset 0 0 5px rgb(19 75 121 / 74%);
     		background: #145d82;
 		}
@@ -151,12 +149,6 @@
 .bu-components-post-chooser-results-controls-sort {
 	padding-inline: 10px;
 	border-left: 1px solid var(--bu-components-post-chooser-results-border-color, #b1a495);
-
-	// WordPress DropdownMenu Component.
-	.components-dropdown-menu {
-
-	}
-
 }
 
 // Popover Content Div for the sort dropdown.
