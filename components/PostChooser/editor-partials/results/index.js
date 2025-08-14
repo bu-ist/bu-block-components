@@ -55,7 +55,7 @@ export const Results = ( props ) => {
 					) }
 					{ searchType === 'id' && (
 						<>
-							<h3>{ __( `Find post by it's ID` ) }</h3>
+							<h3>{ __( `Find post by its ID` ) }</h3>
 							<p>
 								{ __('If looking for a specific post, enter the') } <strong>{ __('Post ID') }</strong> { __('in the search field.') }
 							</p>
