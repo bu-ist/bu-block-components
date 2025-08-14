@@ -277,6 +277,9 @@ export const PostChooserModal = ( props ) => {
 	/**
 	* When the search term changes or when we have search results,
 	* automatically switch to the appropriate search type.
+	*
+	* Note: Don't enter `searchType` as a dependency in this effect.
+	* Doing so will cause a rerender and the setting will be undone.
 	*/
 	useEffect( () => {
 		if (searchTerm && searchType === 'recent') {
