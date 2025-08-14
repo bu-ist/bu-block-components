@@ -3,6 +3,11 @@
  * controls for data that spans multiple pages.
  */
 
+// External Dependencies
+
+import classnames from 'classnames';
+
+
 // WordPress dependencies
 import { useState, useEffect } from '@wordpress/element';
 import { Button, TextControl } from '@wordpress/components';
@@ -17,6 +22,7 @@ import './editor.scss';
 
 export const Pagination = ( props ) => {
 	const {
+		className,
 		currentPage = 1, // Default to page 1 if not provided.
 		totalPages = 1, // Default to 1 page if not provided.
 		onChange = () => {}, // Default to an empty function if not provided.
@@ -44,11 +50,13 @@ export const Pagination = ( props ) => {
 		onChange( newPage );
 	};
 
+	// Combine class names for the pagination container with any class passed to the component.
+	const classes = classnames( 'bu-components-pagination', className );
 
 
 	return (
 		<nav
-			className="bu-components-pagination"
+			className={classes}
 			// Use the margin prop to conditionally apply margin styles
 			// marginBlock and marginInline are optional props
 			// If they are not provided, they will not be applied.
@@ -59,99 +67,102 @@ export const Pagination = ( props ) => {
 				}
 			}
 		>
-			{ showPrevNextButtons && (
-				<Button
-					isSecondary
-					disabled={ page <= 1 }
-					onClick={ () => handleChange( page - 1 ) }
+			<div class="bu-components-pagination-container">
+				{ showPrevNextButtons && (
+					<Button
+						isSecondary
+						disabled={ page <= 1 }
+						onClick={ () => handleChange( page - 1 ) }
 
-				>
-					<>
-						<Icon icon={ PaginationIcons.previous.icon } />
-						{ __( 'Previous' ) }
-					</>
-				</Button>
-			)}
+					>
+						<>
+							<Icon icon={ PaginationIcons.previous.icon } />
+							<span className="bu-components-pagination-button-text">{ __( 'Previous' ) }</span>
+						</>
+					</Button>
+				)}
 
-			{ ( showFirstLastButtons || showPageNumbers || showJumpToPage ) && (
-				<div className='bu-components-pagination-info'>
-					{ showFirstLastButtons && (
-						<div className='bu-components-pagination-first'>
-							<Button
-								isSecondary
-								disabled={ page <= 1 }
-								onClick={ () => handleChange( 1 ) }
-								label='First Page'
-							>
-								{ <Icon icon={ PaginationIcons.first.icon } /> }
-							</Button>
-						</div>
-					)}
-					{ showPageNumbers && (
-						<div className='bu-components-pagination-of'>
-							{ __( 'Page' ) }
-							{ ' ' }
-							{ showJumpToPage ? (
-								<span className='bu-components-pagination-jump-to'>
-									<TextControl
-										value={ page }
-										onChange={ ( value ) => handleChange( value ) }
-										type='number'
-										min={ 1 }
-										max={ totalPages }
-										label={ __( 'Jump to page' ) }
-										hideLabelFromVision={ true }
-									/>
+				{ ( showFirstLastButtons || showPageNumbers || showJumpToPage ) && (
+					<div className='bu-components-pagination-info'>
+						{ showFirstLastButtons && (
+							<div className='bu-components-pagination-first'>
+								<Button
+									isSecondary
+									disabled={ page <= 1 }
+									onClick={ () => handleChange( 1 ) }
+									label='First Page'
+								>
+									{ <Icon icon={ PaginationIcons.first.icon } /> }
+								</Button>
+							</div>
+						)}
+						{ showPageNumbers && (
+							<div className='bu-components-pagination-of'>
+								<span className="bu-components-pagination-page-label-text">
+									{ __( 'Page ' ) }
 								</span>
-							) :
-								<strong>{ page }</strong>
-							}
-							{' '}
-							{ __( 'of' ) }
-							{' '}
-							<strong>{ totalPages }</strong>
-						</div>
-					)}
-					{ showJumpToPage && ! showPageNumbers && (
-						<span className='bu-components-pagination-jump-to'>
-							<TextControl
-								value={ page }
-								onChange={ ( value ) => handleChange( value ) }
-								type='number'
-								min={ 1 }
-								max={ totalPages }
-								label={ __( 'Jump to page' ) }
-								hideLabelFromVision={ true }
-							/>
-						</span>
-					) }
-					{ showFirstLastButtons && (
-						<div className='bu-components-pagination-last'>
-							<Button
-								isSecondary
-								disabled={ page >= totalPages }
-								onClick={ () => handleChange( totalPages ) }
-								label='Last Page'
-							>
-								{ <Icon icon={ PaginationIcons.last.icon } /> }
-							</Button>
-						</div>
-					)}
-				</div>
-			)}
-			{ showPrevNextButtons && (
-				<Button
-					isSecondary
-					disabled={ page >= totalPages }
-					onClick={ () => handleChange( page + 1 ) }
+								{ showJumpToPage ? (
+									<span className='bu-components-pagination-jump-to'>
+										<TextControl
+											value={ page }
+											onChange={ ( value ) => handleChange( value ) }
+											type='number'
+											min={ 1 }
+											max={ totalPages }
+											label={ __( 'Jump to page' ) }
+											hideLabelFromVision={ true }
+										/>
+									</span>
+								) :
+									<strong>{ page }</strong>
+								}
+								{' '}
+								{ __( 'of' ) }
+								{' '}
+								<strong>{ totalPages }</strong>
+							</div>
+						)}
+						{ showJumpToPage && ! showPageNumbers && (
+							<span className='bu-components-pagination-jump-to'>
+								<TextControl
+									value={ page }
+									onChange={ ( value ) => handleChange( value ) }
+									type='number'
+									min={ 1 }
+									max={ totalPages }
+									label={ __( 'Jump to page' ) }
+									hideLabelFromVision={ true }
+								/>
+							</span>
+						) }
+						{ showFirstLastButtons && (
+							<div className='bu-components-pagination-last'>
+								<Button
+									isSecondary
+									disabled={ page >= totalPages }
+									onClick={ () => handleChange( totalPages ) }
+									label='Last Page'
+								>
+									{ <Icon icon={ PaginationIcons.last.icon } /> }
+								</Button>
+							</div>
+						)}
+					</div>
+				)}
+				{ showPrevNextButtons && (
+					<Button
+						isSecondary
+						disabled={ page >= totalPages }
+						onClick={ () => handleChange( page + 1 ) }
 
-				>
-					<>
-						{ __( 'Next' ) }
-						<Icon icon={ PaginationIcons.next.icon } />
-					</>
-				</Button>
-			)}
+					>
+						<>
+							<span className="bu-components-pagination-button-text">{ __( 'Next' ) }</span>
+							<Icon icon={ PaginationIcons.next.icon } />
+						</>
+					</Button>
+				)}
+			</div>
 		</nav>
 	);
 };
