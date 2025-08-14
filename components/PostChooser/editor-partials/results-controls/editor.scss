@@ -1,13 +1,11 @@
 
 .bu-components-post-chooser-results-controls {
+	container-type: inline-size;
+	container-name: bu-components-post-chooser-results-controls;
 	width: 100%;
-	//justify-content: center;
-	//background: #fefcf8;
     margin: 0;
-    //width: auto;
-    padding: 0 10px;
+    padding: 0;
     border-bottom: 1px solid var(--bu-components-post-chooser-results-border-color, #b1a495);
-	//box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
 
 	// WordPress Flex Component.
 	.components-flex {
@@ -16,6 +14,10 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0;
+
+		@container bu-components-post-chooser-results-controls ( width >= 375px ) {
+			padding-inline: 10px;
+		}
 	}
 }
 
@@ -24,19 +26,40 @@
     width: fit-content;
     display: flex;
 	flex-direction: row;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	justify-content: space-between;
 
 	// WordPress RadioGroup Button (Button Component)
 	.components-button {
 		padding-inline: 10px;
-		padding: 20px;
+		padding: 10px;
 		background: transparent;
 		color: black;
 		border: none;
 		height: auto;
 		box-shadow: none;
 		position: relative;
+
+		svg {
+			display:none;
+		}
+
+		.bu-components-post-chooser-results-controls-type-label-long {
+			display: none;
+		}
+
+		@container bu-components-post-chooser-results-controls (width > 420px) {
+			svg {
+				display: block;
+			}
+		}
+
+		@container bu-components-post-chooser-results-controls ( width >= 750px ) {
+			padding: 20px;
+			.bu-components-post-chooser-results-controls-type-label-long {
+				display: inline;
+			}
+		}
 
 		&:disabled {
 			background: #fef7eb;
@@ -87,7 +110,7 @@
 		.bu-components-post-chooser-results-controls-type-count {
 			font-size: 0.8em;
 			margin-inline: 5px;
-			display: inline-block;
+			display: none;
 			border-radius: 4px;
 			padding: 4px 8px;
 			background: #fef8ef;
@@ -96,7 +119,13 @@
 			min-width: 20px;
 			text-align: center;
 			transition: all 0.2s ease;
+
+			@container bu-components-post-chooser-results-controls ( width >= 550px ) {
+				display: inline-block;
+			}
 		}
+
+
 
 		&:hover:not(:disabled) .bu-components-post-chooser-results-controls-type-count {
 			background: inherit;

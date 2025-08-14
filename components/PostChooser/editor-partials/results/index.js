@@ -32,7 +32,7 @@ export const Results = ( props ) => {
 	}, [ loading ] );
 
 	return (
-		<>
+		<div className="bu-components-post-chooser-results">
 			<div
 				className="bu-components-post-chooser-results-spinner"
 				data-spinnervisible={ spinnerVisible }
@@ -66,21 +66,50 @@ export const Results = ( props ) => {
 				</div>
 			) }
 			{ searchTerm && ! loading && totalItems === 0 && (
-				<div className="bu-components-post-chooser-results-message">
-					<h3>{ __( 'No posts found.' ) }</h3>
-					<p>
-						{ __(
-							'Your search term might be too specific. Try broadening your search.'
+				<div className="bu-components-post-chooser-no-results-message">
+					<div className="bu-components-post-chooser-results-message">
+						{ searchType === 'default' && (
+							<>
+								<h3>{ __( 'No Posts Found' ) }</h3>
+								<h4>{ __( 'The search term:' ) } <code>{ searchTerm }</code> { __( 'did not match any posts.' ) }</h4>
+								<p>
+									{ __(
+										'Your search term might be too specific. Try broadening your search.'
+									) }
+								</p>
+								<p>
+									{ __(
+										'If you have a specific post in mind, try searching for its title. Alternatively, you can try entering the post ID or slug.'
+									) }
+								</p>
+							</>
 						) }
-					</p>
-					<p>
-						{ __(
-							'If you have a specific post in mind, try searching for its title. Alternatively, you can try entering the post ID or slug.'
+						{ searchType === 'slug' && (
+							<>
+								<h3>{ __( 'Post Slug Not Found' ) }</h3>
+								<p>
+									{ __(
+										'Check that the slug is exactly the same as the slug of the post. A partial match will not work.'
+									) }
+								</p>
+
+							</>
 						) }
-					</p>
+						{ searchType === 'id' && (
+							<>
+								<h3>{ __( 'Post ID Not Found' ) }</h3>
+								<p>
+									{ __(
+										'Check that a numerical post ID has been entered and that the post type is correct.'
+									) }
+								</p>
+
+							</>
+						) }
+					</div>
 				</div>
 			) }
-			<ul className="bu-components-post-chooser-results" data-loading={ loading }>
+			<ul className="bu-components-post-chooser-results-list" data-loading={ loading }>
 				{ loading && (
 					<>
 						<ResultsItem placeholder={ true } />
@@ -117,6 +146,6 @@ export const Results = ( props ) => {
 					</>
 				) }
 			</ul>
-		</>
+		</div>
 	);
 };

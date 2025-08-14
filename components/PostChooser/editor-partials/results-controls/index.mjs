@@ -58,7 +58,15 @@ export const ResultsControls = ( props ) => {
 							iconPosition="right"
 							className={ searchType === 'recent' ? 'is-active' : '' }
 						>
-							{ __( 'Recently Updated' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label">
+
+								<span className="bu-components-post-chooser-results-controls-type-label-short">
+									{ __( 'Recent' ) }
+								</span>
+								<span className="bu-components-post-chooser-results-controls-type-label-long">
+									{ __( 'ly Updated' ) }
+								</span>
+							</span>
 						</Radio>
 						<Radio
 							value="default"
@@ -79,7 +87,12 @@ export const ResultsControls = ( props ) => {
 							iconPosition="right"
 							className={ searchType === 'slug' ? 'is-active' : '' }
 						>
-							{ __( 'Post Slug' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label-long">
+								{ __( 'Post' ) }
+							</span>
+							<span className="bu-components-post-chooser-results-controls-type-label-short">
+								{ __( 'Slug' ) }
+							</span>
 							{ searchTerm && (
 								<span className="bu-components-post-chooser-results-controls-type-count">{slugResultsCount}</span>
 							)}
@@ -91,7 +104,12 @@ export const ResultsControls = ( props ) => {
 							iconPosition="right"
 							className={ searchType === 'id' ? 'is-active' : '' }
 						>
-							{ __( 'Post ID' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label-long">
+								{ __( 'Post' ) }
+							</span>
+							<span className="bu-components-post-chooser-results-controls-type-label-short">
+								{ __( 'ID' ) }
+							</span>
 							{ searchTerm && (
 								<span className="bu-components-post-chooser-results-controls-type-count">{idResultsCount}</span>
 							)}

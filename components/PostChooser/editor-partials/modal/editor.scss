@@ -4,6 +4,7 @@
 	--bu-components-post-chooser-results-border-color: #c7b9a7;
 	--bu-components-post-chooser-results-border-color-darker: #b1a495;
 	--bu-components-post-chooser-results-text-color-darker: #7c7063;
+	--bu-components-post-chooser-results-text-color-heading: #4e4b48;
 }
 
 .bu-components-post-chooser-modal {
@@ -36,8 +37,10 @@
 
 // Results container div in the post chooser modal.
 .bu-components-post-chooser-results-container {
+	container-name: bu-components-post-chooser-results-container;
+	container-type: size;
 	height: 100%;
-	min-height: 100px;
+	min-height: 200px;
 	overflow: auto;
 	padding: 12px;
 	position: relative;
@@ -48,5 +51,12 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		z-index: 2;
+	}
+}
+
+
+.bu-components-post-chooser-pagination {
+	.components-button.is-secondary:disabled {
+		background-color: #f4ede5;
 	}
 }

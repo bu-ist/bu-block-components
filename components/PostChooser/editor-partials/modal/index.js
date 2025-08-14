@@ -337,6 +337,7 @@ export const PostChooserModal = ( props ) => {
 					/>
 					{ currentTotalPages > 1 && currentResults.posts && (
 						<Pagination
+							className="bu-components-post-chooser-pagination"
 							currentPage={ currentPage }
 							totalPages={ currentTotalPages }
 							onChange={ handlePageChange }
