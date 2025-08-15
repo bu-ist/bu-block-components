@@ -1,12 +1,15 @@
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Spinner, Modal } from '@wordpress/components';
-import { useEffect } from 'react';
+import { Modal } from '@wordpress/components';
+
 
 // Internal dependencies
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import { ResultsControls } from '../results-controls/index.mjs';
+import { LoadingOverlay, LoadingSpinner } from '../loading-overlay/index.js';
+
+// Import from Block Imports Package.
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
@@ -297,6 +300,7 @@ export const PostChooserModal = ( props ) => {
 	const currentPage = getCurrentPage();
 	const currentTotalPages = currentResults.totalPages || 0;
 
+
 	return (
 		<Modal
 			title={ title }
@@ -329,23 +333,27 @@ export const PostChooserModal = ( props ) => {
 						setSearchType(newType);
 					}}
 				/>
-				<div className="bu-components-post-chooser-results-container">
-					<Results
-						posts={ currentResults.posts }
-						onSelectPost={ onSelectPost }
-						totalItems={ currentResults.totalItems }
-						loading={ currentLoading }
-						searchTerm={ searchTerm }
-						searchType={ searchType }
-					/>
-					{ currentTotalPages > 1 && currentResults.posts && (
-						<Pagination
-							className="bu-components-post-chooser-pagination"
-							currentPage={ currentPage }
-							totalPages={ currentTotalPages }
-							onChange={ handlePageChange }
+				<div className="bu-components-post-chooser-results-scrollable">
+					<LoadingSpinner loading={ currentLoading } />
+					<div className="bu-components-post-chooser-results-container">
+						<LoadingOverlay loading={ currentLoading } />
+						<Results
+							posts={ currentResults.posts }
+							onSelectPost={ onSelectPost }
+							totalItems={ currentResults.totalItems }
+							loading={ currentLoading }
+							searchTerm={ searchTerm }
+							searchType={ searchType }
 						/>
-					) }
+						{ currentTotalPages > 1 && currentResults.posts && (
+							<Pagination
+								className="bu-components-post-chooser-pagination"
+								currentPage={ currentPage }
+								totalPages={ currentTotalPages }
+								onChange={ handlePageChange }
+							/>
+						) }
+					</div>
 				</div>
 			</div>
 		</Modal>

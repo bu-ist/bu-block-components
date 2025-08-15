@@ -36,14 +36,26 @@
 }
 
 // Results container div in the post chooser modal.
-.bu-components-post-chooser-results-container {
-	container-name: bu-components-post-chooser-results-container;
-	container-type: size;
+.bu-components-post-chooser-results-scrollable {
 	height: 100%;
 	min-height: 200px;
 	overflow: auto;
 	padding: 12px;
+	container-type: size;
+	container-name: bu-components-post-chooser-results-scrollable;
 	position: relative;
+}
+
+// Results container div in the post chooser modal.
+.bu-components-post-chooser-results-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	position: relative;
+
+	&:has(.bu-components-post-chooser-no-results-message) {
+		height: 100%;
+	}
 
 	.bu-components-loading-spinner {
 		position: absolute;
