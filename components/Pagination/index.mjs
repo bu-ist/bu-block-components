@@ -67,7 +67,7 @@ export const Pagination = ( props ) => {
 				}
 			}
 		>
-			<div class="bu-components-pagination-container">
+			<div className="bu-components-pagination-container">
 				{ showPrevNextButtons && (
 					<Button
 						isSecondary
