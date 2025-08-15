@@ -1,10 +1,8 @@
 // WordPress dependencies
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
 
 // Internal dependencies
 import { ResultsItem } from '../results-item/index.mjs';
-import { LoadingSpinner } from '../../../LoadingSpinner/index.mjs';
 
 // Import CSS.
 import './editor.scss';
@@ -15,30 +13,8 @@ import helpPostIdImage from './help-post-id.png';
 export const Results = ( props ) => {
 	const { posts, onSelectPost, loading, totalItems, searchTerm, searchType } = props;
 
-	// Spinner visibility state for animation
-	const [ spinnerVisible, setSpinnerVisible ] = useState( false );
-
-	// Effect to handle animating the spinner
-	useEffect( () => {
-		if ( loading ) {
-			setSpinnerVisible( true );
-		} else {
-			// Delay hiding to allow for fade-out animation
-			const timer = setTimeout( () => {
-				setSpinnerVisible( false );
-			}, 300 );
-			return () => clearTimeout( timer );
-		}
-	}, [ loading ] );
-
 	return (
 		<div className="bu-components-post-chooser-results">
-			<div
-				className="bu-components-post-chooser-results-spinner"
-				data-spinnervisible={ spinnerVisible }
-			>
-				<LoadingSpinner />
-			</div>
 			{ ! posts && ! searchTerm && searchType !== 'recent' && (
 				<div className="bu-components-post-chooser-before-search-message">
 					{ searchType === 'slug' && (
