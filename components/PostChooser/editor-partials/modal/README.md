@@ -21,8 +21,10 @@ The `PostChooserModal` component serves as the main container for the post selec
 | `onSelectPost` | Function | Required | Function to call when a post is selected |
 | `label` | String | - | Label for the search field |
 | `postTypes` | Array | - | Array of post types to include in search |
+| `primaryPostType` | String | "post" | Default selected post type |
 | `placeholder` | String | "Enter a search term…" | Placeholder text for the search field |
 | `title` | String | "Choose a Post" | Title of the modal |
+| `minCharacters` | Number | 3 | Minimum number of characters required for search |
 
 ## Internal State
 
@@ -30,7 +32,9 @@ The component maintains several pieces of state:
 - `searchTerm` - Current search query
 - `sortOrder` - Object with `orderby` and `order` properties
 - `searchType` - Type of search (recent, default, slug, ID)
-- `searchCurrentPage` - Current page of search results
+- `selectedPostType` - Currently selected post type
+- `searchCurrentPage` - Object with separate pagination states for each search type (recent, default, slug, ID)
+- `searchResults` - Object storing separate results for each search type
 
 ## Pagination
 

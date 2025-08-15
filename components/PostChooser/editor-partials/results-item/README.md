@@ -7,7 +7,7 @@ The `ResultsItem` component renders an individual post in the search results lis
 ## Features
 
 - Displays post title, modification date, and status
-- Shows the post type in a badge format
+- Provides a "View Post" link when the post URL is available
 - Provides a "Select" button for choosing the post
 - Styled with hover effects for better user experience
 
@@ -23,6 +23,8 @@ The `ResultsItem` component renders an individual post in the search results lis
 ## Implementation Details
 
 - Uses WordPress `Button` component for the select action
-- Formats the modification date using JavaScript's `toLocaleDateString()`
-- Renders HTML-encoded titles with proper escaping (`post.title.rendered`)
+- Provides an "View Post" external link to the post on the site when post.link is available
+- Uses WordPress `dateI18n` for proper localized date formatting
+- Renders HTML-encoded titles with proper escaping (`post.title.rendered`) using WordPress `decodeEntities`
+- Displays post status information
 - Styled with CSS Grid for responsive layout
