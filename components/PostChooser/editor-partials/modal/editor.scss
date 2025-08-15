@@ -53,7 +53,7 @@
 	justify-content: space-around;
 	position: relative;
 
-	&:has(.bu-components-post-chooser-no-results-message) {
+	&:has(.bu-components-post-chooser-results-message) {
 		height: 100%;
 	}
 

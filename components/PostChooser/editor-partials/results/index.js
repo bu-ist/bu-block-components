@@ -16,34 +16,36 @@ export const Results = ( props ) => {
 	return (
 		<div className="bu-components-post-chooser-results">
 			{ ! posts && ! searchTerm && searchType !== 'recent' && (
-				<div className="bu-components-post-chooser-before-search-message">
-					{ searchType === 'slug' && (
-						<>
-							<h3>{ __( 'Search by Slug' ) }</h3>
-							<p>{ __( 'Enter the post slug to find it quickly.' ) }</p>
-						</>
-					) }
-					{ searchType === 'default' && (
-						<>
-							<h3>{ __( 'Search Post Content' ) }</h3>
-							<p>{ __( 'Enter a search term to search the Title & Post Content. Note, post meta, taxonomies, and other metadata will not be searched.' ) }</p>
-						</>
-					) }
-					{ searchType === 'id' && (
-						<>
-							<h3>{ __( `Find post by its ID` ) }</h3>
-							<p>
-								{ __('If looking for a specific post, enter the') } <strong>{ __('Post ID') }</strong> { __('in the search field.') }
-							</p>
-							<img className="bu-components-post-chooser-help-image" src={ helpPostIdImage } />
-							<p>{ __( 'The post ID can be found in the URL of the post edit screen.' ) }</p>
-						</>
-					) }
+				<div className="bu-components-post-chooser-results-message bu-components-post-chooser-before-search-message">
+					<div className="bu-components-post-chooser-results-message-box">
+						{ searchType === 'slug' && (
+							<>
+								<h3>{ __( 'Search by Slug' ) }</h3>
+								<p>{ __( 'Enter the post slug to find it quickly.' ) }</p>
+							</>
+						) }
+						{ searchType === 'default' && (
+							<>
+								<h3>{ __( 'Search Post Content' ) }</h3>
+								<p>{ __( 'Enter a search term to search the Title & Post Content. Note, post meta, taxonomies, and other metadata will not be searched.' ) }</p>
+							</>
+						) }
+						{ searchType === 'id' && (
+							<>
+								<h3>{ __( `Find post by its ID` ) }</h3>
+								<p>
+									{ __('If looking for a specific post, enter the') } <strong>{ __('Post ID') }</strong> { __('in the search field.') }
+								</p>
+								<img className="bu-components-post-chooser-help-image" src={ helpPostIdImage } />
+								<p>{ __( 'The post ID can be found in the URL of the post edit screen.' ) }</p>
+							</>
+						) }
+					</div>
 				</div>
 			) }
 			{ searchTerm && ! loading && totalItems === 0 && (
-				<div className="bu-components-post-chooser-no-results-message">
-					<div className="bu-components-post-chooser-results-message">
+				<div className="bu-components-post-chooser-results-message bu-components-post-chooser-no-results-message">
+					<div className="bu-components-post-chooser-results-message-box">
 						{ searchType === 'default' && (
 							<>
 								<h3>{ __( 'No Posts Found' ) }</h3>

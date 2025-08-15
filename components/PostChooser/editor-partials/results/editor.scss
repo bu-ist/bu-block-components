@@ -20,6 +20,14 @@
     font-size: 1.1em;
 }
 
+.bu-components-post-chooser-results-message {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
 
 .bu-components-post-chooser-no-results-message {
 	display: flex;
@@ -29,7 +37,7 @@
 	height: 100%;
 }
 
-.bu-components-post-chooser-results-message {
+.bu-components-post-chooser-results-message-box {
 	text-align: center;
 	background: white;
 	border-radius: 5px;
@@ -44,9 +52,6 @@
 		max-width: 60ch;
 	}
 
-	@container (min-width: 500px) and (min-height: 400px) {
-
-	}
 }
 
 

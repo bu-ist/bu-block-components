@@ -88,7 +88,7 @@ export const ResultsControls = ( props ) => {
 							className={ searchType === 'slug' ? 'is-active' : '' }
 						>
 							<span className="bu-components-post-chooser-results-controls-type-label-long">
-								{ __( 'Post' ) }
+								{ __( 'Post ' ) }
 							</span>
 							<span className="bu-components-post-chooser-results-controls-type-label-short">
 								{ __( 'Slug' ) }
@@ -105,7 +105,7 @@ export const ResultsControls = ( props ) => {
 							className={ searchType === 'id' ? 'is-active' : '' }
 						>
 							<span className="bu-components-post-chooser-results-controls-type-label-long">
-								{ __( 'Post' ) }
+								{ __( 'Post ' ) }
 							</span>
 							<span className="bu-components-post-chooser-results-controls-type-label-short">
 								{ __( 'ID' ) }
