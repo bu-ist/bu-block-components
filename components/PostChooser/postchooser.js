@@ -24,6 +24,8 @@ export const PostChooser = ( props ) => {
 		searchPlaceholder,
 		minCharacters = 3,
 		onClose,
+		metaFilters = {},
+		taxonomyFilters = {},
 	} = props;
 
 	return (
@@ -36,6 +38,8 @@ export const PostChooser = ( props ) => {
 			placeholder={ searchPlaceholder }
 			minCharacters={ minCharacters }
 			onClose={ onClose }
+			metaFilters={ metaFilters }
+			taxonomyFilters={ taxonomyFilters }
 		/>
 	);
 };

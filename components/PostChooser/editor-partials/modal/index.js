@@ -27,6 +27,8 @@ export const PostChooserModal = ( props ) => {
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 		minCharacters = 3,
+		metaFilters = {}, // Meta query filters (like meta_query in WP_Query)
+		taxonomyFilters = {}, // Taxonomy filters (like tax_query in WP_Query)
 	} = props;
 
 	const [ searchTerm, setSearchTerm ] = useState( '' );
@@ -64,6 +66,10 @@ export const PostChooserModal = ( props ) => {
 		orderby: sortOrder.orderby,
 		order: sortOrder.order,
 		status: 'publish',
+		// Apply meta filters (like adding meta_query to WP_Query)
+		...metaFilters,
+		// Apply taxonomy filters (like adding tax_query to WP_Query)
+		...taxonomyFilters,
 	};
 
 	// Recent posts query (always active)
