@@ -180,6 +180,9 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 							{ label: __( 'Bob' ), value: 'import-bob' },
 						] }
 						primaryPostType="import-bob"
+						metaFilters={ {
+							'show_on_post': 1
+						} }
 					/>
 				) }
 				<div className="wp-block-plugin-slug-block-callout-postpicker--image">
