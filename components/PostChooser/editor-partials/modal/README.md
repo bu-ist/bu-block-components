@@ -29,7 +29,8 @@ The `PostChooserModal` component serves as the main container for the post selec
 ## Internal State
 
 The component maintains several pieces of state:
-- `searchTerm` - Current search query
+- `searchTerm` - Current search query (updates immediately with user input)
+- `searchTermThrottled` - Debounced version of searchTerm (used for API calls)
 - `sortOrder` - Object with `orderby` and `order` properties
 - `searchType` - Type of search (recent, default, slug, ID)
 - `selectedPostType` - Currently selected post type
@@ -39,6 +40,14 @@ The component maintains several pieces of state:
 ## Pagination
 
 The component uses the `useGetPagination` hook to fetch pagination information and displays a `Pagination` component when there are multiple pages of results.
+
+## Debouncing Search Input
+
+The component uses the `useDebouncedInput` hook to manage input debouncing:
+1. `searchTerm` updates immediately to provide responsive user feedback in the search field
+2. `searchTermThrottled` only updates after a brief delay (500ms), reducing API calls while typing
+3. The search input uses the immediate `searchTerm` value for real-time UI updates
+4. All API requests and results display use the debounced `searchTermThrottled` value for better performance
 
 ## Internal Components
 
