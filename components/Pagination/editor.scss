@@ -13,6 +13,21 @@
 		gap: 1em;
 	}
 
+	&-numbers {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+
+		.components-button {
+			padding-inline: 0.5em;
+			&:disabled {
+				color: black;
+				text-decoration: none;
+				opacity: 1;
+			}
+		}
+	}
+
 	&-info {
 		display: flex;
 		flex-direction: row;
