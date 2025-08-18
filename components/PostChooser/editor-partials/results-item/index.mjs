@@ -10,7 +10,7 @@ export const ResultsItem = ( props ) => {
 	const {
 		post,
 		onSelectPost,
-		placeholder = undefined,
+		placeholder,
 	} = props;
 
 
