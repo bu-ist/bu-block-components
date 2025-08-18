@@ -281,10 +281,24 @@ export const PostChooserModal = ( props ) => {
 	* When the search term changes or when we have search results,
 	* automatically switch to the appropriate search type.
 	*
+	* When the search Term changes, set the search current page to 1.
+	* If not, the query in useSelect() may throw an error if we request
+	* a page number that doesn't exist. Anytime the searchTerm changes this
+	* should be set back to page 1 of the results as the old results are
+	* now invalid.
+	*
 	* Note: Don't enter `searchType` as a dependency in this effect.
 	* Doing so will cause a rerender and the setting will be undone.
 	*/
 	useEffect( () => {
+		if ( searchTerm ) {
+			// If searchTerm changed, set the current page for this search type to 1.
+			setSearchCurrentPage(prev => ({
+				...prev,
+				[searchType]: 1
+			}));
+		}
+
 		if (searchTerm && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
 			setSearchType('default');
