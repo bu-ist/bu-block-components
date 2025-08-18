@@ -90,26 +90,10 @@ export const Results = ( props ) => {
 			<ul className="bu-components-post-chooser-results-list" data-loading={ loading }>
 				{ loading && (
 					<>
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
-						<ResultsItem placeholder={ true } />
+						{/* Show 20 placeholder ResultsItem components to simulate data loading in interface */}
+						{ Array.from( { length: 20 } ).map( ( _, index ) => (
+							<ResultsItem key={ index } placeholder={ true } />
+						) ) }
 					</>
 				) }
 				{ posts && Array.isArray( posts ) && posts.length > 0 && (
