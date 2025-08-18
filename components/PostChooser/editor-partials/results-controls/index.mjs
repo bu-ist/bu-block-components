@@ -70,7 +70,6 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="default"
-							//disabled={ contentResultsCount > 0 ? false : true }
 							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
 							className={ searchType === 'default' ? 'is-active' : '' }
