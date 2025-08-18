@@ -81,7 +81,6 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="slug"
-							//disabled={ slugResultsCount > 0 ? false : true }
 							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
 							className={ searchType === 'slug' ? 'is-active' : '' }
