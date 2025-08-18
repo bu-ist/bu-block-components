@@ -131,7 +131,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 				postURL={ selectedPostURL }
 				onRemovePost={ calloutRemovePostHandler }
 				openButtonLabel={ 'Select Post' }
-				changeButtonLabel={ 'Change Post ' }
+				changeButtonLabel={ 'Change Post' }
 				panelTitle={ __( 'Featured Post' ) }
 				onOpenPostChooserModal={ () =>
 					setIsPostChooserModalOpen( true )
