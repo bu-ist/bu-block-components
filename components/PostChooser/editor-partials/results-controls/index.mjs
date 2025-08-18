@@ -32,13 +32,14 @@ export const ResultsControls = ( props ) => {
 	const {
 		searchTerm,
 		searchType,
-		setSearchType,
 		sortOrder,
 		setSortOrder,
 		contentResultsCount = 0, // Todo: Add support for content results count
 		slugResultsCount = 0, // Todo: Add support for slug results count
 		idResultsCount = 0, // Todo: Add support for ID results count
+		onChange = () => {}, // Function to call when the search type or sort order changes.
 	} = props;
+
 
 
 	return (
@@ -48,7 +49,7 @@ export const ResultsControls = ( props ) => {
 					<RadioGroup
 						className='bu-components-post-chooser-search-type'
 						label="Search Type"
-						onChange={ ( value ) => setSearchType( value ) }
+						onChange={ onChange }
 						checked={ searchType }
 					>
 						<Radio
@@ -57,11 +58,18 @@ export const ResultsControls = ( props ) => {
 							iconPosition="right"
 							className={ searchType === 'recent' ? 'is-active' : '' }
 						>
-							{ __( 'Recently Updated' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label">
+
+								<span className="bu-components-post-chooser-results-controls-type-label-short">
+									{ __( 'Recent' ) }
+								</span>
+								<span className="bu-components-post-chooser-results-controls-type-label-long">
+									{ __( 'ly Updated' ) }
+								</span>
+							</span>
 						</Radio>
 						<Radio
 							value="default"
-							disabled={ searchTerm ? false : true }
 							icon={ IconPostChooserTextSearch }
 							iconPosition="right"
 							className={ searchType === 'default' ? 'is-active' : '' }
@@ -73,24 +81,33 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="slug"
-							disabled={ searchTerm ? false : true }
 							icon={ IconPostChooserSlugSearch }
 							iconPosition="right"
 							className={ searchType === 'slug' ? 'is-active' : '' }
 						>
-							{ __( 'Post Slug' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label-long">
+								{ __( 'Post ' ) }
+							</span>
+							<span className="bu-components-post-chooser-results-controls-type-label-short">
+								{ __( 'Slug' ) }
+							</span>
 							{ searchTerm && (
 								<span className="bu-components-post-chooser-results-controls-type-count">{slugResultsCount}</span>
 							)}
 						</Radio>
 						<Radio
 							value="id"
-							disabled={ searchTerm ? false : true }
+							
 							icon={ IconPostChooserId }
 							iconPosition="right"
 							className={ searchType === 'id' ? 'is-active' : '' }
 						>
-							{ __( 'Post ID' ) }
+							<span className="bu-components-post-chooser-results-controls-type-label-long">
+								{ __( 'Post ' ) }
+							</span>
+							<span className="bu-components-post-chooser-results-controls-type-label-short">
+								{ __( 'ID' ) }
+							</span>
 							{ searchTerm && (
 								<span className="bu-components-post-chooser-results-controls-type-count">{idResultsCount}</span>
 							)}

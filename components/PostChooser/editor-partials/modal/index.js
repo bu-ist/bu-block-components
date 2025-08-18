@@ -1,12 +1,15 @@
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Spinner, Modal } from '@wordpress/components';
-import { useEffect } from 'react';
+import { Modal } from '@wordpress/components';
+
 
 // Internal dependencies
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import { ResultsControls } from '../results-controls/index.mjs';
+import { LoadingOverlay, LoadingSpinner } from '../loading-overlay/index.js';
+
+// Import from Block Imports Package.
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
@@ -275,9 +278,12 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	/**
-		* When the search term changes or when we have search results,
-		* automatically switch to the appropriate search type.
-		*/
+	* When the search term changes or when we have search results,
+	* automatically switch to the appropriate search type.
+	*
+	* Note: Don't enter `searchType` as a dependency in this effect.
+	* Doing so will cause a rerender and the setting will be undone.
+	*/
 	useEffect( () => {
 		if (searchTerm && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
@@ -286,13 +292,14 @@ export const PostChooserModal = ( props ) => {
 			// Auto-switch back to recent when search term is cleared
 			setSearchType('recent');
 		}
-	}, [ searchTerm, searchType ] );
+	}, [ searchTerm ] );
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
 	const currentLoading = getCurrentLoadingState();
 	const currentPage = getCurrentPage();
 	const currentTotalPages = currentResults.totalPages || 0;
+
 
 	return (
 		<Modal
@@ -302,13 +309,6 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
-				{ /**
-					* These sub-components are currently using a lot of props that are being passed down into them.
-					* This should be improved in the future to reduce prop drilling.
-					*
-					* @todo: Refactor how these props are passed down to the sub-components by using a context provider.
-					* This will avoid having to pass down so many props and make the code cleaner.
-					*/ }
 				<SearchUI
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
@@ -323,64 +323,43 @@ export const PostChooserModal = ( props ) => {
 				/>
 				<ResultsControls
 					searchTerm={ searchTerm }
-					onSearch={ handleSearch }
 					searchType={ searchType }
-					setSearchType={ setSearchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
 					contentResultsCount={ searchResults.default.totalItems || 0 }
 					slugResultsCount={ searchResults.slug.totalItems || 0 }
 					idResultsCount={ searchResults.id.totalItems || 0 }
+					onChange={ (newType) => {
+						setSearchType(newType);
+					}}
 				/>
-				<div className="bu-components-post-chooser-results-container">
-					{ currentLoading && <Spinner /> }
-					{ searchType === 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Recently Published' ) }
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								loading={ currentLoading }
-								totalItems={ currentResults.totalItems }
-							/>
-						</>
-					) }
-					{ searchType !== 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ searchType === 'default' && __( 'Content Search Results' ) }
-								{ searchType === 'slug' && __( 'Slug Search Results' ) }
-								{ searchType === 'id' && __( 'ID Search Results' ) }
-								<em>
-									{ currentResults.totalItems > 0 && (
-										<span className="bu-components-post-chooser-results-count">
-											{ __( 'Found: ' ) +
-												` ${ currentResults.totalItems } ${
-													currentResults.totalItems > 1
-														? __( 'items' )
-														: __( 'item' )
-												}` }
-										</span>
-									) }
-								</em>
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								totalItems={ currentResults.totalItems }
-								loading={ currentLoading }
-							/>
-						</>
-					) }
-					{ currentTotalPages > 1 && currentResults.posts && (
-						<Pagination
-							currentPage={ currentPage }
-							totalPages={ currentTotalPages }
-							onChange={ handlePageChange }
+				<div className="bu-components-post-chooser-results-scrollable">
+					<LoadingSpinner loading={ currentLoading } />
+					<div className="bu-components-post-chooser-results-container">
+						<LoadingOverlay loading={ currentLoading } />
+						<Results
+							posts={ currentResults.posts }
+							onSelectPost={ onSelectPost }
+							totalItems={ currentResults.totalItems }
+							loading={ currentLoading }
+							searchTerm={ searchTerm }
+							searchType={ searchType }
 						/>
-					) }
+						{ currentTotalPages > 1 && currentResults.posts && (
+							<Pagination
+								className="bu-components-post-chooser-pagination"
+								currentPage={ currentPage }
+								totalPages={ currentTotalPages }
+								onChange={ handlePageChange }
+								showPageInfo={ false }
+								showPageNumbers={ true }
+								showFirstLastButtons={ false }
+								prevLabel={ false }
+								nextLabel={ false }
+								showMaxPageNumbers={ 6 }
+							/>
+						) }
+					</div>
 				</div>
 			</div>
 		</Modal>

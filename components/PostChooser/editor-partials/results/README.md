@@ -7,7 +7,6 @@ The `Results` component displays the list of posts returned from a search or que
 ## Features
 
 - Displays search results or recently updated posts
-- Shows a loading spinner with smooth fade in/out animation
 - Handles empty state with informative messages
 - Renders each post using the `ResultsItem` component
 - Shows placeholder items during loading states
@@ -21,12 +20,12 @@ The `Results` component displays the list of posts returned from a search or que
 | `onSelectPost` | Function | Required | Function to call when a post is selected |
 | `loading` | Boolean | false | Whether posts are currently being loaded |
 | `totalItems` | Number | - | Total number of items in search results, used for empty state messaging |
+| `searchTerm` | String | - | Current search term value, used for conditional rendering |
+| `searchType` | String | - | Current search type (recent, default, slug, ID), used for displaying contextual help messages |
 
 ## Implementation Details
 
-- Uses `useState` and `useEffect` to manage loading spinner visibility
-- Implements smooth CSS transitions for spinner appearance/disappearance
-- Uses the custom `data-spinnervisible` attribute to control animation states
+- Uses the custom `data-loading` attribute to control loading state visibility
 - Handles multiple conditional rendering scenarios:
   - When posts are loading
   - When posts are found
@@ -35,11 +34,10 @@ The `Results` component displays the list of posts returned from a search or que
 - Renders placeholder `ResultsItem` components during loading or empty states
 - Performs proper array validation to prevent errors with malformed data
 - Provides contextual help messages to guide users when searches return no results
+- Displays different instructional content based on search type (slug, default, ID)
 
 ## CSS
 
 The component uses CSS for:
-- Positioning the loading spinner
-- Animating opacity transitions
 - Styling the "No posts found" message
-- Creating a proper layout for
+- Creating a proper layout for the result list.

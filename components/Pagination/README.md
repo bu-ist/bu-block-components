@@ -11,14 +11,16 @@ A customizable pagination component that provides navigation controls for data t
 
 ## Features
 
-- First/Last page buttons
-- Previous/Next navigation
-- Page number display
-- Jump-to-page input field
+- First/Last page buttons (optional)
+- Previous/Next navigation with customizable labels
+- Page number display with smart ellipsis behavior
+- "Page X of Y" information display (optional)
+- Jump-to-page input field (optional)
 - Fully customizable display options
-- Accessible navigation controls with proper button labels
-- Icons from the Noun Project
-- Configurable inline style margins - margin styles can be passed as props to the component to avoid having to write styles for the component itself.
+- Smart pagination number display that shows ellipses for large page ranges
+- Accessible navigation controls with proper button labels and ARIA attributes
+- SVG icons from the Noun Project
+- Configurable inline style margins - margin styles can be passed as props to avoid having to write additional CSS
 
 
 ## Layout Options
@@ -50,18 +52,23 @@ const MyComponent = () => {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `currentPage` | Number | Required | The currently active page |
-| `totalPages` | Number | Required | Total number of pages available |
-| `onChange` | Function | Required | Callback function triggered when page changes |
-| `showPageNumbers` | Boolean | `true` | Whether to show the current page and total pages |
-| `showFirstLastButtons` | Boolean | `true` | Whether to show first/last page buttons |
+| `currentPage` | Number | `1` | The currently active page |
+| `totalPages` | Number | `1` | Total number of pages available |
+| `onChange` | Function | `() => {}` | Callback function triggered when page changes |
+| `showPageInfo` | Boolean | `false` | Whether to show the current page and total pages text (e.g., "Page 1 of 10") |
+| `showFirstLastButtons` | Boolean | `false` | Whether to show first/last page buttons |
 | `showPrevNextButtons` | Boolean | `true` | Whether to show previous/next buttons |
+| `showPageNumbers` | Boolean | `false` | Whether to show numbered page buttons |
+| `showMaxPageNumbers` | Number | `5` | Maximum number of page numbers to display before using ellipsis |
+| `prevLabel` | String | `"Back"` | Label for the previous page button |
+| `nextLabel` | String | `"Next"` | Label for the next page button |
 | `showJumpToPage` | Boolean | `false` | Whether to show a text input for jumping to a specific page |
-| `margin` | Object | `{}` | Custom margin settings with optional `marginBlock` and `marginInline` properties |
+| `margin` | Object | `{ marginBlock: '1em', marginInline: 0 }` | Custom margin settings with optional `marginBlock` and `marginInline` properties |
+| `className` | String | `''` | Additional CSS class to apply to the pagination component |
 
 ## Examples
 
-### Basic Pagination
+### Basic Pagination (Previous/Next only)
 
 ```jsx
 <Pagination
@@ -71,15 +78,41 @@ const MyComponent = () => {
 />
 ```
 
-### Minimal Pagination (Only Previous/Next)
+### Complete Pagination (All features enabled)
 
 ```jsx
 <Pagination
-  currentPage={1}
-  totalPages={5}
+  currentPage={3}
+  totalPages={10}
   onChange={(page) => console.log(`Navigated to page ${page}`)}
-  showFirstLastButtons={false}
-  showPageNumbers={false}
+  showFirstLastButtons={true}
+  showPageNumbers={true}
+  showPageInfo={true}
+  showJumpToPage={true}
+/>
+```
+
+### Pagination with Page Numbers and Ellipsis
+
+```jsx
+<Pagination
+  currentPage={5}
+  totalPages={20}
+  onChange={(page) => console.log(`Navigated to page ${page}`)}
+  showPageNumbers={true}
+  showMaxPageNumbers={5}
+/>
+```
+
+### With Custom Navigation Labels
+
+```jsx
+<Pagination
+  currentPage={3}
+  totalPages={10}
+  onChange={(page) => console.log(`Navigated to page ${page}`)}
+  prevLabel="Previous"
+  nextLabel="Forward"
 />
 ```
 
