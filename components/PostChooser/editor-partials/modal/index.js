@@ -351,6 +351,12 @@ export const PostChooserModal = ( props ) => {
 								currentPage={ currentPage }
 								totalPages={ currentTotalPages }
 								onChange={ handlePageChange }
+								showPageInfo={ false }
+								showPageNumbers={ true }
+								showFirstLastButtons={ false }
+								prevLabel={ false }
+								nextLabel={ false }
+								showMaxPageNumbers={ 6 }
 							/>
 						) }
 					</div>
