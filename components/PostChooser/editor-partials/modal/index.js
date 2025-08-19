@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Modal } from '@wordpress/components';
 
-
 // Internal dependencies
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
@@ -13,6 +12,7 @@ import { LoadingOverlay, LoadingSpinner } from '../loading-overlay/index.js';
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import { useDebouncedInput } from '../../../../hooks/useDebouncedInput/index.mjs';
 
 // Import CSS
 import './editor.scss';
@@ -32,7 +32,11 @@ export const PostChooserModal = ( props ) => {
 		minCharacters = 3,
 	} = props;
 
-	const [ searchTerm, setSearchTerm ] = useState( '' );
+	// Use the new useDebouncedInput hook to handle both immediate and debounced search terms
+	// searchTerm - updates immediately with each keystroke for responsive UI
+	// debouncedSearchTerm - only updates after delay (used for API calls to reduce requests)
+	const [ searchTerm, setSearchTerm, searchTermThrottled ] = useDebouncedInput('', 300);
+
 	const [ sortOrder, setSortOrder ] = useState( {
 		orderby: 'date',
 		order: 'desc',
@@ -59,7 +63,7 @@ export const PostChooserModal = ( props ) => {
 	} );
 
 	// Determine if search term is numeric for ID search
-	const isSearchTermNumeric = searchTerm && !isNaN(searchTerm) && !isNaN(parseFloat(searchTerm));
+	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
 
 	// Base query parameters
 	const baseQuery = {
@@ -78,23 +82,23 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	// Content search query (only when there's a search term)
-	const contentQuery = searchTerm ? {
+	const contentQuery = searchTermThrottled ? {
 		...baseQuery,
-		search: searchTerm,
+		search: searchTermThrottled,
 		page: searchCurrentPage.default,
 	} : null;
 
 	// Slug search query (only when there's a search term) - exact slug match only
-	const slugQuery = searchTerm ? {
+	const slugQuery = searchTermThrottled ? {
 		...baseQuery,
-		slug: searchTerm,
+		slug: searchTermThrottled,
 		page: searchCurrentPage.slug,
 	} : null;
 
 	// ID search query (only when search term is numeric)
 	const idQuery = isSearchTermNumeric ? {
 		...baseQuery,
-		include: [parseInt(searchTerm)],
+		include: [parseInt(searchTermThrottled)],
 		page: searchCurrentPage.id,
 	} : null;
 
@@ -161,7 +165,7 @@ export const PostChooserModal = ( props ) => {
 	}, [recentPosts, recentPagination]);
 
 	useEffect(() => {
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				default: {
@@ -176,10 +180,10 @@ export const PostChooserModal = ( props ) => {
 				default: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [contentPosts, contentPagination, searchTerm]);
+	}, [contentPosts, contentPagination, searchTermThrottled]);
 
 	useEffect(() => {
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				slug: {
@@ -194,7 +198,7 @@ export const PostChooserModal = ( props ) => {
 				slug: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [slugPosts, slugPagination, searchTerm]);
+	}, [slugPosts, slugPagination, searchTermThrottled]);
 
 	useEffect(() => {
 		if (isSearchTermNumeric) {
@@ -259,14 +263,14 @@ export const PostChooserModal = ( props ) => {
 	const handleSearch = useCallback( () => {
 		// Trigger search by invalidating all search results
 		recentInvalidateResolver();
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			contentInvalidateResolver();
 			slugInvalidateResolver();
 		}
 		if (isSearchTermNumeric) {
 			idInvalidateResolver();
 		}
-	}, [ recentInvalidateResolver, contentInvalidateResolver, slugInvalidateResolver, idInvalidateResolver, searchTerm, isSearchTermNumeric ] );
+	}, [ recentInvalidateResolver, contentInvalidateResolver, slugInvalidateResolver, idInvalidateResolver, searchTermThrottled, isSearchTermNumeric ] );
 
 	// Handle page change for current search type
 	const handlePageChange = (newPage) => {
@@ -299,14 +303,14 @@ export const PostChooserModal = ( props ) => {
 			}));
 		}
 
-		if (searchTerm && searchType === 'recent') {
+		if (searchTermThrottled && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
 			setSearchType('default');
-		} else if (!searchTerm && searchType !== 'recent') {
+		} else if (!searchTermThrottled && searchType !== 'recent') {
 			// Auto-switch back to recent when search term is cleared
 			setSearchType('recent');
 		}
-	}, [ searchTerm ] );
+	}, [ searchTermThrottled ] );
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
@@ -336,7 +340,7 @@ export const PostChooserModal = ( props ) => {
 					setSelectedPostType={ setSelectedPostType }
 				/>
 				<ResultsControls
-					searchTerm={ searchTerm }
+					searchTerm={ searchTermThrottled }
 					searchType={ searchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
@@ -356,7 +360,7 @@ export const PostChooserModal = ( props ) => {
 							onSelectPost={ onSelectPost }
 							totalItems={ currentResults.totalItems }
 							loading={ currentLoading }
-							searchTerm={ searchTerm }
+							searchTerm={ searchTermThrottled }
 							searchType={ searchType }
 						/>
 						{ currentTotalPages > 1 && currentResults.posts && (
