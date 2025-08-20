@@ -285,7 +285,7 @@ export const PostChooserModal = ( props ) => {
 	* When the search term changes or when we have search results,
 	* automatically switch to the appropriate search type.
 	*
-	* When the search Term changes, set the search current page to 1.
+	* When the search Term changes, set ALL search current pages to 1.
 	* If not, the query in useSelect() may throw an error if we request
 	* a page number that doesn't exist. Anytime the searchTerm changes this
 	* should be set back to page 1 of the results as the old results are
@@ -295,11 +295,15 @@ export const PostChooserModal = ( props ) => {
 	* Doing so will cause a rerender and the setting will be undone.
 	*/
 	useEffect( () => {
-		if ( searchTerm ) {
-			// If searchTerm changed, set the current page for this search type to 1.
+		if ( searchTermThrottled !== undefined ) {
+			// When searchTerm changes (throttled), reset search pages to 1 for types that use the search term
+			// Keep the "recent" page as is since it doesn't depend on searchTerm
+			// This prevents "invalid page" errors when changing search terms after pagination
 			setSearchCurrentPage(prev => ({
 				...prev,
-				[searchType]: 1
+				default: 1,
+				slug: 1,
+				id: 1
 			}));
 		}
 
