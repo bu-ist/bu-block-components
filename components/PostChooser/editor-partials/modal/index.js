@@ -295,17 +295,16 @@ export const PostChooserModal = ( props ) => {
 	* Doing so will cause a rerender and the setting will be undone.
 	*/
 	useEffect( () => {
-		if ( searchTermThrottled !== undefined ) {
-			// When searchTerm changes (throttled), reset search pages to 1 for types that use the search term
-			// Keep the "recent" page as is since it doesn't depend on searchTerm
-			// This prevents "invalid page" errors when changing search terms after pagination
-			setSearchCurrentPage(prev => ({
-				...prev,
-				default: 1,
-				slug: 1,
-				id: 1
-			}));
-		}
+		// When searchTermThrottled changes (due to dependency array),
+		// reset search pages to 1 for types that use the search term
+		// Keep the "recent" page as is since it doesn't depend on searchTerm
+		// This prevents "invalid page" errors when changing search terms after pagination
+		setSearchCurrentPage(prev => ({
+			...prev,
+			default: 1,
+			slug: 1,
+			id: 1
+		}));
 
 		if (searchTermThrottled && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
