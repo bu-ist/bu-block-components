@@ -4,13 +4,13 @@
 	margin: 0;
 	padding: 0;
 
-
-	.bu-components-loading-spinner {
-		left: 50%;
-		transform: translate(-50%, -50%);
-		position: absolute;
-		top: 50%;
-		z-index: 2;
+	// When data is loading, the placeholder LI items are shown.
+	// The placeholder items are styled to look like results being loaded.
+	// We want to ensure the container doesn't trigger scrollbars in the parent scrollable container.
+	// This is done by setting max-height to 100% and overflow to hidden.
+	&[data-loading="true"] {
+		max-height: 100%;
+		overflow: hidden;
 	}
 
 }
@@ -20,36 +20,42 @@
     font-size: 1.1em;
 }
 
-// Container for the Loading Spinner in the Results component.
-// Sits on top of the results list.
-// This spinner is used to indicate that results are being loaded or searched.
-.bu-components-post-chooser-results-spinner {
-	left: 50%;
-	opacity: 0;
-	pointer-events: none;
-	position: absolute;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	transition: opacity 300ms ease-in-out;
-	z-index: 2;
-
-	&[data-spinnervisible="true"] {
-		opacity: 1;
-	}
-	&[data-spinnervisible="false"] {
-		opacity: 0;
-	}
+.bu-components-post-chooser-results-message {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
 }
 
-.bu-components-post-chooser-results-message {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+
+.bu-components-post-chooser-no-results-message {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.bu-components-post-chooser-results-message-box {
 	text-align: center;
 	background: white;
 	border-radius: 5px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	padding: 20px;
+	padding: 2cqw;
 	z-index: 2;
+	margin: 0 auto;
+	max-width: 90cqw;
+	min-width: 50cqw;
+
+	p {
+		max-width: 60ch;
+	}
+
+}
+
+
+.bu-components-post-chooser-help-image {
+	border: 1px solid var(--wp-admin-theme-color, #2271b1);
+	border-radius: 4px;
 }

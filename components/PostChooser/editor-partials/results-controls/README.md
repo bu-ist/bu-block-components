@@ -18,12 +18,12 @@ The `ResultsControls` component provides filtering and sorting options for the p
 |------|------|---------|-------------|
 | `searchTerm` | String | Required | Current search term |
 | `searchType` | String | Required | Current search type (recent, content, slug, ID) |
-| `setSearchType` | Function | Required | Function to update the search type |
 | `sortOrder` | Object | Required | Current sort configuration with `orderby` and `order` properties |
 | `setSortOrder` | Function | Required | Function to update the sort configuration |
 | `contentResultsCount` | Number | 0 | Count of content search results |
 | `slugResultsCount` | Number | 0 | Count of slug search results |
 | `idResultsCount` | Number | 0 | Count of ID search results |
+| `onChange` | Function | `() => {}` | Function to call when the search type changes |
 
 
 ## Implementation Details

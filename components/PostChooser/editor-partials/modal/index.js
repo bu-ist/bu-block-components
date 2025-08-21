@@ -1,15 +1,18 @@
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Spinner, Modal } from '@wordpress/components';
-import { useEffect } from 'react';
+import { Modal } from '@wordpress/components';
 
 // Internal dependencies
 import { Results } from '../results/index.js';
 import { SearchUI } from '../search-ui/index.js';
 import { ResultsControls } from '../results-controls/index.mjs';
+import { LoadingOverlay, LoadingSpinner } from '../loading-overlay/index.js';
+
+// Import from Block Imports Package.
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import { useDebouncedInput } from '../../../../hooks/useDebouncedInput/index.mjs';
 
 // Import CSS
 import './editor.scss';
@@ -31,7 +34,11 @@ export const PostChooserModal = ( props ) => {
 		taxonomyFilters = {}, // Taxonomy filters (like tax_query in WP_Query)
 	} = props;
 
-	const [ searchTerm, setSearchTerm ] = useState( '' );
+	// Use the new useDebouncedInput hook to handle both immediate and debounced search terms
+	// searchTerm - updates immediately with each keystroke for responsive UI
+	// debouncedSearchTerm - only updates after delay (used for API calls to reduce requests)
+	const [ searchTerm, setSearchTerm, searchTermThrottled ] = useDebouncedInput('', 300);
+
 	const [ sortOrder, setSortOrder ] = useState( {
 		orderby: 'date',
 		order: 'desc',
@@ -58,7 +65,7 @@ export const PostChooserModal = ( props ) => {
 	} );
 
 	// Determine if search term is numeric for ID search
-	const isSearchTermNumeric = searchTerm && !isNaN(searchTerm) && !isNaN(parseFloat(searchTerm));
+	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
 
 	// Base query parameters
 	const baseQuery = {
@@ -81,23 +88,23 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	// Content search query (only when there's a search term)
-	const contentQuery = searchTerm ? {
+	const contentQuery = searchTermThrottled ? {
 		...baseQuery,
-		search: searchTerm,
+		search: searchTermThrottled,
 		page: searchCurrentPage.default,
 	} : null;
 
 	// Slug search query (only when there's a search term) - exact slug match only
-	const slugQuery = searchTerm ? {
+	const slugQuery = searchTermThrottled ? {
 		...baseQuery,
-		slug: searchTerm,
+		slug: searchTermThrottled,
 		page: searchCurrentPage.slug,
 	} : null;
 
 	// ID search query (only when search term is numeric)
 	const idQuery = isSearchTermNumeric ? {
 		...baseQuery,
-		include: [parseInt(searchTerm)],
+		include: [parseInt(searchTermThrottled)],
 		page: searchCurrentPage.id,
 	} : null;
 
@@ -164,7 +171,7 @@ export const PostChooserModal = ( props ) => {
 	}, [recentPosts, recentPagination]);
 
 	useEffect(() => {
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				default: {
@@ -179,10 +186,10 @@ export const PostChooserModal = ( props ) => {
 				default: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [contentPosts, contentPagination, searchTerm]);
+	}, [contentPosts, contentPagination, searchTermThrottled]);
 
 	useEffect(() => {
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				slug: {
@@ -197,7 +204,7 @@ export const PostChooserModal = ( props ) => {
 				slug: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [slugPosts, slugPagination, searchTerm]);
+	}, [slugPosts, slugPagination, searchTermThrottled]);
 
 	useEffect(() => {
 		if (isSearchTermNumeric) {
@@ -262,14 +269,14 @@ export const PostChooserModal = ( props ) => {
 	const handleSearch = useCallback( () => {
 		// Trigger search by invalidating all search results
 		recentInvalidateResolver();
-		if (searchTerm) {
+		if (searchTermThrottled) {
 			contentInvalidateResolver();
 			slugInvalidateResolver();
 		}
 		if (isSearchTermNumeric) {
 			idInvalidateResolver();
 		}
-	}, [ recentInvalidateResolver, contentInvalidateResolver, slugInvalidateResolver, idInvalidateResolver, searchTerm, isSearchTermNumeric ] );
+	}, [ recentInvalidateResolver, contentInvalidateResolver, slugInvalidateResolver, idInvalidateResolver, searchTermThrottled, isSearchTermNumeric ] );
 
 	// Handle page change for current search type
 	const handlePageChange = (newPage) => {
@@ -281,24 +288,28 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	/**
-		* When the search term changes or when we have search results,
-		* automatically switch to the appropriate search type.
-		*/
+	* When the search term changes or when we have search results,
+	* automatically switch to the appropriate search type.
+	*
+	* Note: Don't enter `searchType` as a dependency in this effect.
+	* Doing so will cause a rerender and the setting will be undone.
+	*/
 	useEffect( () => {
-		if (searchTerm && searchType === 'recent') {
+		if (searchTermThrottled && searchType === 'recent') {
 			// Auto-switch to content search when user starts typing
 			setSearchType('default');
-		} else if (!searchTerm && searchType !== 'recent') {
+		} else if (!searchTermThrottled && searchType !== 'recent') {
 			// Auto-switch back to recent when search term is cleared
 			setSearchType('recent');
 		}
-	}, [ searchTerm, searchType ] );
+	}, [ searchTermThrottled ] );
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
 	const currentLoading = getCurrentLoadingState();
 	const currentPage = getCurrentPage();
 	const currentTotalPages = currentResults.totalPages || 0;
+
 
 	return (
 		<Modal
@@ -308,13 +319,6 @@ export const PostChooserModal = ( props ) => {
 			className="bu-components-post-chooser-modal"
 		>
 			<div className="bu-components-post-chooser-modal-container">
-				{ /**
-					* These sub-components are currently using a lot of props that are being passed down into them.
-					* This should be improved in the future to reduce prop drilling.
-					*
-					* @todo: Refactor how these props are passed down to the sub-components by using a context provider.
-					* This will avoid having to pass down so many props and make the code cleaner.
-					*/ }
 				<SearchUI
 					searchTerm={ searchTerm }
 					setSearchTerm={ setSearchTerm }
@@ -328,65 +332,44 @@ export const PostChooserModal = ( props ) => {
 					setSelectedPostType={ setSelectedPostType }
 				/>
 				<ResultsControls
-					searchTerm={ searchTerm }
-					onSearch={ handleSearch }
+					searchTerm={ searchTermThrottled }
 					searchType={ searchType }
-					setSearchType={ setSearchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
 					contentResultsCount={ searchResults.default.totalItems || 0 }
 					slugResultsCount={ searchResults.slug.totalItems || 0 }
 					idResultsCount={ searchResults.id.totalItems || 0 }
+					onChange={ (newType) => {
+						setSearchType(newType);
+					}}
 				/>
-				<div className="bu-components-post-chooser-results-container">
-					{ currentLoading && <Spinner /> }
-					{ searchType === 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ __( 'Recently Published' ) }
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								loading={ currentLoading }
-								totalItems={ currentResults.totalItems }
-							/>
-						</>
-					) }
-					{ searchType !== 'recent' && (
-						<>
-							<h2 className="bu-components-post-chooser-results-title">
-								{ searchType === 'default' && __( 'Content Search Results' ) }
-								{ searchType === 'slug' && __( 'Slug Search Results' ) }
-								{ searchType === 'id' && __( 'ID Search Results' ) }
-								<em>
-									{ currentResults.totalItems > 0 && (
-										<span className="bu-components-post-chooser-results-count">
-											{ __( 'Found: ' ) +
-												` ${ currentResults.totalItems } ${
-													currentResults.totalItems > 1
-														? __( 'items' )
-														: __( 'item' )
-												}` }
-										</span>
-									) }
-								</em>
-							</h2>
-							<Results
-								posts={ currentResults.posts }
-								onSelectPost={ onSelectPost }
-								totalItems={ currentResults.totalItems }
-								loading={ currentLoading }
-							/>
-						</>
-					) }
-					{ currentTotalPages > 1 && currentResults.posts && (
-						<Pagination
-							currentPage={ currentPage }
-							totalPages={ currentTotalPages }
-							onChange={ handlePageChange }
+				<div className="bu-components-post-chooser-results-scrollable">
+					<LoadingSpinner loading={ currentLoading } />
+					<div className="bu-components-post-chooser-results-container">
+						<LoadingOverlay loading={ currentLoading } />
+						<Results
+							posts={ currentResults.posts }
+							onSelectPost={ onSelectPost }
+							totalItems={ currentResults.totalItems }
+							loading={ currentLoading }
+							searchTerm={ searchTermThrottled }
+							searchType={ searchType }
 						/>
-					) }
+						{ currentTotalPages > 1 && currentResults.posts && (
+							<Pagination
+								className="bu-components-post-chooser-pagination"
+								currentPage={ currentPage }
+								totalPages={ currentTotalPages }
+								onChange={ handlePageChange }
+								showPageInfo={ false }
+								showPageNumbers={ true }
+								showFirstLastButtons={ false }
+								prevLabel={ false }
+								nextLabel={ false }
+								showMaxPageNumbers={ 6 }
+							/>
+						) }
+					</div>
 				</div>
 			</div>
 		</Modal>

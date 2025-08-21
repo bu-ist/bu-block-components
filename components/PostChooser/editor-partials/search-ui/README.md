@@ -25,6 +25,9 @@ The `SearchUI` component provides a search input field with clear functionality 
 | `hideLabelFromVision` | Boolean | `true` | Whether to visually hide the label |
 | `placeholder` | String | `"Enter a search term…"` | Placeholder text for the search input |
 | `postTypes` | Array | `[{ label: 'Posts', value: 'post' }, { label: 'Pages', value: 'page' }]` | Array of post types with label/value pairs |
+| `primaryPostType` | String | `'post'` | Default post type to use if none is specified |
+| `selectedPostType` | String | `primaryPostType \|\| 'post'` | Currently selected post type |
+| `setSelectedPostType` | Function | `() => {}` | Function to update selected post type state |
 
 ## Component Interaction
 

@@ -1,19 +1,49 @@
 .bu-components-pagination {
-	display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-	gap: 1em;
+	container-type: inline-size;
+	container-name: bu-components-pagination;
+	font-size: 1em;
+
+	&-container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+		gap: 1em;
+	}
+
+	&-numbers {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+
+		.components-button {
+			padding-inline: 0.5em;
+			&:disabled {
+				color: black;
+				text-decoration: none;
+				opacity: 1;
+			}
+		}
+	}
 
 	&-info {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
+		font-size: 0.875em;
 		align-items: center;
 		justify-content: space-evenly;
 		gap: 1em;
+
+		.bu-components-pagination-page-label-text {
+			display: none;
+
+			@container bu-components-pagination ( width >= 340px ) {
+				display: inline;
+			}
+		}
 	}
 
 	&-first,
@@ -23,6 +53,14 @@
 
 	&-of {
 		text-align: center;
+	}
+
+	.bu-components-pagination-button-text {
+		display: none;
+
+		@container bu-components-pagination ( width >= 400px ) {
+			display: inline;
+		}
 	}
 }
 

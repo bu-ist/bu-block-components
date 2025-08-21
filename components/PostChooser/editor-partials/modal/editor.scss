@@ -1,14 +1,16 @@
 :where(html) {
 	--bu-components-modal-header-height: 60px;
+	--bu-components-modal-maxheight: 75vh;
 	--bu-components-post-chooser-results-border-color: #c7b9a7;
 	--bu-components-post-chooser-results-border-color-darker: #b1a495;
 	--bu-components-post-chooser-results-text-color-darker: #7c7063;
+	--bu-components-post-chooser-results-text-color-heading: #4e4b48;
 }
 
 .bu-components-post-chooser-modal {
 	background-color: #fef8ee;
 	border-radius: 10px;
-	max-height:50vh;
+	max-height: var(--bu-components-modal-maxheight);
 	overflow: hidden;
 	position: relative;
     max-width: 768px;
@@ -21,11 +23,11 @@
 }
 
 .bu-components-post-chooser-modal-container {
-	height: calc(50vh - var(--bu-components-modal-header-height) ); // subtract header height
+    display: flex;
+	flex-direction: column;
+	height: calc(var(--bu-components-modal-maxheight) - var(--bu-components-modal-header-height) ); // subtract header height
 	margin: 0 -32px 24px;
 	overflow: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 .bu-components-post-chooser-search-type {
@@ -34,11 +36,26 @@
 }
 
 // Results container div in the post chooser modal.
-.bu-components-post-chooser-results-container {
-	padding: 12px;
-	overflow: auto;
-	position: relative;
+.bu-components-post-chooser-results-scrollable {
 	height: 100%;
+	min-height: 200px;
+	overflow: auto;
+	padding: 12px;
+	container-type: size;
+	container-name: bu-components-post-chooser-results-scrollable;
+	position: relative;
+}
+
+// Results container div in the post chooser modal.
+.bu-components-post-chooser-results-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	position: relative;
+
+	&:has(.bu-components-post-chooser-results-message) {
+		height: 100%;
+	}
 
 	.bu-components-loading-spinner {
 		position: absolute;
@@ -46,5 +63,12 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		z-index: 2;
+	}
+}
+
+
+.bu-components-post-chooser-pagination {
+	.components-button.is-secondary:disabled {
+		background-color: #f4ede5;
 	}
 }
