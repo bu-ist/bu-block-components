@@ -176,10 +176,8 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 						modalTitle={ __( 'Choose a post (postchooser block)' ) }
 						onClose={ () => setIsPostChooserModalOpen( false ) }
 						postTypes={ [
-							{ label: __( 'Posts' ), value: 'post' },
 							{ label: __( 'Bob' ), value: 'import-bob' },
 						] }
-						primaryPostType="import-bob"
 						taxonomyFilters={ {
 							'fish': 'vero-velit-ea, dolor-sequi-incidunt'
 						} }

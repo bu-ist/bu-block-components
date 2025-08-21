@@ -22,11 +22,11 @@ export const PostChooserModal = ( props ) => {
 		onClose = () => {}, // Function to call when the modal is closed.
 		label,
 		onSelectPost = () => {}, // Function to call when a post is selected.
-		postTypes= [
+		postTypes = [
 			{ label: __( 'Posts' ), value: 'post' },
 			{ label: __( 'Pages' ), value: 'page' },
 		], // Default post types to search.
-		primaryPostType = 'post', // Default primary post type.
+		primaryPostType, // Optional: only needed to override the first postType in the array
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
 		minCharacters = 3,
@@ -64,6 +64,87 @@ export const PostChooserModal = ( props ) => {
 		id: { posts: null, totalItems: 0, totalPages: 0 },
 	} );
 
+	// State to hold converted taxonomy filters (slug-to-ID conversion)
+	const [ convertedTaxonomyFilters, setConvertedTaxonomyFilters ] = useState( {} );
+	const [ isConvertingFilters, setIsConvertingFilters ] = useState( false );
+
+	// Helper function to detect if a value is likely a slug (contains hyphens, no numbers)
+	const isLikelySlug = ( value ) => {
+		if ( typeof value !== 'string' ) return false;
+		// Check if it contains hyphens and doesn't look like a numeric ID
+		return value.includes( '-' ) && isNaN( parseInt( value ) );
+	};
+
+	// Helper function to check if taxonomyFilters need conversion
+	const needsConversion = ( filters ) => {
+		if ( ! filters || Object.keys( filters ).length === 0 ) return false;
+		
+		for ( const [ taxonomy, terms ] of Object.entries( filters ) ) {
+			const termList = typeof terms === 'string' ? terms.split( ',' ).map( t => t.trim() ) : terms;
+			if ( Array.isArray( termList ) && termList.some( term => isLikelySlug( term ) ) ) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	// Fetch term data for slug-to-ID conversion
+	// Only fetch if we detect slugs in the taxonomyFilters
+	const shouldFetchTerms = needsConversion( taxonomyFilters );
+	const termQueries = shouldFetchTerms ? Object.entries( taxonomyFilters ).map( ( [ taxonomy, terms ] ) => {
+		const termList = typeof terms === 'string' ? terms.split( ',' ).map( t => t.trim() ) : terms;
+		return {
+			taxonomy,
+			terms: termList,
+			query: { slug: termList.join( ',' ), per_page: 100 } // Fetch terms by slug
+		};
+	} ) : [];
+
+	// Use useRequestData to fetch term data for each taxonomy that needs conversion
+	const termResults = termQueries.map( ( { taxonomy, query } ) => {
+		// Only use the hook if we actually need to fetch terms
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [ terms, loading ] = shouldFetchTerms ? useRequestData( 'taxonomy', taxonomy, query ) : [ null, false ];
+		return { taxonomy, terms, loading };
+	} );
+
+	// Convert slugs to IDs when term data is available
+	useEffect( () => {
+		if ( ! shouldFetchTerms ) {
+			setConvertedTaxonomyFilters( taxonomyFilters );
+			setIsConvertingFilters( false );
+			return;
+		}
+
+		setIsConvertingFilters( true );
+
+		// Check if all term queries have finished loading
+		const allLoaded = termResults.every( result => ! result.loading );
+		
+		if ( allLoaded ) {
+			const converted = { ...taxonomyFilters };
+
+			termResults.forEach( ( { taxonomy, terms } ) => {
+				if ( terms && Array.isArray( terms ) ) {
+					// Convert slug list to ID list
+					const originalTerms = taxonomyFilters[ taxonomy ];
+					const originalSlugList = typeof originalTerms === 'string' ? originalTerms.split( ',' ).map( t => t.trim() ) : originalTerms;
+					
+					const termIds = terms
+						.filter( term => originalSlugList.includes( term.slug ) )
+						.map( term => term.id );
+
+					if ( termIds.length > 0 ) {
+						converted[ taxonomy ] = termIds.join( ',' );
+					}
+				}
+			} );
+
+			setConvertedTaxonomyFilters( converted );
+			setIsConvertingFilters( false );
+		}
+	}, [ termResults.map( r => r.loading ).join( ',' ), shouldFetchTerms ] );
+
 	// Determine if search term is numeric for ID search
 	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
 
@@ -75,8 +156,8 @@ export const PostChooserModal = ( props ) => {
 		status: 'publish',
 		// Apply meta filters (like adding meta_query to WP_Query)
 		...metaFilters,
-		// Apply taxonomy filters (like adding tax_query to WP_Query)
-		...taxonomyFilters,
+		// Apply taxonomy filters (like adding tax_query to WP_Query) - use converted filters with IDs
+		...convertedTaxonomyFilters,
 	};
 
 	// Recent posts query (always active)
@@ -86,6 +167,8 @@ export const PostChooserModal = ( props ) => {
 		orderby: sortOrder.orderby,
 		order: sortOrder.order,
 	};
+
+	console.log('PostChooserModal recentQuery', recentQuery);
 
 	// Content search query (only when there's a search term)
 	const contentQuery = searchTermThrottled ? {
@@ -115,6 +198,8 @@ export const PostChooserModal = ( props ) => {
 		recentQuery
 	);
 
+	console.log('PostChooserModal recentPosts', recentPosts);
+
 	const [contentPosts, contentLoading, contentInvalidateResolver] = useRequestData(
 		'postType',
 		selectedPostType,
@@ -132,6 +217,8 @@ export const PostChooserModal = ( props ) => {
 		selectedPostType,
 		idQuery
 	);
+
+	console.log('PostChooserModal idPosts', idPosts);
 
 	// Get pagination for each search type
 	const { pagination: recentPagination } = useGetPagination(
@@ -231,18 +318,25 @@ export const PostChooserModal = ( props ) => {
 
 	// Get current loading state based on selected search type
 	const getCurrentLoadingState = () => {
+		let searchLoading = false;
 		switch (searchType) {
 			case 'recent':
-				return recentLoading;
+				searchLoading = recentLoading;
+				break;
 			case 'default':
-				return contentLoading;
+				searchLoading = contentLoading;
+				break;
 			case 'slug':
-				return slugLoading;
+				searchLoading = slugLoading;
+				break;
 			case 'id':
-				return idLoading;
+				searchLoading = idLoading;
+				break;
 			default:
-				return false;
+				searchLoading = false;
 		}
+		// Include filter conversion loading state
+		return searchLoading || isConvertingFilters;
 	};
 
 	// Get current page for selected search type

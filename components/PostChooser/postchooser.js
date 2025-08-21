@@ -19,8 +19,11 @@ export const PostChooser = ( props ) => {
 		onSelectPost,
 		modalLabel,
 		modalTitle,
-		postTypes,
-		primaryPostType,
+		postTypes = [
+			{ label: __( 'Posts' ), value: 'post' },
+			{ label: __( 'Pages' ), value: 'page' },
+		], // Default post types when none provided
+		primaryPostType, // Only needed when you want to override the first postType in the array
 		searchPlaceholder,
 		minCharacters = 3,
 		onClose,
