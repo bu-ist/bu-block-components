@@ -12,10 +12,182 @@ import { LoadingOverlay, LoadingSpinner } from '../loading-overlay/index.js';
 import { Pagination } from '../../../../components/Pagination/index.mjs';
 import { useGetPagination } from '../../../../hooks/useGetPagination/index.mjs';
 import { useRequestData } from '../../../../hooks/useRequestData/index.mjs';
+import { useRequestProgressiveData } from '../../../../hooks/useRequestProgressiveData/index.mjs';
 import { useDebouncedInput } from '../../../../hooks/useDebouncedInput/index.mjs';
 
 // Import CSS
 import './editor.scss';
+
+/**
+	* Helper function to safely get meta value from post object.
+	* In WordPress 5.8+, meta fields are nested in a 'meta' object.
+	* This function handles both nested and top-level meta field access.
+	*
+	* @param {Object} post - The post object from REST API
+	* @param {string} metaKey - The meta key to retrieve
+	* @returns {*} The meta value or undefined if not found
+	*/
+const getPostMetaValue = (post, metaKey) => {
+	if (!post) {
+		console.log(`getPostMetaValue: post is null/undefined`);
+		return undefined;
+	}
+	
+	console.log(`getPostMetaValue: Looking for "${metaKey}" in post ${post.id}`);
+	console.log(`Post meta object:`, post.meta);
+	
+	// First check if meta exists in nested 'meta' object (WordPress 5.8+)
+	if (post.meta && typeof post.meta === 'object' && post.meta.hasOwnProperty(metaKey)) {
+		const value = post.meta[metaKey];
+		console.log(`Found "${metaKey}" in meta object: "${value}"`);
+		return value;
+	}
+	
+	// Fallback to top-level property for backward compatibility
+	if (post.hasOwnProperty(metaKey)) {
+		const value = post[metaKey];
+		console.log(`Found "${metaKey}" at top level: "${value}"`);
+		return value;
+	}
+	
+	console.log(`Meta key "${metaKey}" not found in post ${post.id}`);
+	return undefined;
+};
+
+/**
+	* Helper function to filter posts based on meta criteria.
+	* Supports both simple meta_key/meta_value filtering and complex meta_query arrays.
+	*
+	* @param {Array} posts - Array of posts to filter
+	* @param {Object} metaFilters - Meta filter criteria
+	* @returns {Array} Filtered posts array
+	*/
+const filterPostsByMeta = (posts, metaFilters) => {
+	console.log('filterPostsByMeta called with:', { posts: posts?.length, metaFilters });
+	
+	if (!posts || !Array.isArray(posts) || !metaFilters || Object.keys(metaFilters).length === 0) {
+		console.log('Returning original posts - no filtering needed');
+		return posts;
+	}
+	
+	// Handle direct meta field filtering (from your example: bob_where_are_you: 'here')
+	const directMetaFilters = Object.entries(metaFilters).filter(([key, value]) =>
+		!['meta_key', 'meta_value', 'meta_compare', 'meta_query'].includes(key)
+	);
+	
+	console.log('Direct meta filters found:', directMetaFilters);
+	
+	const filteredPosts = posts.filter(post => {
+		console.log('Checking post:', post.id, 'Meta data:', post.meta);
+		
+		// Handle direct meta field filtering (bob_where_are_you: 'here')
+		for (const [metaKey, expectedValue] of directMetaFilters) {
+			const metaValue = getPostMetaValue(post, metaKey);
+			console.log(`Checking ${metaKey}: expected="${expectedValue}", actual="${metaValue}"`);
+			
+			if (!checkMetaCondition(metaValue, expectedValue, '=')) {
+				console.log(`Post ${post.id} filtered out: ${metaKey} doesn't match`);
+				return false;
+			}
+		}
+		
+		// Handle simple meta_key/meta_value filtering
+		if (metaFilters.meta_key && metaFilters.meta_value !== undefined) {
+			const metaValue = getPostMetaValue(post, metaFilters.meta_key);
+			const compare = metaFilters.meta_compare || '=';
+			console.log(`Simple meta filtering: ${metaFilters.meta_key} = ${metaValue}`);
+			
+			if (!checkMetaCondition(metaValue, metaFilters.meta_value, compare)) {
+				console.log(`Post ${post.id} filtered out by simple meta filter`);
+				return false;
+			}
+		}
+		
+		// Handle complex meta_query filtering
+		if (metaFilters.meta_query && Array.isArray(metaFilters.meta_query)) {
+			const relation = metaFilters.meta_query.relation || 'AND';
+			const results = metaFilters.meta_query.map(query => {
+				if (!query.key || query.value === undefined) return true;
+				
+				const metaValue = getPostMetaValue(post, query.key);
+				const compare = query.compare || '=';
+				
+				return checkMetaCondition(metaValue, query.value, compare, query.type);
+			});
+			
+			if (relation === 'AND') {
+				const passed = results.every(result => result);
+				if (!passed) {
+					console.log(`Post ${post.id} filtered out by meta_query (AND)`);
+					return false;
+				}
+			} else if (relation === 'OR') {
+				const passed = results.some(result => result);
+				if (!passed) {
+					console.log(`Post ${post.id} filtered out by meta_query (OR)`);
+					return false;
+				}
+			}
+		}
+		
+		console.log(`Post ${post.id} passed all meta filters`);
+		return true;
+	});
+	
+	console.log(`Filtering complete: ${posts.length} -> ${filteredPosts.length} posts`);
+	return filteredPosts;
+};
+
+/**
+	* Helper function to check meta condition based on compare operator.
+	*
+	* @param {*} metaValue - The actual meta value from the post
+	* @param {*} compareValue - The value to compare against
+	* @param {string} compare - The comparison operator
+	* @param {string} type - The data type (NUMERIC, CHAR, etc.)
+	* @returns {boolean} Whether the condition is met
+	*/
+const checkMetaCondition = (metaValue, compareValue, compare = '=', type = 'CHAR') => {
+	// Handle undefined/null meta values
+	if (metaValue === undefined || metaValue === null) {
+		return compare === 'NOT EXISTS';
+	}
+	
+	// Convert values based on type
+	if (type === 'NUMERIC') {
+		metaValue = parseFloat(metaValue);
+		compareValue = parseFloat(compareValue);
+	} else {
+		metaValue = String(metaValue);
+		compareValue = String(compareValue);
+	}
+	
+	switch (compare) {
+		case '=':
+			return metaValue === compareValue;
+		case '!=':
+			return metaValue !== compareValue;
+		case '>':
+			return metaValue > compareValue;
+		case '>=':
+			return metaValue >= compareValue;
+		case '<':
+			return metaValue < compareValue;
+		case '<=':
+			return metaValue <= compareValue;
+		case 'LIKE':
+			return String(metaValue).toLowerCase().includes(String(compareValue).toLowerCase());
+		case 'NOT LIKE':
+			return !String(metaValue).toLowerCase().includes(String(compareValue).toLowerCase());
+		case 'EXISTS':
+			return metaValue !== undefined && metaValue !== null;
+		case 'NOT EXISTS':
+			return metaValue === undefined || metaValue === null;
+		default:
+			return metaValue === compareValue;
+	}
+};
+
 
 export const PostChooserModal = ( props ) => {
 	const {
@@ -63,6 +235,8 @@ export const PostChooserModal = ( props ) => {
 		slug: { posts: null, totalItems: 0, totalPages: 0 },
 		id: { posts: null, totalItems: 0, totalPages: 0 },
 	} );
+
+	// Note: Progressive fetching state removed - using simpler approach of fetching more posts initially
 
 	// State to hold converted taxonomy filters (slug-to-ID conversion)
 	const [ convertedTaxonomyFilters, setConvertedTaxonomyFilters ] = useState( {} );
@@ -143,19 +317,20 @@ export const PostChooserModal = ( props ) => {
 			setConvertedTaxonomyFilters( converted );
 			setIsConvertingFilters( false );
 		}
-	}, [ termResults.map( r => r.loading ).join( ',' ), shouldFetchTerms ] );
+	}, [ termResults.length > 0 ? termResults.every( r => ! r.loading ) : false, shouldFetchTerms, JSON.stringify(taxonomyFilters) ] );
 
 	// Determine if search term is numeric for ID search
 	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
 
 	// Base query parameters
+	// Note: Meta filters are handled by useRequestProgressiveData which automatically fetches
+	// additional pages until enough filtered results are found
+	const hasMetaFilters = metaFilters && Object.keys(metaFilters).length > 0;
 	const baseQuery = {
-		per_page: 10,
+		per_page: 10, // Standard page size - progressive fetching will handle getting more results when needed
 		orderby: sortOrder.orderby,
 		order: sortOrder.order,
 		status: 'publish',
-		// Apply meta filters (like adding meta_query to WP_Query)
-		...metaFilters,
 		// Apply taxonomy filters (like adding tax_query to WP_Query) - use converted filters with IDs
 		...convertedTaxonomyFilters,
 	};
@@ -191,32 +366,80 @@ export const PostChooserModal = ( props ) => {
 		page: searchCurrentPage.id,
 	} : null;
 
-	// Use separate useRequestData hooks for each search type
-	const [recentPosts, recentLoading, recentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		recentQuery
-	);
+	// Create meta filter function for progressive data fetching
+	const metaFilterFunction = hasMetaFilters ? (posts) => filterPostsByMeta(posts, metaFilters) : null;
+
+	// Use progressive data fetching for searches that need meta filtering
+	// Use regular useRequestData for searches without meta filtering
+	const [recentPosts, recentLoading, recentProgressivePagination, recentInvalidateResolver] = hasMetaFilters
+		? useRequestProgressiveData(
+			'postType',
+			selectedPostType,
+			recentQuery,
+			{
+				filter: metaFilterFunction,
+				targetResults: 10,
+				maxPages: 20,
+				pageSize: 50
+			}
+		)
+		: [
+			...useRequestData('postType', selectedPostType, recentQuery),
+			null // No progressive pagination
+		];
 
 	console.log('PostChooserModal recentPosts', recentPosts);
 
-	const [contentPosts, contentLoading, contentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		contentQuery
-	);
+	const [contentPosts, contentLoading, contentProgressivePagination, contentInvalidateResolver] = hasMetaFilters && searchTermThrottled
+		? useRequestProgressiveData(
+			'postType',
+			selectedPostType,
+			contentQuery,
+			{
+				filter: metaFilterFunction,
+				targetResults: 10,
+				maxPages: 15,
+				pageSize: 30
+			}
+		)
+		: [
+			...useRequestData('postType', selectedPostType, contentQuery),
+			null // No progressive pagination
+		];
 
-	const [slugPosts, slugLoading, slugInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		slugQuery
-	);
+	const [slugPosts, slugLoading, slugProgressivePagination, slugInvalidateResolver] = hasMetaFilters && searchTermThrottled
+		? useRequestProgressiveData(
+			'postType',
+			selectedPostType,
+			slugQuery,
+			{
+				filter: metaFilterFunction,
+				targetResults: 10,
+				maxPages: 10,
+				pageSize: 25
+			}
+		)
+		: [
+			...useRequestData('postType', selectedPostType, slugQuery),
+			null // No progressive pagination
+		];
 
-	const [idPosts, idLoading, idInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		idQuery
-	);
+	const [idPosts, idLoading, idProgressivePagination, idInvalidateResolver] = hasMetaFilters && isSearchTermNumeric
+		? useRequestProgressiveData(
+			'postType',
+			selectedPostType,
+			idQuery,
+			{
+				filter: metaFilterFunction,
+				targetResults: 5,
+				maxPages: 5,
+				pageSize: 20
+			}
+		)
+		: [
+			...useRequestData('postType', selectedPostType, idQuery),
+			null // No progressive pagination
+		];
 
 	console.log('PostChooserModal idPosts', idPosts);
 
@@ -245,26 +468,42 @@ export const PostChooserModal = ( props ) => {
 		idQuery || {}
 	);
 
-	// Update search results state when individual search results change
+	// Handle recent posts results - progressive fetching handles filtering automatically when meta filters are present
 	useEffect(() => {
 		setSearchResults(prevResults => ({
 			...prevResults,
 			recent: {
 				posts: recentPosts,
-				totalItems: recentPagination.totalItems || 0,
-				totalPages: recentPagination.totalPages || 0,
+				totalItems: hasMetaFilters && recentProgressivePagination
+					? recentProgressivePagination.totalItems
+					: (recentPagination.totalItems || 0),
+				totalPages: hasMetaFilters && recentProgressivePagination
+					? recentProgressivePagination.totalPages
+					: (recentPagination.totalPages || 0),
 			}
 		}));
-	}, [recentPosts, recentPagination]);
+	}, [
+		recentPosts,
+		recentPagination.totalItems,
+		recentPagination.totalPages,
+		recentProgressivePagination?.totalItems,
+		recentProgressivePagination?.totalPages,
+		hasMetaFilters
+	]);
 
+	// Handle content search results - progressive fetching handles filtering automatically when meta filters are present
 	useEffect(() => {
-		if (searchTermThrottled) {
+		if (searchTermThrottled && contentPosts) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				default: {
 					posts: contentPosts,
-					totalItems: contentPagination.totalItems || 0,
-					totalPages: contentPagination.totalPages || 0,
+					totalItems: hasMetaFilters && contentProgressivePagination
+						? contentProgressivePagination.totalItems
+						: (contentPagination.totalItems || 0),
+					totalPages: hasMetaFilters && contentProgressivePagination
+						? contentProgressivePagination.totalPages
+						: (contentPagination.totalPages || 0),
 				}
 			}));
 		} else {
@@ -273,16 +512,29 @@ export const PostChooserModal = ( props ) => {
 				default: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [contentPosts, contentPagination, searchTermThrottled]);
+	}, [
+		contentPosts,
+		contentPagination.totalItems,
+		contentPagination.totalPages,
+		contentProgressivePagination?.totalItems,
+		contentProgressivePagination?.totalPages,
+		searchTermThrottled,
+		hasMetaFilters
+	]);
 
+	// Handle slug search results - progressive fetching handles filtering automatically when meta filters are present
 	useEffect(() => {
-		if (searchTermThrottled) {
+		if (searchTermThrottled && slugPosts) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				slug: {
 					posts: slugPosts,
-					totalItems: slugPagination.totalItems || 0,
-					totalPages: slugPagination.totalPages || 0,
+					totalItems: hasMetaFilters && slugProgressivePagination
+						? slugProgressivePagination.totalItems
+						: (slugPosts ? slugPosts.length : 0),
+					totalPages: hasMetaFilters && slugProgressivePagination
+						? slugProgressivePagination.totalPages
+						: (slugPosts ? Math.ceil(slugPosts.length / 10) : 0),
 				}
 			}));
 		} else {
@@ -291,16 +543,29 @@ export const PostChooserModal = ( props ) => {
 				slug: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [slugPosts, slugPagination, searchTermThrottled]);
+	}, [
+		slugPosts,
+		slugPagination.totalItems,
+		slugPagination.totalPages,
+		slugProgressivePagination?.totalItems,
+		slugProgressivePagination?.totalPages,
+		searchTermThrottled,
+		hasMetaFilters
+	]);
 
+	// Handle ID search results - progressive fetching handles filtering automatically when meta filters are present
 	useEffect(() => {
-		if (isSearchTermNumeric) {
+		if (isSearchTermNumeric && idPosts) {
 			setSearchResults(prevResults => ({
 				...prevResults,
 				id: {
 					posts: idPosts,
-					totalItems: idPagination.totalItems || 0,
-					totalPages: idPagination.totalPages || 0,
+					totalItems: hasMetaFilters && idProgressivePagination
+						? idProgressivePagination.totalItems
+						: (idPosts ? idPosts.length : 0),
+					totalPages: hasMetaFilters && idProgressivePagination
+						? idProgressivePagination.totalPages
+						: (idPosts ? Math.ceil(idPosts.length / 10) : 0),
 				}
 			}));
 		} else {
@@ -309,7 +574,15 @@ export const PostChooserModal = ( props ) => {
 				id: { posts: null, totalItems: 0, totalPages: 0 }
 			}));
 		}
-	}, [idPosts, idPagination, isSearchTermNumeric]);
+	}, [
+		idPosts,
+		idPagination.totalItems,
+		idPagination.totalPages,
+		idProgressivePagination?.totalItems,
+		idProgressivePagination?.totalPages,
+		isSearchTermNumeric,
+		hasMetaFilters
+	]);
 
 	// Get current results based on selected search type
 	const getCurrentResults = () => {

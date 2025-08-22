@@ -92,7 +92,7 @@ export const SearchUI = ( props ) => {
 						</div>
 					</FlexBlock>
 				</Flex>
-				{ postTypes.length > 1 && (
+				{ postTypes && postTypes.length > 1 && (
 					<Flex
 						className="bu-components-post-chooser-posttype-select"
 						justify="space-between"

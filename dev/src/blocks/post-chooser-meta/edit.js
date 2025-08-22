@@ -176,12 +176,10 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 						modalTitle={ __( 'Choose a post (postchooser block)' ) }
 						onClose={ () => setIsPostChooserModalOpen( false ) }
 						postTypes={ [
-							{ label: __( 'Posts' ), value: 'post' },
 							{ label: __( 'Bob' ), value: 'import-bob' },
 						] }
-						primaryPostType="import-bob"
 						metaFilters={ {
-							'show_on_post': 1
+							'bob_where_are_you': 'here'
 						} }
 					/>
 				) }

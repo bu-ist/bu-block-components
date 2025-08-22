@@ -674,8 +674,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
 /* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
 /* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
-/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
+/* harmony import */ var _hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../hooks/useRequestProgressiveData/index.mjs */ "../hooks/useRequestProgressiveData/index.mjs");
+/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./editor.scss */ "../components/PostChooser/editor-partials/modal/editor.scss");
 
 
 
@@ -693,8 +694,167 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // Import CSS
 
+
+/**
+	* Helper function to safely get meta value from post object.
+	* In WordPress 5.8+, meta fields are nested in a 'meta' object.
+	* This function handles both nested and top-level meta field access.
+	*
+	* @param {Object} post - The post object from REST API
+	* @param {string} metaKey - The meta key to retrieve
+	* @returns {*} The meta value or undefined if not found
+	*/
+const getPostMetaValue = (post, metaKey) => {
+  if (!post) {
+    console.log(`getPostMetaValue: post is null/undefined`);
+    return undefined;
+  }
+  console.log(`getPostMetaValue: Looking for "${metaKey}" in post ${post.id}`);
+  console.log(`Post meta object:`, post.meta);
+
+  // First check if meta exists in nested 'meta' object (WordPress 5.8+)
+  if (post.meta && typeof post.meta === 'object' && post.meta.hasOwnProperty(metaKey)) {
+    const value = post.meta[metaKey];
+    console.log(`Found "${metaKey}" in meta object: "${value}"`);
+    return value;
+  }
+
+  // Fallback to top-level property for backward compatibility
+  if (post.hasOwnProperty(metaKey)) {
+    const value = post[metaKey];
+    console.log(`Found "${metaKey}" at top level: "${value}"`);
+    return value;
+  }
+  console.log(`Meta key "${metaKey}" not found in post ${post.id}`);
+  return undefined;
+};
+
+/**
+	* Helper function to filter posts based on meta criteria.
+	* Supports both simple meta_key/meta_value filtering and complex meta_query arrays.
+	*
+	* @param {Array} posts - Array of posts to filter
+	* @param {Object} metaFilters - Meta filter criteria
+	* @returns {Array} Filtered posts array
+	*/
+const filterPostsByMeta = (posts, metaFilters) => {
+  console.log('filterPostsByMeta called with:', {
+    posts: posts?.length,
+    metaFilters
+  });
+  if (!posts || !Array.isArray(posts) || !metaFilters || Object.keys(metaFilters).length === 0) {
+    console.log('Returning original posts - no filtering needed');
+    return posts;
+  }
+
+  // Handle direct meta field filtering (from your example: bob_where_are_you: 'here')
+  const directMetaFilters = Object.entries(metaFilters).filter(([key, value]) => !['meta_key', 'meta_value', 'meta_compare', 'meta_query'].includes(key));
+  console.log('Direct meta filters found:', directMetaFilters);
+  const filteredPosts = posts.filter(post => {
+    console.log('Checking post:', post.id, 'Meta data:', post.meta);
+
+    // Handle direct meta field filtering (bob_where_are_you: 'here')
+    for (const [metaKey, expectedValue] of directMetaFilters) {
+      const metaValue = getPostMetaValue(post, metaKey);
+      console.log(`Checking ${metaKey}: expected="${expectedValue}", actual="${metaValue}"`);
+      if (!checkMetaCondition(metaValue, expectedValue, '=')) {
+        console.log(`Post ${post.id} filtered out: ${metaKey} doesn't match`);
+        return false;
+      }
+    }
+
+    // Handle simple meta_key/meta_value filtering
+    if (metaFilters.meta_key && metaFilters.meta_value !== undefined) {
+      const metaValue = getPostMetaValue(post, metaFilters.meta_key);
+      const compare = metaFilters.meta_compare || '=';
+      console.log(`Simple meta filtering: ${metaFilters.meta_key} = ${metaValue}`);
+      if (!checkMetaCondition(metaValue, metaFilters.meta_value, compare)) {
+        console.log(`Post ${post.id} filtered out by simple meta filter`);
+        return false;
+      }
+    }
+
+    // Handle complex meta_query filtering
+    if (metaFilters.meta_query && Array.isArray(metaFilters.meta_query)) {
+      const relation = metaFilters.meta_query.relation || 'AND';
+      const results = metaFilters.meta_query.map(query => {
+        if (!query.key || query.value === undefined) return true;
+        const metaValue = getPostMetaValue(post, query.key);
+        const compare = query.compare || '=';
+        return checkMetaCondition(metaValue, query.value, compare, query.type);
+      });
+      if (relation === 'AND') {
+        const passed = results.every(result => result);
+        if (!passed) {
+          console.log(`Post ${post.id} filtered out by meta_query (AND)`);
+          return false;
+        }
+      } else if (relation === 'OR') {
+        const passed = results.some(result => result);
+        if (!passed) {
+          console.log(`Post ${post.id} filtered out by meta_query (OR)`);
+          return false;
+        }
+      }
+    }
+    console.log(`Post ${post.id} passed all meta filters`);
+    return true;
+  });
+  console.log(`Filtering complete: ${posts.length} -> ${filteredPosts.length} posts`);
+  return filteredPosts;
+};
+
+/**
+	* Helper function to check meta condition based on compare operator.
+	*
+	* @param {*} metaValue - The actual meta value from the post
+	* @param {*} compareValue - The value to compare against
+	* @param {string} compare - The comparison operator
+	* @param {string} type - The data type (NUMERIC, CHAR, etc.)
+	* @returns {boolean} Whether the condition is met
+	*/
+const checkMetaCondition = (metaValue, compareValue, compare = '=', type = 'CHAR') => {
+  // Handle undefined/null meta values
+  if (metaValue === undefined || metaValue === null) {
+    return compare === 'NOT EXISTS';
+  }
+
+  // Convert values based on type
+  if (type === 'NUMERIC') {
+    metaValue = parseFloat(metaValue);
+    compareValue = parseFloat(compareValue);
+  } else {
+    metaValue = String(metaValue);
+    compareValue = String(compareValue);
+  }
+  switch (compare) {
+    case '=':
+      return metaValue === compareValue;
+    case '!=':
+      return metaValue !== compareValue;
+    case '>':
+      return metaValue > compareValue;
+    case '>=':
+      return metaValue >= compareValue;
+    case '<':
+      return metaValue < compareValue;
+    case '<=':
+      return metaValue <= compareValue;
+    case 'LIKE':
+      return String(metaValue).toLowerCase().includes(String(compareValue).toLowerCase());
+    case 'NOT LIKE':
+      return !String(metaValue).toLowerCase().includes(String(compareValue).toLowerCase());
+    case 'EXISTS':
+      return metaValue !== undefined && metaValue !== null;
+    case 'NOT EXISTS':
+      return metaValue === undefined || metaValue === null;
+    default:
+      return metaValue === compareValue;
+  }
+};
 const PostChooserModal = props => {
   const {
     onClose = () => {},
@@ -723,7 +883,7 @@ const PostChooserModal = props => {
   // Use the new useDebouncedInput hook to handle both immediate and debounced search terms
   // searchTerm - updates immediately with each keystroke for responsive UI
   // debouncedSearchTerm - only updates after delay (used for API calls to reduce requests)
-  const [searchTerm, setSearchTerm, searchTermThrottled] = (0,_hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_11__.useDebouncedInput)('', 300);
+  const [searchTerm, setSearchTerm, searchTermThrottled] = (0,_hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_12__.useDebouncedInput)('', 300);
   const [sortOrder, setSortOrder] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)({
     orderby: 'date',
     order: 'desc'
@@ -762,6 +922,8 @@ const PostChooserModal = props => {
       totalPages: 0
     }
   });
+
+  // Note: Progressive fetching state removed - using simpler approach of fetching more posts initially
 
   // State to hold converted taxonomy filters (slug-to-ID conversion)
   const [convertedTaxonomyFilters, setConvertedTaxonomyFilters] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)({});
@@ -848,19 +1010,21 @@ const PostChooserModal = props => {
       setConvertedTaxonomyFilters(converted);
       setIsConvertingFilters(false);
     }
-  }, [termResults.map(r => r.loading).join(','), shouldFetchTerms]);
+  }, [termResults.length > 0 ? termResults.every(r => !r.loading) : false, shouldFetchTerms, JSON.stringify(taxonomyFilters)]);
 
   // Determine if search term is numeric for ID search
   const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
 
   // Base query parameters
+  // Note: Meta filters are handled by useRequestProgressiveData which automatically fetches
+  // additional pages until enough filtered results are found
+  const hasMetaFilters = metaFilters && Object.keys(metaFilters).length > 0;
   const baseQuery = {
     per_page: 10,
+    // Standard page size - progressive fetching will handle getting more results when needed
     orderby: sortOrder.orderby,
     order: sortOrder.order,
     status: 'publish',
-    // Apply meta filters (like adding meta_query to WP_Query)
-    ...metaFilters,
     // Apply taxonomy filters (like adding tax_query to WP_Query) - use converted filters with IDs
     ...convertedTaxonomyFilters
   };
@@ -895,12 +1059,40 @@ const PostChooserModal = props => {
     page: searchCurrentPage.id
   } : null;
 
-  // Use separate useRequestData hooks for each search type
-  const [recentPosts, recentLoading, recentInvalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, recentQuery);
+  // Create meta filter function for progressive data fetching
+  const metaFilterFunction = hasMetaFilters ? posts => filterPostsByMeta(posts, metaFilters) : null;
+
+  // Use progressive data fetching for searches that need meta filtering
+  // Use regular useRequestData for searches without meta filtering
+  const [recentPosts, recentLoading, recentProgressivePagination, recentInvalidateResolver] = hasMetaFilters ? (0,_hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_11__.useRequestProgressiveData)('postType', selectedPostType, recentQuery, {
+    filter: metaFilterFunction,
+    targetResults: 10,
+    maxPages: 20,
+    pageSize: 50
+  }) : [...(0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, recentQuery), null // No progressive pagination
+  ];
   console.log('PostChooserModal recentPosts', recentPosts);
-  const [contentPosts, contentLoading, contentInvalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, contentQuery);
-  const [slugPosts, slugLoading, slugInvalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, slugQuery);
-  const [idPosts, idLoading, idInvalidateResolver] = (0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, idQuery);
+  const [contentPosts, contentLoading, contentProgressivePagination, contentInvalidateResolver] = hasMetaFilters && searchTermThrottled ? (0,_hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_11__.useRequestProgressiveData)('postType', selectedPostType, contentQuery, {
+    filter: metaFilterFunction,
+    targetResults: 10,
+    maxPages: 15,
+    pageSize: 30
+  }) : [...(0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, contentQuery), null // No progressive pagination
+  ];
+  const [slugPosts, slugLoading, slugProgressivePagination, slugInvalidateResolver] = hasMetaFilters && searchTermThrottled ? (0,_hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_11__.useRequestProgressiveData)('postType', selectedPostType, slugQuery, {
+    filter: metaFilterFunction,
+    targetResults: 10,
+    maxPages: 10,
+    pageSize: 25
+  }) : [...(0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, slugQuery), null // No progressive pagination
+  ];
+  const [idPosts, idLoading, idProgressivePagination, idInvalidateResolver] = hasMetaFilters && isSearchTermNumeric ? (0,_hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_11__.useRequestProgressiveData)('postType', selectedPostType, idQuery, {
+    filter: metaFilterFunction,
+    targetResults: 5,
+    maxPages: 5,
+    pageSize: 20
+  }) : [...(0,_hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_10__.useRequestData)('postType', selectedPostType, idQuery), null // No progressive pagination
+  ];
   console.log('PostChooserModal idPosts', idPosts);
 
   // Get pagination for each search type
@@ -917,25 +1109,27 @@ const PostChooserModal = props => {
     pagination: idPagination
   } = (0,_hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_9__.useGetPagination)('postType', selectedPostType, idQuery || {});
 
-  // Update search results state when individual search results change
+  // Handle recent posts results - progressive fetching handles filtering automatically when meta filters are present
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     setSearchResults(prevResults => ({
       ...prevResults,
       recent: {
         posts: recentPosts,
-        totalItems: recentPagination.totalItems || 0,
-        totalPages: recentPagination.totalPages || 0
+        totalItems: hasMetaFilters && recentProgressivePagination ? recentProgressivePagination.totalItems : recentPagination.totalItems || 0,
+        totalPages: hasMetaFilters && recentProgressivePagination ? recentProgressivePagination.totalPages : recentPagination.totalPages || 0
       }
     }));
-  }, [recentPosts, recentPagination]);
+  }, [recentPosts, recentPagination.totalItems, recentPagination.totalPages, recentProgressivePagination?.totalItems, recentProgressivePagination?.totalPages, hasMetaFilters]);
+
+  // Handle content search results - progressive fetching handles filtering automatically when meta filters are present
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    if (searchTermThrottled) {
+    if (searchTermThrottled && contentPosts) {
       setSearchResults(prevResults => ({
         ...prevResults,
         default: {
           posts: contentPosts,
-          totalItems: contentPagination.totalItems || 0,
-          totalPages: contentPagination.totalPages || 0
+          totalItems: hasMetaFilters && contentProgressivePagination ? contentProgressivePagination.totalItems : contentPagination.totalItems || 0,
+          totalPages: hasMetaFilters && contentProgressivePagination ? contentProgressivePagination.totalPages : contentPagination.totalPages || 0
         }
       }));
     } else {
@@ -948,15 +1142,17 @@ const PostChooserModal = props => {
         }
       }));
     }
-  }, [contentPosts, contentPagination, searchTermThrottled]);
+  }, [contentPosts, contentPagination.totalItems, contentPagination.totalPages, contentProgressivePagination?.totalItems, contentProgressivePagination?.totalPages, searchTermThrottled, hasMetaFilters]);
+
+  // Handle slug search results - progressive fetching handles filtering automatically when meta filters are present
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    if (searchTermThrottled) {
+    if (searchTermThrottled && slugPosts) {
       setSearchResults(prevResults => ({
         ...prevResults,
         slug: {
           posts: slugPosts,
-          totalItems: slugPagination.totalItems || 0,
-          totalPages: slugPagination.totalPages || 0
+          totalItems: hasMetaFilters && slugProgressivePagination ? slugProgressivePagination.totalItems : slugPosts ? slugPosts.length : 0,
+          totalPages: hasMetaFilters && slugProgressivePagination ? slugProgressivePagination.totalPages : slugPosts ? Math.ceil(slugPosts.length / 10) : 0
         }
       }));
     } else {
@@ -969,15 +1165,17 @@ const PostChooserModal = props => {
         }
       }));
     }
-  }, [slugPosts, slugPagination, searchTermThrottled]);
+  }, [slugPosts, slugPagination.totalItems, slugPagination.totalPages, slugProgressivePagination?.totalItems, slugProgressivePagination?.totalPages, searchTermThrottled, hasMetaFilters]);
+
+  // Handle ID search results - progressive fetching handles filtering automatically when meta filters are present
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    if (isSearchTermNumeric) {
+    if (isSearchTermNumeric && idPosts) {
       setSearchResults(prevResults => ({
         ...prevResults,
         id: {
           posts: idPosts,
-          totalItems: idPagination.totalItems || 0,
-          totalPages: idPagination.totalPages || 0
+          totalItems: hasMetaFilters && idProgressivePagination ? idProgressivePagination.totalItems : idPosts ? idPosts.length : 0,
+          totalPages: hasMetaFilters && idProgressivePagination ? idProgressivePagination.totalPages : idPosts ? Math.ceil(idPosts.length / 10) : 0
         }
       }));
     } else {
@@ -990,7 +1188,7 @@ const PostChooserModal = props => {
         }
       }));
     }
-  }, [idPosts, idPagination, isSearchTermNumeric]);
+  }, [idPosts, idPagination.totalItems, idPagination.totalPages, idProgressivePagination?.totalItems, idProgressivePagination?.totalPages, isSearchTermNumeric, hasMetaFilters]);
 
   // Get current results based on selected search type
   const getCurrentResults = () => {
@@ -1594,7 +1792,7 @@ const SearchUI = props => {
     className: "bu-components-post-chooser-search-clear-button"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "bu-components-post-chooser-search-clear-button-label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Clear'))))))))), postTypes.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Clear'))))))))), postTypes && postTypes.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
     className: "bu-components-post-chooser-posttype-select",
     justify: "space-between",
     align: "center"
@@ -2129,6 +2327,266 @@ const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
 
 /***/ }),
 
+/***/ "../hooks/useRequestProgressiveData/index.mjs":
+/*!****************************************************!*\
+  !*** ../hooks/useRequestProgressiveData/index.mjs ***!
+  \****************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useRequestProgressiveData: () => (/* binding */ useRequestProgressiveData)
+/* harmony export */ });
+/* harmony import */ var lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/isObject.js */ "../node_modules/lodash/isObject.js");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line import/no-extraneous-dependencies
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Hook for progressively retrieving and filtering data from the WordPress REST API.
+ *
+ * This hook is designed for scenarios where client-side filtering (like meta filtering)
+ * might need to fetch posts across multiple pages to find enough matching results.
+ * It continues fetching pages until it has enough filtered results or hits safety limits.
+ *
+ * @param {string} entity           The entity to retrieve. Defaults to postType.
+ * @param {string} kind             The entity kind to retrieve. Defaults to post.
+ * @param {object} query            Query to pass to the geEntityRecords request.
+ * @param {object} options          Additional options for progressive fetching.
+ * @param {function} options.filter Optional client-side filter function to apply to results.
+ * @param {number} options.targetResults Target number of filtered results to fetch (default: 10).
+ * @param {number} options.maxPages Maximum pages to fetch to prevent infinite loops (default: 10).
+ * @param {number} options.pageSize Number of items per page to fetch (default: 20).
+ * @returns {Array} [filteredData, isLoading, pagination, invalidateResolver]
+ */
+const useRequestProgressiveData = (entity = 'postType', kind = 'post', query = {}, options = {}) => {
+  const {
+    filter = null,
+    targetResults = 10,
+    maxPages = 10,
+    pageSize = 20
+  } = options;
+  console.log('useRequestProgressiveData called:', {
+    entity,
+    kind,
+    query,
+    options
+  });
+
+  // Use refs to store stable values and prevent infinite loops
+  const queryRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(JSON.stringify(query));
+  const currentQueryString = JSON.stringify(query);
+
+  // State for progressive fetching - use separate pieces of state to minimize updates
+  const [currentPage, setCurrentPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(1);
+  const [allFetchedData, setAllFetchedData] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)([]);
+  const [filteredData, setFilteredData] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [isComplete, setIsComplete] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [pagination, setPagination] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)({
+    totalItems: 0,
+    totalPages: 0,
+    hasMore: true
+  });
+  const [isProgressiveLoading, setIsProgressiveLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const processingRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(false);
+  const {
+    invalidateResolution
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)('core/data');
+
+  // Build the current page query
+  const currentPageQuery = query ? {
+    ...query,
+    per_page: pageSize,
+    page: currentPage
+  } : null;
+
+  // Use the standard useSelect to fetch current page data
+  const {
+    currentPageData,
+    isLoading,
+    totalPages,
+    totalItems
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
+    if (!currentPageQuery) {
+      return {
+        currentPageData: null,
+        isLoading: false,
+        totalPages: 0,
+        totalItems: 0
+      };
+    }
+    try {
+      const selectorName = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(currentPageQuery) ? 'getEntityRecords' : 'getEntityRecord';
+      const coreSelect = select(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store);
+      const dataSelect = select('core/data');
+      if (!coreSelect || !dataSelect) {
+        return {
+          currentPageData: null,
+          isLoading: false,
+          totalPages: 0,
+          totalItems: 0
+        };
+      }
+      const data = coreSelect[selectorName](entity, kind, currentPageQuery);
+      const loading = dataSelect.isResolving(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, selectorName, [entity, kind, currentPageQuery]);
+
+      // Note: getEntitiesState is not available in WordPress 5.8, so we can't get total pages/items from headers
+      // This is a limitation we'll have to work with
+      return {
+        currentPageData: data,
+        isLoading: loading,
+        totalPages: 0,
+        // Can't get this in WP 5.8
+        totalItems: 0 // Can't get this in WP 5.8
+      };
+    } catch (error) {
+      console.error('Error in useRequestProgressiveData useSelect:', error);
+      return {
+        currentPageData: null,
+        isLoading: false,
+        totalPages: 0,
+        totalItems: 0
+      };
+    }
+  }, [entity, kind, JSON.stringify(currentPageQuery)]);
+
+  // Reset all state when query changes
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    if (queryRef.current !== currentQueryString) {
+      console.log('Query changed, resetting progressive state');
+      queryRef.current = currentQueryString;
+      setCurrentPage(1);
+      setAllFetchedData([]);
+      setFilteredData(null);
+      setIsComplete(false);
+      setPagination({
+        totalItems: 0,
+        totalPages: 0,
+        hasMore: true
+      });
+      processingRef.current = false;
+    }
+  }, [currentQueryString]);
+
+  // Process current page data when it becomes available
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    if (!currentPageData || isLoading || isComplete || processingRef.current) {
+      return;
+    }
+    processingRef.current = true;
+    setIsProgressiveLoading(true);
+    console.log(`Processing page ${currentPage}:`, {
+      currentPageDataLength: Array.isArray(currentPageData) ? currentPageData.length : 'not array'
+    });
+
+    // Ensure currentPageData is an array and filter out null/undefined values
+    let dataArray;
+    if (Array.isArray(currentPageData)) {
+      dataArray = currentPageData.filter(item => item != null);
+    } else if (currentPageData != null) {
+      dataArray = [currentPageData];
+    } else {
+      dataArray = [];
+    }
+
+    // Combine with previously fetched data
+    const newAllData = [...allFetchedData, ...dataArray];
+    setAllFetchedData(newAllData);
+
+    // Apply client-side filter if provided
+    let newFilteredData;
+    try {
+      newFilteredData = filter ? filter(newAllData) : newAllData;
+    } catch (filterError) {
+      console.error('Error applying filter in useRequestProgressiveData:', filterError);
+      newFilteredData = newAllData; // Fallback to unfiltered data
+    }
+    setFilteredData(newFilteredData);
+    console.log(`Filtering results: ${newAllData.length} -> ${newFilteredData.length}`);
+
+    // Check if we have enough results or should continue
+    const hasEnoughResults = newFilteredData.length >= targetResults;
+    const hasMorePages = currentPage < maxPages && dataArray.length > 0; // Can't check totalPages in WP 5.8
+    const shouldContinue = !hasEnoughResults && hasMorePages;
+    console.log('Progressive fetch decision:', {
+      hasEnoughResults,
+      hasMorePages,
+      shouldContinue,
+      currentPage,
+      maxPages,
+      dataArrayLength: dataArray.length
+    });
+    setPagination({
+      totalItems: newFilteredData.length,
+      totalPages: Math.ceil(newFilteredData.length / Math.max(targetResults, 1)),
+      hasMore: shouldContinue
+    });
+    if (shouldContinue) {
+      console.log(`Fetching next page: ${currentPage + 1}`);
+      // Use setTimeout to prevent immediate state update and potential infinite loop
+      setTimeout(() => {
+        setCurrentPage(prev => prev + 1);
+        processingRef.current = false;
+      }, 0);
+    } else {
+      console.log('Progressive fetching complete:', {
+        reason: hasEnoughResults ? 'enough results' : !hasMorePages ? 'no more pages' : 'max pages reached',
+        finalResults: newFilteredData.length
+      });
+      setIsComplete(true);
+      processingRef.current = false;
+    }
+    setIsProgressiveLoading(false);
+  }, [currentPageData, isLoading, currentPage, allFetchedData, isComplete, filter, targetResults, maxPages]);
+  const invalidateResolver = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(() => {
+    console.log('Invalidating progressive data resolver');
+
+    // Reset all state
+    setCurrentPage(1);
+    setAllFetchedData([]);
+    setFilteredData(null);
+    setIsComplete(false);
+    setPagination({
+      totalItems: 0,
+      totalPages: 0,
+      hasMore: true
+    });
+    processingRef.current = false;
+
+    // Invalidate the current query
+    if (currentPageQuery) {
+      const selectorName = lodash_isObject_js__WEBPACK_IMPORTED_MODULE_0__(currentPageQuery) ? 'getEntityRecords' : 'getEntityRecord';
+      invalidateResolution(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.store, selectorName, [entity, kind, currentPageQuery]);
+    }
+  }, [entity, kind, currentPageQuery, invalidateResolution]);
+
+  // Return the filtered data and loading state
+  const finalLoading = isLoading || isProgressiveLoading || !isComplete && currentPage === 1 && !filteredData;
+  console.log('useRequestProgressiveData returning:', {
+    dataLength: filteredData?.length,
+    isLoading: finalLoading,
+    pagination: pagination,
+    currentPage: currentPage,
+    isComplete: isComplete
+  });
+  return [filteredData, finalLoading, pagination, invalidateResolver];
+};
+
+/***/ }),
+
 /***/ "../index.js":
 /*!*******************!*\
   !*** ../index.js ***!
@@ -2142,18 +2600,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Pagination: () => (/* reexport safe */ _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__.Pagination),
 /* harmony export */   PostChooser: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooser),
 /* harmony export */   PostChooserSidebar: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooserSidebar),
-/* harmony export */   useDebouncedInput: () => (/* reexport safe */ _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_6__.useDebouncedInput),
-/* harmony export */   useGetPagination: () => (/* reexport safe */ _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useGetPagination),
+/* harmony export */   useDebouncedInput: () => (/* reexport safe */ _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_7__.useDebouncedInput),
+/* harmony export */   useGetPagination: () => (/* reexport safe */ _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__.useGetPagination),
 /* harmony export */   useMedia: () => (/* reexport safe */ _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useMedia),
-/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)
+/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData),
+/* harmony export */   useRequestProgressiveData: () => (/* reexport safe */ _hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useRequestProgressiveData)
 /* harmony export */ });
 /* harmony import */ var _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/LoadingSpinner/index.mjs */ "../components/LoadingSpinner/index.mjs");
 /* harmony import */ var _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/PostChooser/index.mjs */ "../components/PostChooser/index.mjs");
 /* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
 /* harmony import */ var _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hooks/useMedia/index.mjs */ "../hooks/useMedia/index.mjs");
 /* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
-/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
-/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
+/* harmony import */ var _hooks_useRequestProgressiveData_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hooks/useRequestProgressiveData/index.mjs */ "../hooks/useRequestProgressiveData/index.mjs");
+/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
+/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
 // Components
 // export { AllowedBlocks } from './components/AllowedBlocks';
 // export { Background } from './components/Background';
@@ -2191,6 +2651,7 @@ __webpack_require__.r(__webpack_exports__);
 // export { useAllTerms } from './hooks/useAllTerms';
 
 // export { useRenderAppenderWithBlockLimit } from './hooks/useRenderAppenderWithBlockLimit';
+
 
 
 
