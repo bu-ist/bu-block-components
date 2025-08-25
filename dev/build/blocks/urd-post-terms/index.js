@@ -1783,15 +1783,18 @@ if (!hasNewSelectors) {
  * @param {string} entity           The entity to retrieve. Defaults to postType.
  * @param {string} kind             The entity kind to retrieve. Defaults to post.
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
- * @return {Object}            	    Object with records and pagination info
+ * @returns {Object}                An object containing pagination information: { pagination: { totalItems: number, totalPages: number, perPage: number } }
  */
 const useGetPagination = (entity = 'postType', kind = 'post', query = {}) => {
+  // Memoize the query object to ensure stable reference
+  const memoizedQuery = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useMemo)(() => query, [JSON.stringify(query)]);
+
   // State to hold pagination information
   // This will hold total items and total pages.
   const [pagination, setPagination] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)({
     totalItems: 0,
     totalPages: 0,
-    perPage: query.per_page || 10 // Default to 10 items per page if not specified
+    perPage: memoizedQuery.per_page || 10 // Default to 10 items per page if not specified
   });
 
   /**
@@ -1878,7 +1881,7 @@ const useGetPagination = (entity = 'postType', kind = 'post', query = {}) => {
     // Only run this effect if the new selectors are not available, such as before WordPress 6.5.
     if (hasNewSelectors) return;
     const loadPaginationData = async () => {
-      // If  entityConfig is available, skip fetching pagination data.
+      // If entityConfig is not available, skip fetching pagination data.
       if (!entityConfig) return;
 
       // Set default values for total items and pages.
@@ -1922,7 +1925,7 @@ const useGetPagination = (entity = 'postType', kind = 'post', query = {}) => {
     // Call the function to load pagination data.
     // This will run whenever records, entity, kind, query, or entityConfig changes
     loadPaginationData();
-  }, [JSON.stringify(query), entityConfig]);
+  }, [memoizedQuery, entityConfig]);
 
   // Return the pagination information
   return {
