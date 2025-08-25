@@ -713,8 +713,7 @@ const PostChooserModal = props => {
     primaryPostType = 'post',
     // Default primary post type.
     placeholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a search term…'),
-    title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Choose a Post'),
-    minCharacters = 3
+    title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Choose a Post')
   } = props;
 
   // Use the new useDebouncedInput hook to handle both immediate and debounced search terms
