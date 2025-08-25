@@ -25,7 +25,7 @@ if ( ! hasNewSelectors) {
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @returns {Object}                An object containing pagination information: { pagination: { totalItems: number, totalPages: number, perPage: number } }
  */
-export const useGetPagination = (entity='postType', kind='post', query = {} ) => {
+export const useGetPagination = (entity = 'postType', kind = 'post', query = {} ) => {
 	// Memoize the query object to ensure stable reference
 	const memoizedQuery = useMemo(() => query, [JSON.stringify(query)]);
 
