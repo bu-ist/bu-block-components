@@ -78,7 +78,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 		setAttributes( { excerpt: newExcerpt } );
 	};
 
-	const calloutRemovePostHandler = ( e ) => {
+	const calloutRemovePostHandler = () => {
 
 		setAttributes( {
 			selectedPostID: undefined,
