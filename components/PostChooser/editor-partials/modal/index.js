@@ -154,68 +154,75 @@ export const PostChooserModal = ( props ) => {
 
 	// Update search results state when individual search results change
 	useEffect(() => {
+		// Update the recent posts search results with the latest data and pagination
+		const recentSearchResult = {
+			posts: recentPosts,
+			totalItems: recentPagination.totalItems || 0,
+			totalPages: recentPagination.totalPages || 0,
+		};
+
 		setSearchResults(prevResults => ({
 			...prevResults,
-			recent: {
-				posts: recentPosts,
-				totalItems: recentPagination.totalItems || 0,
-				totalPages: recentPagination.totalPages || 0,
-			}
+			recent: recentSearchResult
 		}));
 	}, [recentPosts, recentPagination]);
 
 	useEffect(() => {
-		if (searchTermThrottled) {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				default: {
-					posts: contentPosts,
-					totalItems: contentPagination.totalItems || 0,
-					totalPages: contentPagination.totalPages || 0,
-				}
-			}));
-		} else {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				default: { posts: null, totalItems: 0, totalPages: 0 }
-			}));
-		}
+		// Determine the appropriate search result object based on whether we have a search term
+		// If searchTermThrottled exists: use the API data with pagination information
+		// If no search term: reset to empty/null values to clear results
+		const defaultSearchResult = searchTermThrottled 
+			? {
+				posts: contentPosts,
+				totalItems: contentPagination.totalItems || 0,
+				totalPages: contentPagination.totalPages || 0,
+			}
+			: { posts: null, totalItems: 0, totalPages: 0 };
+		
+		// Update just the "default" search type in our results state object,
+		// preserving other search type results
+		setSearchResults(prevResults => ({
+			...prevResults,
+			default: defaultSearchResult
+		}));
 	}, [contentPosts, contentPagination, searchTermThrottled]);
 
 	useEffect(() => {
-		if (searchTermThrottled) {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				slug: {
-					posts: slugPosts,
-					totalItems: slugPagination.totalItems || 0,
-					totalPages: slugPagination.totalPages || 0,
-				}
-			}));
-		} else {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				slug: { posts: null, totalItems: 0, totalPages: 0 }
-			}));
-		}
+		// Determine slug search results based on search term presence
+		// If searchTermThrottled exists: use the slug search results and pagination
+		// If no search term: reset to empty/null values
+		const slugSearchResult = searchTermThrottled 
+			? {
+				posts: slugPosts,
+				totalItems: slugPagination.totalItems || 0,
+				totalPages: slugPagination.totalPages || 0,
+			}
+			: { posts: null, totalItems: 0, totalPages: 0 };
+		
+		// Update the slug search results while preserving other search types
+		setSearchResults(prevResults => ({
+			...prevResults,
+			slug: slugSearchResult
+		}));
 	}, [slugPosts, slugPagination, searchTermThrottled]);
 
 	useEffect(() => {
-		if (isSearchTermNumeric) {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				id: {
-					posts: idPosts,
-					totalItems: idPagination.totalItems || 0,
-					totalPages: idPagination.totalPages || 0,
-				}
-			}));
-		} else {
-			setSearchResults(prevResults => ({
-				...prevResults,
-				id: { posts: null, totalItems: 0, totalPages: 0 }
-			}));
-		}
+		// Determine ID search results based on whether search term is numeric
+		// If isSearchTermNumeric is true: use the ID search results and pagination
+		// If not numeric: reset to empty/null values
+		const idSearchResult = isSearchTermNumeric 
+			? {
+				posts: idPosts,
+				totalItems: idPagination.totalItems || 0,
+				totalPages: idPagination.totalPages || 0,
+			}
+			: { posts: null, totalItems: 0, totalPages: 0 };
+		
+		// Update the ID search results while preserving other search types
+		setSearchResults(prevResults => ({
+			...prevResults,
+			id: idSearchResult
+		}));
 	}, [idPosts, idPagination, isSearchTermNumeric]);
 
 	// Get current results based on selected search type
