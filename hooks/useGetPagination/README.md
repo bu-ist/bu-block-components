@@ -2,7 +2,7 @@
 
 ## Overview
 
-`useGetPagination` is a custom React hook that retrieves pagination information for WordPress REST API data. For a give query it provides total counts and total pages information without fetching all the data.
+`useGetPagination` is a custom React hook that retrieves pagination information for WordPress REST API data. For a given query it provides total counts and total pages information without fetching all the data.
 
 ## Features
 
