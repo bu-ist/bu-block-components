@@ -2380,7 +2380,7 @@ function Edit({
       excerpt: newExcerpt
     });
   };
-  const calloutRemovePostHandler = e => {
+  const calloutRemovePostHandler = () => {
     setAttributes({
       selectedPostID: undefined,
       selectedPostTitle: undefined,
