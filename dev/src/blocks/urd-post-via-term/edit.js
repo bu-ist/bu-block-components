@@ -13,13 +13,11 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 
-import {
-	useRequestData,
-} from '@bostonuniversity/block-imports';
+import { useRequestData } from '@bostonuniversity/block-imports';
 
 import { TextControl, PanelBody, PanelRow } from '@wordpress/components';
 
-import {ThePost} from './the-post';
+import { ThePost } from './the-post';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -28,7 +26,7 @@ import {ThePost} from './the-post';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import {post} from "@wordpress/icons";
+import { post } from '@wordpress/icons';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -45,7 +43,7 @@ export default function Edit( props ) {
 
 	// Fetch any matching terms for the slug.
 	// If there is no slug, send null (which is a safe guard value to prevent invalid requests).
-	const [termData, termIsLoading] = useRequestData(
+	const [ termData, termIsLoading ] = useRequestData(
 		'taxonomy',
 		'fish',
 		termSlug ? { slug: termSlug } : null
@@ -53,10 +51,10 @@ export default function Edit( props ) {
 
 	// Fetch posts for the first term that matches the slug.
 	// If there are no terms, send null (which is a safe guard value to prevent invalid requests).
-	const [posts, postsIsLoading] = useRequestData(
+	const [ posts, postsIsLoading ] = useRequestData(
 		'postType',
 		'import-bob',
-		termData?.[0]?.id ? { fish: termData[0].id } : null
+		termData?.[ 0 ]?.id ? { fish: termData[ 0 ].id } : null
 	);
 
 	// Calculate if any of the requests are loading.
@@ -78,9 +76,10 @@ export default function Edit( props ) {
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
-				{posts && posts.map((post) => (
-					<ThePost key={post.id} post={post} />
-				))}
+				{ posts &&
+					posts.map( ( post ) => (
+						<ThePost key={ post.id } post={ post } />
+					) ) }
 				{ ! termSlug && (
 					<strong>Enter a Fish slug in the inspector controls</strong>
 				) }

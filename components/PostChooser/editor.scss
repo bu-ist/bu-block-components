@@ -1,0 +1,31 @@
+// General Editor styles for the PostChooser component
+
+
+/**
+* The following styles are used to style the
+* PostChooserSidebar component.
+*/
+.components-post-chooser-sidebar-posttitle {
+	font-size: 1em;
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+	margin-block: 0.5em;
+}
+
+.components-post-chooser-sidebar-posttitle-label {
+	font-size: 0.8em;
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+.components-post-chooser-sidebar-posttitle-link {
+	font-size: 0.8em;
+}
+
+.components-post-chooser-sidebar-posttitle-heading {
+	margin-block: 0;
+}
+
+

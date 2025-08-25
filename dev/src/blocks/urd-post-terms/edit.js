@@ -55,8 +55,6 @@ export default function Edit( props ) {
 		postData ? { post: postID } : undefined
 	);
 
-	console.log( 'fishTerms: ', fishTerms );
-
 	return (
 		<>
 			<InspectorControls>
@@ -73,7 +71,7 @@ export default function Edit( props ) {
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
-				{ (postIsLoading || termsIsLoading) && (
+				{ ( postIsLoading || termsIsLoading ) && (
 					<LoadingSpinner
 						text="Loading"
 						shadow={ false }
@@ -85,16 +83,14 @@ export default function Edit( props ) {
 					<div className="fish-terms">
 						<h3>Fish Terms:</h3>
 						<ul>
-							{fishTerms.map((term) => (
-								<li key={term.id}>
-									{term.name}
-								</li>
-							))}
+							{ fishTerms.map( ( term ) => (
+								<li key={ term.id }>{ term.name }</li>
+							) ) }
 						</ul>
 					</div>
 				) }
 
-				{ !postID && (
+				{ ! postID && (
 					<strong>Enter a post ID in the inspector controls</strong>
 				) }
 

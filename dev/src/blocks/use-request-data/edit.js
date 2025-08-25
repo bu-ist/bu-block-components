@@ -53,15 +53,10 @@ export default function Edit( props ) {
 	);
 
 	if ( data ) {
-		console.log( data );
-		console.log( 'Featured Image', data.featured_media );
 		imageID = data.featured_media;
 	}
 
 	const { media, isResolvingMedia, hasResolvedMedia } = useMedia( imageID );
-
-	console.log( isResolvingMedia );
-	console.log( hasResolvedMedia );
 
 	return (
 		<>
