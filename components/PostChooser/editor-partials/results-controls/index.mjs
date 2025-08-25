@@ -97,7 +97,7 @@ export const ResultsControls = ( props ) => {
 						</Radio>
 						<Radio
 							value="id"
-							
+
 							icon={ IconPostChooserId }
 							iconPosition="right"
 							className={ searchType === 'id' ? 'is-active' : '' }
