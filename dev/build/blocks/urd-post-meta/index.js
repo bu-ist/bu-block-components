@@ -1,6 +1,147 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "../components/HelpWrapper/editor.scss":
+/*!*********************************************!*\
+  !*** ../components/HelpWrapper/editor.scss ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "../components/HelpWrapper/index.js":
+/*!******************************************!*\
+  !*** ../components/HelpWrapper/index.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HelpWrapper: () => (/* binding */ HelpWrapper)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "../node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "../components/HelpWrapper/editor.scss");
+
+// External dependencies.
+
+
+// WordPress dependencies.
+
+
+
+// Import CSS.
+
+
+/**
+ * Returns the class list for the component based on the current settings.
+ *
+ * @param {string} className  Additional classes assigned to the component.
+ * @param {boolean} offset    If true, adds the 'has-offset-label' class to the component.
+ * @returns {string}          The computed class list for the component.
+ */
+const getClasses = (className, offset) => classnames__WEBPACK_IMPORTED_MODULE_1___default()('bu-components-help-wrapper', {
+  [className]: className,
+  [`has-offset-label`]: offset
+});
+
+/**
+ * Help Wrapper Component
+ *
+ * A component that wraps children elements and provides a help icon button
+ * that shows a popover with help information when clicked.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.text] - Help text content to be displayed in the popover.
+ * @param {string} [props.title] - Optional title for the help popover.
+ * @param {string} [props.className] - Additional CSS class name for the wrapper element.
+ * @param {string|Object} [props.offset] - Offset positioning for the help icon.
+ * @param {React.ReactNode} [props.children] - Child elements to be wrapped by this component.
+ *
+ * @returns {JSX.Element} The HelpWrapper component.
+ */
+const HelpWrapper = props => {
+  const {
+    text,
+    title,
+    className,
+    offset,
+    children
+  } = props;
+
+  // State to manage the visibility of the popover.
+  // Initially, the popover is not visible.
+  const [popoverVisible, setPopoverVisible] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+
+  // Function to toggle the visibility of the popover.
+  // This function is called when the icon is clicked.
+  const toggleVisible = event => {
+    // If the click is on the icon, toggle the popover visibility.
+    if (popoverVisible) {
+      // If the popover is already visible, hide it.
+      setPopoverVisible(false);
+    } else {
+      // If the popover is not visible, show it.
+      setPopoverVisible(true);
+    }
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: getClasses(className, offset)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-help-wrapper-container"
+  }, !popoverVisible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    onClick: toggleVisible,
+    role: "button",
+    icon: "editor-help",
+    className: "bu-components-help-wrapper-icon",
+    iconSize: "20",
+    label: "Help",
+    size: "small" // For Future WP 6.x compatibility.
+    ,
+    isSmall: true // for WP 5.8 compatibility
+    ,
+    variant: "link"
+  }), popoverVisible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    onClick: () => {
+      setPopoverVisible(false);
+    },
+    role: "button",
+    icon: "dismiss",
+    className: "bu-components-help-wrapper-icon",
+    iconSize: "20",
+    label: "Close Help",
+    size: "small" // For Future WP 6.x compatibility.
+    ,
+    isSmall: true // for WP 5.8 compatibility
+    ,
+    variant: "link"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Popover, {
+    className: "bu-components-help-wrapper-popover",
+    noArrow: true,
+    onFocusOutside: () => {
+      setPopoverVisible(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bu-components-help-wrapper-popover-content"
+  }, title && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+    className: "bu-components-help-wrapper-popover-title"
+  }, title), text)))), children);
+};
+
+/***/ }),
+
 /***/ "../components/LoadingSpinner/editor.scss":
 /*!************************************************!*\
   !*** ../components/LoadingSpinner/editor.scss ***!
@@ -2035,22 +2176,24 @@ const useRequestData = (entity = 'postType', kind = 'post', query = {}) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   LoadingSpinner: () => (/* reexport safe */ _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_0__.LoadingSpinner),
-/* harmony export */   Pagination: () => (/* reexport safe */ _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__.Pagination),
-/* harmony export */   PostChooser: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooser),
-/* harmony export */   PostChooserSidebar: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__.PostChooserSidebar),
-/* harmony export */   useDebouncedInput: () => (/* reexport safe */ _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_6__.useDebouncedInput),
-/* harmony export */   useGetPagination: () => (/* reexport safe */ _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useGetPagination),
-/* harmony export */   useMedia: () => (/* reexport safe */ _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useMedia),
-/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useRequestData)
+/* harmony export */   HelpWrapper: () => (/* reexport safe */ _components_HelpWrapper__WEBPACK_IMPORTED_MODULE_0__.HelpWrapper),
+/* harmony export */   LoadingSpinner: () => (/* reexport safe */ _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_1__.LoadingSpinner),
+/* harmony export */   Pagination: () => (/* reexport safe */ _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_3__.Pagination),
+/* harmony export */   PostChooser: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_2__.PostChooser),
+/* harmony export */   PostChooserSidebar: () => (/* reexport safe */ _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_2__.PostChooserSidebar),
+/* harmony export */   useDebouncedInput: () => (/* reexport safe */ _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_7__.useDebouncedInput),
+/* harmony export */   useGetPagination: () => (/* reexport safe */ _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__.useGetPagination),
+/* harmony export */   useMedia: () => (/* reexport safe */ _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useMedia),
+/* harmony export */   useRequestData: () => (/* reexport safe */ _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useRequestData)
 /* harmony export */ });
-/* harmony import */ var _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/LoadingSpinner/index.mjs */ "../components/LoadingSpinner/index.mjs");
-/* harmony import */ var _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/PostChooser/index.mjs */ "../components/PostChooser/index.mjs");
-/* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
-/* harmony import */ var _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hooks/useMedia/index.mjs */ "../hooks/useMedia/index.mjs");
-/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
-/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
-/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
+/* harmony import */ var _components_HelpWrapper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/HelpWrapper */ "../components/HelpWrapper/index.js");
+/* harmony import */ var _components_LoadingSpinner_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/LoadingSpinner/index.mjs */ "../components/LoadingSpinner/index.mjs");
+/* harmony import */ var _components_PostChooser_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/PostChooser/index.mjs */ "../components/PostChooser/index.mjs");
+/* harmony import */ var _components_Pagination_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Pagination/index.mjs */ "../components/Pagination/index.mjs");
+/* harmony import */ var _hooks_useMedia_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hooks/useMedia/index.mjs */ "../hooks/useMedia/index.mjs");
+/* harmony import */ var _hooks_useRequestData_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hooks/useRequestData/index.mjs */ "../hooks/useRequestData/index.mjs");
+/* harmony import */ var _hooks_useGetPagination_index_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hooks/useGetPagination/index.mjs */ "../hooks/useGetPagination/index.mjs");
+/* harmony import */ var _hooks_useDebouncedInput_index_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./hooks/useDebouncedInput/index.mjs */ "../hooks/useDebouncedInput/index.mjs");
 // Components
 // export { AllowedBlocks } from './components/AllowedBlocks';
 // export { Background } from './components/Background';
@@ -2061,7 +2204,7 @@ __webpack_require__.r(__webpack_exports__);
 // export { CustomBlockAppender } from './components/CustomBlockAppender';
 // export { DragHandle } from './components/drag-handle';
 // export { FetchAllTermSelectControl } from './components/FetchAllTermSelectControl';
-// export { HelpWrapper } from './components/HelpWrapper';
+
 // export { IconPicker } from './components/IconPicker';
 // export { Image } from './components/Image/index.mjs';
 // export { LinkToolbar } from './components/LinkToolbar';
