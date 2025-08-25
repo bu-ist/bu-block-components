@@ -3,7 +3,7 @@
  */
 import { store as coreStore, getEntityRecords, getEntityRecordsTotalItems, getEntityRecordsTotalPages } from '@wordpress/core-data';
 import { select, useSelect } from '@wordpress/data';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useMemo } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
@@ -23,15 +23,18 @@ if ( ! hasNewSelectors) {
  * @param {string} entity           The entity to retrieve. Defaults to postType.
  * @param {string} kind             The entity kind to retrieve. Defaults to post.
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
- * @return {Object}            	    Object with records and pagination info
+ * @returns {Object}                An object containing pagination information: { pagination: { totalItems: number, totalPages: number, perPage: number } }
  */
 export const useGetPagination = (entity='postType', kind='post', query = {} ) => {
+	// Memoize the query object to ensure stable reference
+	const memoizedQuery = useMemo(() => query, [JSON.stringify(query)]);
+
 	// State to hold pagination information
 	// This will hold total items and total pages.
 	const [pagination, setPagination] = useState({
 		totalItems: 0,
 		totalPages: 0,
-		perPage: query.per_page || 10, // Default to 10 items per page if not specified
+		perPage: memoizedQuery.per_page || 10, // Default to 10 items per page if not specified
 	});
 
 
@@ -131,7 +134,7 @@ export const useGetPagination = (entity='postType', kind='post', query = {} ) =>
 		if ( hasNewSelectors ) return;
 
 		const loadPaginationData = async () => {
-			// If  entityConfig is available, skip fetching pagination data.
+			// If entityConfig is not available, skip fetching pagination data.
 			if ( ! entityConfig ) return;
 
 			// Set default values for total items and pages.
@@ -181,7 +184,7 @@ export const useGetPagination = (entity='postType', kind='post', query = {} ) =>
 		loadPaginationData();
 
 
-	}, [ JSON.stringify(query), entityConfig]);
+	}, [memoizedQuery, entityConfig]);
 
 
 
