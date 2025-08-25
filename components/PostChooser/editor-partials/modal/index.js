@@ -29,7 +29,6 @@ export const PostChooserModal = ( props ) => {
 		primaryPostType = 'post', // Default primary post type.
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
-		minCharacters = 3,
 	} = props;
 
 	// Use the new useDebouncedInput hook to handle both immediate and debounced search terms
