@@ -171,14 +171,14 @@ export const PostChooserModal = ( props ) => {
 		// Determine the appropriate search result object based on whether we have a search term
 		// If searchTermThrottled exists: use the API data with pagination information
 		// If no search term: reset to empty/null values to clear results
-		const defaultSearchResult = searchTermThrottled 
+		const defaultSearchResult = searchTermThrottled
 			? {
 				posts: contentPosts,
 				totalItems: contentPagination.totalItems || 0,
 				totalPages: contentPagination.totalPages || 0,
 			}
 			: { posts: null, totalItems: 0, totalPages: 0 };
-		
+
 		// Update just the "default" search type in our results state object,
 		// preserving other search type results
 		setSearchResults(prevResults => ({
@@ -191,14 +191,14 @@ export const PostChooserModal = ( props ) => {
 		// Determine slug search results based on search term presence
 		// If searchTermThrottled exists: use the slug search results and pagination
 		// If no search term: reset to empty/null values
-		const slugSearchResult = searchTermThrottled 
+		const slugSearchResult = searchTermThrottled
 			? {
 				posts: slugPosts,
 				totalItems: slugPagination.totalItems || 0,
 				totalPages: slugPagination.totalPages || 0,
 			}
 			: { posts: null, totalItems: 0, totalPages: 0 };
-		
+
 		// Update the slug search results while preserving other search types
 		setSearchResults(prevResults => ({
 			...prevResults,
@@ -210,14 +210,14 @@ export const PostChooserModal = ( props ) => {
 		// Determine ID search results based on whether search term is numeric
 		// If isSearchTermNumeric is true: use the ID search results and pagination
 		// If not numeric: reset to empty/null values
-		const idSearchResult = isSearchTermNumeric 
+		const idSearchResult = isSearchTermNumeric
 			? {
 				posts: idPosts,
 				totalItems: idPagination.totalItems || 0,
 				totalPages: idPagination.totalPages || 0,
 			}
 			: { posts: null, totalItems: 0, totalPages: 0 };
-		
+
 		// Update the ID search results while preserving other search types
 		setSearchResults(prevResults => ({
 			...prevResults,
