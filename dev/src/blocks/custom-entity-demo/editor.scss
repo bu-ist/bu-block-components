@@ -1,0 +1,27 @@
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+.wp-block-imports-dev-custom-entity-demo {
+    border: 1px dashed #ccc;
+    padding: 20px;
+
+    .post-list {
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .selected-post {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f0f7ff;
+        border-radius: 4px;
+        border-left: 4px solid #0073aa;
+    }
+
+    button {
+        margin-top: 10px;
+    }
+}

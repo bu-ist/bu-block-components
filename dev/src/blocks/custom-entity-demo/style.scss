@@ -1,0 +1,17 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-imports-dev-custom-entity-demo {
+    .post-list {
+        margin-bottom: 20px;
+    }
+
+    .selected-post {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+}

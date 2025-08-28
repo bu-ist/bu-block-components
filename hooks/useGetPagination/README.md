@@ -31,8 +31,8 @@ const { totalItems, totalPages } = pagination;
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `entity` | string | `'postType'` | The entity type to fetch (e.g., 'postType', 'taxonomy') |
-| `kind` | string | `'post'` | The entity kind (e.g., 'post', 'page', 'category') |
+| `kind` | string | `'postType'` | The entity kind (e.g., 'postType', 'taxonomy') |
+| `name` | string | `'post'` | The entity name (e.g., 'post', 'page', 'category') |
 | `query` | object | `{}` | Query parameters to filter results |
 
 ## Return Value

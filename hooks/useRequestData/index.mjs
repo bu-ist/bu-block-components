@@ -13,30 +13,30 @@ import { useSelect, useDispatch } from '@wordpress/data';
 /**
  * Hook for retrieving data from the WordPress REST API.
  *
- * @param {string} entity           The entity to retrieve. Defaults to postType.
- * @param {string} kind             The entity kind to retrieve. Defaults to posts.
- * @param {object | number} [query] Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+ * @param {string} kind             The entity kind to retrieve. Defaults to postType.
+ * @param {string} name             The entity name to retrieve. Defaults to post.
+ * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @returns {Array} The data returned from the request.
  */
-export const useRequestData = (entity='postType', kind='post', query = {} ) => {
+export const useRequestData = (kind='postType', name='post', query = {} ) => {
 	const whichGER = isObject(query) ? 'getEntityRecords' : 'getEntityRecord';
 	const { invalidateResolution } = useDispatch('core/data');
 	const { data, isLoading } = useSelect(
 		(select) => {
 			return {
-				data: select(coreStore)[whichGER](entity, kind, query),
+				data: select(coreStore)[whichGER](kind, name, query),
 				isLoading: select('core/data').isResolving(coreStore, whichGER, [
-					entity,
 					kind,
+					name,
 					query,
 				]),
 			};
 		},
-		[entity, kind, query],
+		[kind, name, query],
 	);
 
 	const invalidateResolver = () => {
-		invalidateResolution(coreStore, whichGER, [entity, kind, query]);
+		invalidateResolution(coreStore, whichGER, [kind, name, query]);
 	};
 
 	return [data, isLoading, invalidateResolver];

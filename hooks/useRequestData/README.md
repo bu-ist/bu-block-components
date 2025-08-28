@@ -4,6 +4,51 @@
 
 `useRequestData` is a basically a wrapper around `getEntityRecords` (`getEntityRecord` if the query is not an array), with addtional processing that would be standard practice. This reduces the amount of redundant code within a theme.
 
+## Usage
+
+```jsx
+import { useRequestData } from '@bostonuniversity/block-imports';
+
+// Basic usage for fetching multiple items
+const [posts, isLoading] = useRequestData('postType', 'post', {
+  per_page: 5,
+  search: 'example'
+});
+
+// Fetching a single item by ID
+const [post, isLoading] = useRequestData('postType', 'post', 123);
+
+// Custom entities
+const [customData, isLoading, invalidateResolver] = useRequestData(
+  'bu-custom/v1',
+  'custom-entity-name',
+  { per_page: 10 }
+);
+
+// Using the invalidateResolver
+<button onClick={invalidateResolver}>Refresh Data</button>
+```
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `kind` | string | `'postType'` | The entity kind (e.g., 'postType', 'taxonomy') |
+| `name` | string | `'post'` | The entity name (e.g., 'post', 'page', 'category') |
+| `query` | object\|number | `{}` | Query parameters or a single ID to fetch |
+
+## Return Value
+
+The hook returns an array containing:
+
+```js
+[
+  data,           // The fetched data (array or single object)
+  isLoading,      // Boolean indicating if the request is in progress
+  invalidateResolver // Function to invalidate and refresh the data
+]
+```
+
 ## Examples
 
 There are a number of examples within the `dev\src\blocks` folder, highliting the flexibility of `useRequestData`:

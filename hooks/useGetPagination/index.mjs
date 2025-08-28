@@ -20,12 +20,12 @@ if ( ! hasNewSelectors) {
 /**
  * Hook for retrieving data from the WordPress REST API.
  *
- * @param {string} entity           The entity to retrieve. Defaults to postType.
- * @param {string} kind             The entity kind to retrieve. Defaults to post.
+ * @param {string} kind             The entity kind to retrieve. Defaults to postType.
+ * @param {string} name             The entity name to retrieve. Defaults to post.
  * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @returns {Object}                An object containing pagination information: { pagination: { totalItems: number, totalPages: number, perPage: number } }
  */
-export const useGetPagination = (entity = 'postType', kind = 'post', query = {} ) => {
+export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) => {
 	// Memoize the query object to ensure stable reference
 	const memoizedQuery = useMemo(() => query, [JSON.stringify(query)]);
 
@@ -42,7 +42,7 @@ export const useGetPagination = (entity = 'postType', kind = 'post', query = {} 
 	/**
 	 * Only runs in WordPress 6.5 and later.
 	 * Uses the new getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors
-	 * to get the total items and total pages for the specified entity and kind.
+	 * to get the total items and total pages for the specified kind and name.
 	 *
 	 * Returns an object with totalItems, totalPages, and isLoading.
 	 *
@@ -54,18 +54,18 @@ export const useGetPagination = (entity = 'postType', kind = 'post', query = {} 
 			const coreSelect = select(coreStore);
 
 			return {
-				totalItems: hasNewSelectors ? coreSelect.getEntityRecordsTotalItems(entity, kind, query) : 0,
-				totalPages: hasNewSelectors ? coreSelect.getEntityRecordsTotalPages(entity, kind, query) : 0,
+				totalItems: hasNewSelectors ? coreSelect.getEntityRecordsTotalItems(kind, name, query) : 0,
+				totalPages: hasNewSelectors ? coreSelect.getEntityRecordsTotalPages(kind, name, query) : 0,
 				isLoading: hasNewSelectors ? select('core/data').isResolving(
 					coreStore,
 					'getEntityRecords', [
-						entity,
 						kind,
+						name,
 						query,
 					]) : false, // Return false if the new selectors are not available.
 			};
 		},
-		[entity, kind, query, hasNewSelectors],
+		[kind, name, query, hasNewSelectors],
 	);
 
 	/**
@@ -87,28 +87,30 @@ export const useGetPagination = (entity = 'postType', kind = 'post', query = {} 
 
 
 	/**
-	 * Fetches the entity configuration for the specified entity and kind.
+	 * Fetches the entity configuration for the specified kind and name.
 	 * This allows us to construct the API endpoint for fetching pagination information via apiFetch.
 	 *
 	 * @effect
-	 * @dependency {string} entity
 	 * @dependency {string} kind
+	 * @dependency {string} name
 	 * @returns {Object} The entity configuration object, or undefined if not found.
 	 */
 	const entityConfig = useSelect(
 		(select) => {
 			// Use getEntitiesByKind to get the entity config.
-			const entities = select(coreStore).getEntitiesByKind(entity);
-			return entities?.find( e => e.name === kind );
+			// Note: getEntitiesByKind takes a kind parameter and returns entities of that kind
+			// We want to find the entity with the right name
+			const entities = select(coreStore).getEntitiesByKind(kind);
+			return entities?.find( e => e.name === name );
 		},
-		[entity, kind]
+		[kind, name]
 	);
 
 	/**
 	 * Fetches pagination information from the WordPress REST API.
 	 *
-	 * This effect runs whenever records, entity, kind, query, or entityConfig changes. It returns
-	 * the total items and total pages for the specified entity and kind in the same format as
+	 * This effect runs whenever records, kind, name, query, or entityConfig changes. It returns
+	 * the total items and total pages for the specified kind and name in the same format as
 	 * the newer getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors that we don't
 	 * have access to yet in this version of WordPress.
 	 *
@@ -127,7 +129,7 @@ export const useGetPagination = (entity = 'postType', kind = 'post', query = {} 
 	 * the getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors.
 	 *
 	 * @effect
-	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
+	 * @dependency {Array} [records, kind, name, JSON.stringify(query), entityConfig, pagination]
 	 */
 	useEffect(() => {
 		// Only run this effect if the new selectors are not available, such as before WordPress 6.5.
@@ -180,7 +182,7 @@ export const useGetPagination = (entity = 'postType', kind = 'post', query = {} 
 			}
 		};
 		// Call the function to load pagination data.
-		// This will run whenever records, entity, kind, query, or entityConfig changes
+		// This will run whenever records, kind, name, query, or entityConfig changes
 		loadPaginationData();
 
 
