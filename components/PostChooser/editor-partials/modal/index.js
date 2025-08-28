@@ -291,17 +291,30 @@ export const PostChooserModal = ( props ) => {
 	* When the search term changes or when we have search results,
 	* automatically switch to the appropriate search type.
 	*
+	* Note: Don't enter `searchType` as a dependency in this effect.
+	* Doing so will cause a rerender and the setting will be undone.
+	*/
+	useEffect( () => {
+		if (searchTermThrottled && searchType === 'recent') {
+			// Auto-switch to content search when user starts typing
+			setSearchType('default');
+		} else if (!searchTermThrottled && searchType !== 'recent') {
+			// Auto-switch back to recent when search term is cleared
+			setSearchType('recent');
+		}
+	}, [ searchTermThrottled ] );
+
+	/**
 	* When the search Term changes, set ALL search current pages to 1.
 	* If not, the query in useSelect() may throw an error if we request
 	* a page number that doesn't exist. Anytime the searchTerm changes this
 	* should be set back to page 1 of the results as the old results are
 	* now invalid.
-	*
-	* Note: Don't enter `searchType` as a dependency in this effect.
-	* Doing so will cause a rerender and the setting will be undone.
+	* Setting this to run on searchTermThrottled was too slow at times due
+	* to the delay in the Throttler.
 	*/
 	useEffect( () => {
-		// When searchTermThrottled changes (due to dependency array),
+		// When searchTerm changes (due to dependency array),
 		// reset search pages to 1 for types that use the search term
 		// Keep the "recent" page as is since it doesn't depend on searchTerm
 		// This prevents "invalid page" errors when changing search terms after pagination
@@ -312,14 +325,8 @@ export const PostChooserModal = ( props ) => {
 			id: 1
 		}));
 
-		if (searchTermThrottled && searchType === 'recent') {
-			// Auto-switch to content search when user starts typing
-			setSearchType('default');
-		} else if (!searchTermThrottled && searchType !== 'recent') {
-			// Auto-switch back to recent when search term is cleared
-			setSearchType('recent');
-		}
-	}, [ searchTermThrottled ] );
+	}, [ searchTerm ] );
+
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
