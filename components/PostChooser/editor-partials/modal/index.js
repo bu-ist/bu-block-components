@@ -85,21 +85,21 @@ export const PostChooserModal = ( props ) => {
 		...baseQuery,
 		search: searchTermThrottled,
 		page: searchCurrentPage.default,
-	} : null;
+	} : undefined;
 
 	// Slug search query (only when there's a search term) - exact slug match only
 	const slugQuery = searchTermThrottled ? {
 		...baseQuery,
 		slug: searchTermThrottled,
 		page: searchCurrentPage.slug,
-	} : null;
+	} : undefined;
 
 	// ID search query (only when search term is numeric)
 	const idQuery = isSearchTermNumeric ? {
 		...baseQuery,
 		include: [parseInt(searchTermThrottled)],
 		page: searchCurrentPage.id,
-	} : null;
+	} : undefined;
 
 	// Use separate useRequestData hooks for each search type
 	const [recentPosts, recentLoading, recentInvalidateResolver] = useRequestData(
