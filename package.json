@@ -18,17 +18,10 @@
     "Dakota Chichester <acketon@bu.edu>",
     "Tim King <timking@bu.edu>"
   ],
-  "main": "index.js",
   "exports": {
-    ".": "./build/index.js",
-    "./components/*": "./build/components/*/index.js",
-    "./hooks/*": "./build/hooks/*/index.js",
-    "./utils/*": "./build/utils/*/index.js"
+    ".": "./index.js"
   },
   "scripts": {
-    "__DEVELOPMENT__": "===================================================================",
-    "start": "wp-scripts start --color | grep -v '^    at ' || true",
-    "__CLEANUP__": "=======================================================================",
     "format": "wp-scripts format",
     "lint": "npm-run-all lint:css lint:html lint:js lint:md lint:pkg",
     "lint:css": "wp-scripts lint-style",
@@ -36,10 +29,7 @@
     "lint:js": "wp-scripts lint-js",
     "lint:js:fix": "wp-scripts lint-js --fix",
     "lint:md": "wp-scripts lint-md-docs",
-    "lint:pkg": "wp-scripts lint-pkg-json",
-    "__BUILD__": "=========================================================================",
-    "build": "wp-scripts build --color | grep -v '^    at ' || true",
-    "build:verbose": "wp-scripts build"
+    "lint:pkg": "wp-scripts lint-pkg-json"
   },
   "devDependencies": {
     "@linthtml/linthtml": "^0.9.5",
@@ -47,11 +37,8 @@
     "@wordpress/icons": "^10.1.0",
     "@wordpress/scripts": "^27.1.0",
     "classnames": "^2.5.1",
-    "copy-webpack-plugin": "^13.0.1",
     "lodash": "^4.17.21",
-    "npm-run-all": "^4.1.5",
-    "webpack-merge": "^5.10.0",
-    "webpack-remove-empty-scripts": "^1.1.1"
+    "npm-run-all": "^4.1.5"
   },
   "publishConfig": {
     "access": "public"
@@ -59,7 +46,6 @@
   "dependencies": {
     "@wordpress/components": "^30.5.0",
     "@wordpress/core-data": "^7.32.0",
-    "@wordpress/data": "^10.32.0",
-    "ajv": "^8.17.1"
+    "@wordpress/data": "^10.32.0"
   }
 }
