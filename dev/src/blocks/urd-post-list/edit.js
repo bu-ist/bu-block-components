@@ -10,15 +10,15 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import {useBlockProps} from '@wordpress/block-editor';
-import {useState, useEffect} from '@wordpress/element';
+import { useBlockProps } from '@wordpress/block-editor';
+import { useState, useEffect } from '@wordpress/element';
 
 import {
 	useRequestData,
 	LoadingSpinner,
 } from '@bostonuniversity/block-imports';
 
-import {ThePost} from './thepost';
+import { ThePost } from './thepost';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -37,102 +37,98 @@ import './editor.scss';
  *
  * @return {JSX.Element} Element to render.
  */
-export default function Edit(props) {
-	const {attributes, setAttributes} = props;
-	const [page, setPage] = useState(1);
-	const [isLastPage, setIsLastPage] = useState(false);
+export default function Edit( props ) {
+	const { attributes, setAttributes } = props;
+	const [ page, setPage ] = useState( 1 );
+	const [ isLastPage, setIsLastPage ] = useState( false );
 	const perPage = 15;
 	const query = {
 		per_page: perPage,
 		page,
 	};
 
-	let imageID = '';
+	const imageID = '';
 
-	const [data, isLoading, invalidateRequest] = useRequestData(
+	const [ data, isLoading, invalidateRequest ] = useRequestData(
 		'postType',
 		'post',
 		query
 	);
 
 	// Check if we're on the last page (fewer posts than per_page)
-	useEffect(() => {
-		if (data && data.length < perPage && data.length > 0) {
-			setIsLastPage(true);
+	useEffect( () => {
+		if ( data && data.length < perPage && data.length > 0 ) {
+			setIsLastPage( true );
 		} else {
-			setIsLastPage(false);
+			setIsLastPage( false );
 		}
-	}, [data]);
+	}, [ data ] );
 
 	return (
 		<>
-			<div {...useBlockProps()}>
-				{isLoading && (
+			<div { ...useBlockProps() }>
+				{ isLoading && (
 					<>
 						<LoadingSpinner
 							text="Loading" // Default is undefined.
-							shadow={false} // Default is true.
+							shadow={ false } // Default is true.
 							className="a-custom-classname-to-add"
 						/>
 					</>
-				)}
-				{data && data.length > 0 ? (
+				) }
+				{ data && data.length > 0 ? (
 					<>
-						{data.map((post) => {
-							return (
-								<ThePost
-									post={post}
-								/>
-							)
-						})}
+						{ data.map( ( post ) => {
+							return <ThePost post={ post } />;
+						} ) }
 
-						{isLastPage ? (
+						{ isLastPage ? (
 							<div className="last-page-message">
 								<p>You've reached the last page of posts.</p>
-								{page > 1 && (
+								{ page > 1 && (
 									<button
 										type="button"
-										onClick={() => {
-											setPage(1);
+										onClick={ () => {
+											setPage( 1 );
 											invalidateRequest();
-										}}
+										} }
 									>
 										Back to first page
 									</button>
-								)}
+								) }
 							</div>
 						) : (
 							<button
 								type="button"
-								onClick={() => {
-									setPage(page + 1);
+								onClick={ () => {
+									setPage( page + 1 );
 									invalidateRequest();
-								}}
+								} }
 							>
 								Refresh list
 							</button>
-						)}
+						) }
 					</>
 				) : (
 					<>
-						{!isLoading && (
+						{ ! isLoading && (
 							<div className="no-posts">
 								<p>No posts to display.</p>
-								{page > 1 && (
+								{ page > 1 && (
 									<button
 										type="button"
-										onClick={() => {
-											setPage(1);
+										onClick={ () => {
+											setPage( 1 );
 											invalidateRequest();
-										}}
+										} }
 									>
 										Back to first page
 									</button>
-								)}
+								) }
 							</div>
-						)}
+						) }
 					</>
-				)}
+				) }
 			</div>
 		</>
 	);
