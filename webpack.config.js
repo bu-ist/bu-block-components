@@ -22,20 +22,20 @@ const RemoveEmptyScriptsPlugin = require( 'webpack-remove-empty-scripts' );
  */
 const blocksConfig = {
 	entry: {
-		index: './index.js',
+		// index: './index.js',
 		// COMPONENTS
-		'components/HelpWrapper': './components/HelpWrapper/index.js',
-		'components/Image': './components/Image/index.mjs',
-		'components/LoadingSpinner': './components/LoadingSpinner/index.mjs',
-		'components/PostChooser': './components/PostChooser/index.mjs',
-		'components/Pagination': './components/Pagination/index.mjs',
+		// 'components/HelpWrapper': './components/HelpWrapper/index.js',
+		// 'components/Image': './components/Image/index.mjs',
+		// 'components/LoadingSpinner': './components/LoadingSpinner/index.mjs',
+		// 'components/PostChooser': './components/PostChooser/index.mjs',
+		// 'components/Pagination': './components/Pagination/index.mjs',
 		// HOOKS
-		'hooks/useMedia': './hooks/useMedia/index.mjs',
-		'hooks/useRequestData': './hooks/useRequestData/index.mjs',
-		'hooks/useGetPagination': './hooks/useGetPagination/index.mjs',
-		'hooks/useDebouncedInput': './hooks/useDebouncedInput/index.mjs',
+		// 'hooks/useMedia': './hooks/useMedia/index.mjs',
+		// 'hooks/useRequestData': './hooks/useRequestData/index.mjs',
+		// 'hooks/useGetPagination': './hooks/useGetPagination/index.mjs',
+		// 'hooks/useDebouncedInput': './hooks/useDebouncedInput/index.mjs',
 		// UTILS
-		'utils/getImageData': './utils/getImageData/index.mjs',
+		// 'utils/getImageData': './utils/getImageData/index.mjs',
 	},
 	plugins: [
 		// Grab the defaultConfig's plugins array and filter it to remove what we don't need.
