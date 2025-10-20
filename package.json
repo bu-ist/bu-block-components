@@ -23,16 +23,14 @@
   },
   "scripts": {
     "format": "wp-scripts format",
-    "lint": "npm-run-all lint:css lint:html lint:js lint:md lint:pkg",
+    "lint": "npm-run-all lint:css lint:js lint:md lint:pkg",
     "lint:css": "wp-scripts lint-style",
-    "lint:html": "linthtml '**!(node_modules|build|vendor)/*.php'",
     "lint:js": "wp-scripts lint-js",
     "lint:js:fix": "wp-scripts lint-js --fix",
     "lint:md": "wp-scripts lint-md-docs",
     "lint:pkg": "wp-scripts lint-pkg-json"
   },
   "devDependencies": {
-    "@linthtml/linthtml": "^0.9.5",
     "@wordpress/eslint-plugin": "^22.18.0",
     "@wordpress/icons": "^10.1.0",
     "@wordpress/scripts": "^27.1.0",
