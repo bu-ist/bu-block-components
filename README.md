@@ -49,7 +49,7 @@ These are just your standard garden variety javascript functions. They don't nee
 
 __These should be named in camelCase without a BU namespace. They should use the [`.mjs`](https://v8.dev/features/modules#mjs) extension.__
 
-- getImageData
+- tbd...
 
 ---
 
