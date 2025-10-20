@@ -1,6 +1,5 @@
 // Components
 export { HelpWrapper } from './components/HelpWrapper';
-// export { Image } from './components/Image/index.mjs';
 export { LoadingSpinner } from './components/LoadingSpinner/index.mjs';
 export { PostChooser } from './components/PostChooser/index.mjs';
 export { PostChooserSidebar } from './components/PostChooser/index.mjs';
