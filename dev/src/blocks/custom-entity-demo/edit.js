@@ -42,13 +42,13 @@ export default function Edit( props ) {
 	// Parameters follow (kind, name, query) order
 	// For custom entities: kind is the namespace, name is the entity
 	const [ customPosts, customPostsLoading, invalidateRequest ] =
-		useRequestData( 'bu-custom/v1', 'import-bob-custom', { per_page: 5 } );
+		useRequestData( 'bu-custom/v1', 'import-bob', { per_page: 5 } );
 
 	// Method 3: Using custom entity with meta filtering
 	// Demonstrates filtering posts where bob_last_name = Smith
 	const [ smithPosts, smithPostsLoading ] = useRequestData(
 		'bu-custom/v1',
-		'import-bob-custom',
+		'import-bob',
 		{
 			per_page: 5,
 			meta_key: 'bob_last_name',
@@ -60,7 +60,7 @@ export default function Edit( props ) {
 	// Demonstrates finding all posts that have the bob_last_name meta key
 	const [ postsWithLastName, postsWithLastNameLoading ] = useRequestData(
 		'bu-custom/v1',
-		'import-bob-custom',
+		'import-bob',
 		{
 			per_page: 5,
 			meta_key: 'bob_last_name',

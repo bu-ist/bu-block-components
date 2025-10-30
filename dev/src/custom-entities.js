@@ -21,13 +21,13 @@ import { registerCustomEntities } from '../..';
 const customEntities = [
 	{
 		// Required properties
-		name: 'import-bob-custom', // Entity name - used in selectors
+		name: 'import-bob', // Entity name - used in selectors
 		kind: 'bu-custom/v1', // Entity kind - namespace
 		baseURL: '/bu-custom/v1/import-bob', // REST API endpoint path
 		route: '/bu-custom/v1/import-bob/(?P<id>[\\d]+)', // Single item route pattern (for getEntityRecord)
 
 		// Optional properties
-		plural: 'import-bob-customs', // Plural form for dynamic selector naming
+		plural: 'import-bobs', // Plural form for dynamic selector naming
 		label: 'Import Bob Custom', // Human-readable label
 
 		// Define the type of identifier used (id, slug, or custom)
