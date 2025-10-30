@@ -5,9 +5,6 @@
  * and an option to search.
  */
 
-// WordPress dependencies
-import { __ } from '@wordpress/i18n';
-
 // Internal dependencies
 import { PostChooserModal } from './editor-partials/modal/index.js';
 
