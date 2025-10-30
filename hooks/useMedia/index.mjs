@@ -1,19 +1,32 @@
-import { useSelect } from "@wordpress/data"
-import { store as coreStore } from "@wordpress/core-data"
+/**
+ * useMedia
+ *
+ * @param {string} mediaId The unique numerical identifier assigned to each image attachment in the media library.
+ *
+ * @return {Object} todo.
+ */
 
-export function useMedia(id) {
-  return useSelect(
-    select => {
-      const { getMedia, isResolving, hasFinishedResolution } = select(coreStore)
+// External dependencies.
+import { useSelect } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
 
-      const mediaParameters = [id, { context: "view" }]
+export function useMedia( id ) {
+	return useSelect(
+		( select ) => {
+			const { getMedia, isResolving, hasFinishedResolution } =
+				select( coreStore );
 
-      return {
-        media: getMedia(...mediaParameters),
-        isResolvingMedia: isResolving("getMedia", mediaParameters),
-        hasResolvedMedia: hasFinishedResolution("getMedia", mediaParameters)
-      }
-    },
-    [id]
-  )
+			const mediaParameters = [ id, { context: 'view' } ];
+
+			return {
+				mediaObj: getMedia( ...mediaParameters ),
+				isResolvingMedia: isResolving( 'getMedia', mediaParameters ),
+				hasResolvedMedia: hasFinishedResolution(
+					'getMedia',
+					mediaParameters
+				),
+			};
+		},
+		[ id ]
+	);
 }

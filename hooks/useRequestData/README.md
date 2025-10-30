@@ -33,19 +33,19 @@ const [customData, isLoading, invalidateResolver] = useRequestData(
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `kind` | string | `'postType'` | The entity kind (e.g., 'postType', 'taxonomy') |
+| `kind` | string | `'postType'` | The entity kind to fetch (e.g., 'postType', 'taxonomy') |
 | `name` | string | `'post'` | The entity name (e.g., 'post', 'page', 'category') |
-| `query` | object\|number | `{}` | Query parameters or a single ID to fetch |
+| `query` | object or number | `{}` | Query parameters for filtering results or a specific ID for single entity retrieval |
 
 ## Return Value
 
-The hook returns an array containing:
+The hook returns an array with the following elements:
 
 ```js
 [
-  data,           // The fetched data (array or single object)
-  isLoading,      // Boolean indicating if the request is in progress
-  invalidateResolver // Function to invalidate and refresh the data
+  data,             // The fetched data (array or single entity object)
+  isLoading,        // Boolean indicating if the request is in progress
+  invalidateResolver // Function to invalidate the resolver and refresh the data
 ]
 ```
 

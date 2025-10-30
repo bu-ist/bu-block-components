@@ -18,11 +18,11 @@ if ( ! hasNewSelectors) {
 
 
 /**
- * Hook for retrieving data from the WordPress REST API.
+ * Hook for retrieving pagination information from the WordPress REST API.
  *
- * @param {string} kind             The entity kind to retrieve. Defaults to postType.
- * @param {string} name             The entity name to retrieve. Defaults to post.
- * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+ * @param {string} kind           The entity kind to retrieve. Defaults to postType.
+ * @param {string} name           The entity name to retrieve. Defaults to post.
+ * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object.
  * @returns {Object}                An object containing pagination information: { pagination: { totalItems: number, totalPages: number, perPage: number } }
  */
 export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) => {
@@ -91,15 +91,13 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 	 * This allows us to construct the API endpoint for fetching pagination information via apiFetch.
 	 *
 	 * @effect
-	 * @dependency {string} kind
-	 * @dependency {string} name
+	 * @dependency {string} kind	The entity kind.
+	 * @dependency {string} name 	The entity name.
 	 * @returns {Object} The entity configuration object, or undefined if not found.
 	 */
 	const entityConfig = useSelect(
 		(select) => {
 			// Use getEntitiesByKind to get the entity config.
-			// Note: getEntitiesByKind takes a kind parameter and returns entities of that kind
-			// We want to find the entity with the right name
 			const entities = select(coreStore).getEntitiesByKind(kind);
 			return entities?.find( e => e.name === name );
 		},
@@ -186,7 +184,7 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 		loadPaginationData();
 
 
-	}, [memoizedQuery, entityConfig]);
+	}, [memoizedQuery, entityConfig ]);
 
 
 

@@ -13,9 +13,9 @@ import { useSelect, useDispatch } from '@wordpress/data';
 /**
  * Hook for retrieving data from the WordPress REST API.
  *
- * @param {string} kind             The entity kind to retrieve. Defaults to postType.
- * @param {string} name             The entity name to retrieve. Defaults to post.
- * @param {object | number} [query] Optional. Query to pass to the getEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
+ * @param {string} kind           The entity kind to retrieve. Defaults to postType.
+ * @param {string} name           The entity name to retrieve. Defaults to posts.
+ * @param {object | number} [query] Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
  * @returns {Array} The data returned from the request.
  */
 export const useRequestData = (kind='postType', name='post', query = {} ) => {
