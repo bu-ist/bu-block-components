@@ -42,6 +42,11 @@ add_action( 'init', 'create_block_imports_dev_block_init' );
 require_once plugin_dir_path( __FILE__ ) . 'includes/custom-endpoints.php';
 
 /**
+ * Include Core REST API Endpoint Filters
+ */
+require_once plugin_dir_path( __FILE__ ) . 'includes/endpoints.php';
+
+/**
  * Enqueue custom entities JavaScript
  */
 function imports_dev_enqueue_custom_entities() {
