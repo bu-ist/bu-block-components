@@ -15,11 +15,17 @@ import {
 	useBlockProps,
 	MediaUpload,
 	MediaUploadCheck,
+	InspectorControls,
 } from '@wordpress/block-editor';
 
 import { decodeEntities } from '@wordpress/html-entities';
 
-import { Button } from '@wordpress/components';
+import {
+	Button,
+	TextControl,
+	PanelBody,
+	PanelRow,
+} from '@wordpress/components';
 
 import { useState } from '@wordpress/element';
 
@@ -60,6 +66,8 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 		selectedPostExcerpt,
 		focalPoint,
 	} = attributes;
+
+	const [ lastName, setLastName ] = useState( '' );
 
 	/**
 	 * Post Chooser Modal State Handlers.
@@ -125,6 +133,23 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 
 	return (
 		<div { ...useBlockProps() }>
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Post Chooser Settings', 'imports-dev' ) }
+				>
+					<PanelRow>
+						<TextControl
+							label={ __( 'Last Name', 'imports-dev' ) }
+							help={ __(
+								'Simulates some value we have to filter the post chooser results by.',
+								'imports-dev'
+							) }
+							value={ lastName }
+							onChange={ ( value ) => setLastName( value ) }
+						/>
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>
 			<PostChooserSidebar
 				postID={ selectedPostID }
 				postTitle={ selectedPostTitle }
@@ -180,6 +205,9 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 							{ label: __( 'Bob' ), value: 'import-bob' },
 						] }
 						primaryPostType="import-bob"
+						entityQuery={
+							{ last_name: lastName } // Example of passing custom query parameters
+						}
 					/>
 				) }
 				<div className="wp-block-plugin-slug-block-callout-postpicker--image">
