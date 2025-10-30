@@ -1,10 +1,16 @@
 <?php
 /**
  * Custom REST API endpoints for BU Block Imports
+ *
+ * @category WordPress
+ * @package  ImportsDev
+ * @author   Dakota Chichester <acketon@bu.edu>
+ * @link     https://github.com/bu-ist/block-imports
+ * @since    1.0.0
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined( 'ABSPATH' )) {
     exit;
 }
 

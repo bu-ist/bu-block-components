@@ -26,7 +26,7 @@ import Edit from './edit';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType('imports-dev/custom-entity-demo', {
+registerBlockType( 'imports-dev/custom-entity-demo', {
 	/**
 	 * @see ./edit.js
 	 */
@@ -38,4 +38,4 @@ registerBlockType('imports-dev/custom-entity-demo', {
 	save: () => {
 		return null; // Dynamic block, rendered server-side
 	},
-});
+} );
