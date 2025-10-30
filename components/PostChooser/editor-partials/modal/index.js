@@ -22,19 +22,22 @@ export const PostChooserModal = ( props ) => {
 		onClose = () => {}, // Function to call when the modal is closed.
 		label,
 		onSelectPost = () => {}, // Function to call when a post is selected.
-		postTypes= [
+		postTypes = [
 			{ label: __( 'Posts' ), value: 'post' },
 			{ label: __( 'Pages' ), value: 'page' },
 		], // Default post types to search.
 		primaryPostType = 'post', // Default primary post type.
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
+		entityKind = 'postType', // Default entity kind. Can be changed for custom entities
+		entityQuery = {}, // Query parameters passed to the component that override defaults.
 	} = props;
 
 	// Use the new useDebouncedInput hook to handle both immediate and debounced search terms
 	// searchTerm - updates immediately with each keystroke for responsive UI
 	// debouncedSearchTerm - only updates after delay (used for API calls to reduce requests)
-	const [ searchTerm, setSearchTerm, searchTermThrottled ] = useDebouncedInput('', 300);
+	const [ searchTerm, setSearchTerm, searchTermThrottled ] =
+		useDebouncedInput( '', 300 );
 
 	const [ sortOrder, setSortOrder ] = useState( {
 		orderby: 'date',
@@ -42,7 +45,10 @@ export const PostChooserModal = ( props ) => {
 	} );
 	const [ searchType, setSearchType ] = useState( 'recent' );
 	const [ selectedPostType, setSelectedPostType ] = useState(
-		primaryPostType || (postTypes && postTypes.length > 0 ? postTypes[ 0 ].value : 'post')
+		primaryPostType ||
+			( postTypes && postTypes.length > 0
+				? postTypes[ 0 ].value
+				: 'post' )
 	);
 
 	// Handle search Pagination for each search type separately
@@ -62,15 +68,24 @@ export const PostChooserModal = ( props ) => {
 	} );
 
 	// Determine if search term is numeric for ID search
-	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
+	const isSearchTermNumeric =
+		searchTermThrottled &&
+		! isNaN( searchTermThrottled ) &&
+		! isNaN( parseFloat( searchTermThrottled ) );
 
-	// Base query parameters
+	// The base query used for all searches.
 	const baseQuery = {
 		per_page: 10,
 		orderby: sortOrder.orderby,
 		order: sortOrder.order,
 		status: 'publish',
 	};
+
+	// Merge in any entityQuery props passed to the component
+	// Any properties in entityQuery will override those in baseQuery.
+	Object.assign( baseQuery, entityQuery );
+
+	console.log( 'PostChooserModal baseQuery:', baseQuery );
 
 	// Recent posts query (always active)
 	const recentQuery = {
@@ -81,72 +96,72 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	// Content search query (only when there's a search term)
-	const contentQuery = searchTermThrottled ? {
-		...baseQuery,
-		search: searchTermThrottled,
-		page: searchCurrentPage.default,
-	} : undefined;
+	const contentQuery = searchTermThrottled
+		? {
+				...baseQuery,
+				search: searchTermThrottled,
+				page: searchCurrentPage.default,
+		  }
+		: undefined;
 
 	// Slug search query (only when there's a search term) - exact slug match only
-	const slugQuery = searchTermThrottled ? {
-		...baseQuery,
-		slug: searchTermThrottled,
-		page: searchCurrentPage.slug,
-	} : undefined;
+	const slugQuery = searchTermThrottled
+		? {
+				...baseQuery,
+				slug: searchTermThrottled,
+				page: searchCurrentPage.slug,
+		  }
+		: undefined;
 
 	// ID search query (only when search term is numeric)
-	const idQuery = isSearchTermNumeric ? {
-		...baseQuery,
-		include: [parseInt(searchTermThrottled)],
-		page: searchCurrentPage.id,
-	} : undefined;
+	const idQuery = isSearchTermNumeric
+		? {
+				...baseQuery,
+				include: [ parseInt( searchTermThrottled ) ],
+				page: searchCurrentPage.id,
+		  }
+		: undefined;
 
 	// Use separate useRequestData hooks for each search type
-	const [recentPosts, recentLoading, recentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		recentQuery
-	);
+	const [ recentPosts, recentLoading, recentInvalidateResolver ] =
+		useRequestData( entityKind, selectedPostType, recentQuery );
 
-	const [contentPosts, contentLoading, contentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		contentQuery
-	);
+	const [ contentPosts, contentLoading, contentInvalidateResolver ] =
+		useRequestData( entityKind, selectedPostType, contentQuery );
 
-	const [slugPosts, slugLoading, slugInvalidateResolver] = useRequestData(
-		'postType',
+	const [ slugPosts, slugLoading, slugInvalidateResolver ] = useRequestData(
+		entityKind,
 		selectedPostType,
 		slugQuery
 	);
 
-	const [idPosts, idLoading, idInvalidateResolver] = useRequestData(
-		'postType',
+	const [ idPosts, idLoading, idInvalidateResolver ] = useRequestData(
+		entityKind,
 		selectedPostType,
 		idQuery
 	);
 
 	// Get pagination for each search type
 	const { pagination: recentPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		recentQuery
 	);
 
 	const { pagination: contentPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		contentQuery || {}
 	);
 
 	const { pagination: slugPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		slugQuery || {}
 	);
 
 	const { pagination: idPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		idQuery || {}
 	);
