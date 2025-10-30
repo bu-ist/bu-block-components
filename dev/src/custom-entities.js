@@ -19,22 +19,22 @@ import { registerCustomEntities } from '../..';
  * Add new entities here following the same structure.
  */
 const customEntities = [
-    {
-        // Required properties
-        name: 'import-bob-custom',      // Entity name - used in selectors
-        kind: 'bu-custom/v1',           // Entity kind - namespace
-        baseURL: '/bu-custom/v1/import-bob', // REST API endpoint path
-        route: '/bu-custom/v1/import-bob/(?P<id>[\\d]+)', // Single item route pattern (for getEntityRecord)
+	{
+		// Required properties
+		name: 'import-bob-custom', // Entity name - used in selectors
+		kind: 'bu-custom/v1', // Entity kind - namespace
+		baseURL: '/bu-custom/v1/import-bob', // REST API endpoint path
+		route: '/bu-custom/v1/import-bob/(?P<id>[\\d]+)', // Single item route pattern (for getEntityRecord)
 
-        // Optional properties
-        plural: 'import-bob-customs',   // Plural form for dynamic selector naming
-        label: 'Import Bob Custom',     // Human-readable label
+		// Optional properties
+		plural: 'import-bob-customs', // Plural form for dynamic selector naming
+		label: 'Import Bob Custom', // Human-readable label
 
-        // Define the type of identifier used (id, slug, or custom)
-        idType: 'id',                  // Identifies the parameter type in the single item endpoint
-    },
-    // Example of how to add additional entities:
-    /*
+		// Define the type of identifier used (id, slug, or custom)
+		idType: 'id', // Identifies the parameter type in the single item endpoint
+	},
+	// Example of how to add additional entities:
+	/*
     {
         name: 'another-custom-entity',
         kind: 'bu-custom/v1',
@@ -54,7 +54,7 @@ const customEntities = [
  * 3. Built-in duplicate detection and error handling
  * 4. WordPress 5.8 compatibility with both immediate registration and subscription
  */
-const unsubscribe = registerCustomEntities(customEntities);
+const unsubscribe = registerCustomEntities( customEntities );
 
 /**
  * The utility returns an unsubscribe function that can be used for cleanup

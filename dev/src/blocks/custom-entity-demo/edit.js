@@ -11,7 +11,6 @@ import { PanelBody, PanelRow, SelectControl } from '@wordpress/components';
 import {
 	useRequestData,
 	LoadingSpinner,
-	// eslint-disable-next-line import/no-unresolved
 } from '@bostonuniversity/block-imports';
 
 /**
