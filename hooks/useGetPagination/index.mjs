@@ -42,7 +42,7 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 	/**
 	 * Only runs in WordPress 6.5 and later.
 	 * Uses the new getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors
-	 * to get the total items and total pages for the specified entity and kind.
+	 * to get the total items and total pages for the specified kind and name.
 	 *
 	 * Returns an object with totalItems, totalPages, and isLoading.
 	 *
@@ -87,7 +87,7 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 
 
 	/**
-	 * Fetches the entity configuration for the specified entity and kind.
+	 * Fetches the entity configuration for the specified kind and name.
 	 * This allows us to construct the API endpoint for fetching pagination information via apiFetch.
 	 *
 	 * @effect
@@ -107,8 +107,8 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 	/**
 	 * Fetches pagination information from the WordPress REST API.
 	 *
-	 * This effect runs whenever records, entity, kind, query, or entityConfig changes. It returns
-	 * the total items and total pages for the specified entity and kind in the same format as
+	 *  This effect runs whenever records, kind, name, query, or entityConfig changes. It returns
+	 * the total items and total pages for the specified kind and name in the same format as
 	 * the newer getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors that we don't
 	 * have access to yet in this version of WordPress.
 	 *
@@ -127,7 +127,7 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 	 * the getEntityRecordsTotalItems and getEntityRecordsTotalPages selectors.
 	 *
 	 * @effect
-	 * @dependency {Array} [records, entity, kind, JSON.stringify(query), entityConfig, pagination]
+	 * @dependency {Array} [records, kind, name, JSON.stringify(query), entityConfig, pagination]
 	 */
 	useEffect(() => {
 		// Only run this effect if the new selectors are not available, such as before WordPress 6.5.
@@ -180,7 +180,7 @@ export const useGetPagination = (kind = 'postType', name = 'post', query = {} ) 
 			}
 		};
 		// Call the function to load pagination data.
-		// This will run whenever records, entity, kind, query, or entityConfig changes
+		// This will run whenever records, kind, name, query, or entityConfig changes
 		loadPaginationData();
 
 
