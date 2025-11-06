@@ -11,7 +11,7 @@
 		"env-start": "wp-env start",
 		"env-stop": "wp-env stop",
 		"env-destroy": "wp-env destroy",
-		"env-wp": "wp-env cli wp",
+		"env-wp": "wp-env run cli wp",
 		"env-shell": "wp-env shell"
 	},
 	"keywords": [],

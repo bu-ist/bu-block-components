@@ -79,7 +79,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	};
 
 	const calloutRemovePostHandler = () => {
-
 		setAttributes( {
 			selectedPostID: undefined,
 			selectedPostTitle: undefined,
@@ -90,7 +89,6 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 	};
 
 	const calloutSelectedPostHandler = ( post ) => {
-
 		setAttributes( {
 			selectedPostID: post.id,
 			selectedPostTitle: post.title.rendered,

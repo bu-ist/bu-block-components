@@ -68,12 +68,28 @@ export default function Edit( props ) {
 							title="Post ID"
 							text={
 								<>
-									<p>Enter the post ID of the post you want to retrieve data for.</p>
-									<p>The Post ID can be found in the URL of the post, for example:</p>
-									<p>https://example.com/wp-admin/post.php??post=123</p>
-									<p>In this case, the post ID is <strong>123</strong>.</p>
 									<p>
-										<strong>Documentation is available:</strong> <a href="https://wpdocs.bu.edu">Read More</a>
+										Enter the post ID of the post you want
+										to retrieve data for.
+									</p>
+									<p>
+										The Post ID can be found in the URL of
+										the post, for example:
+									</p>
+									<p>
+										https://example.com/wp-admin/post.php??post=123
+									</p>
+									<p>
+										In this case, the post ID is{ ' ' }
+										<strong>123</strong>.
+									</p>
+									<p>
+										<strong>
+											Documentation is available:
+										</strong>{ ' ' }
+										<a href="https://wpdocs.bu.edu">
+											Read More
+										</a>
 									</p>
 								</>
 							}
