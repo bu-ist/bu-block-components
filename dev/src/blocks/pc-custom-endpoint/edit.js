@@ -56,7 +56,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 			{
 				kind: 'root',
 				name: 'block-imports/v1/bob-endpoint',
-				baseURL: '/wp-json/block-imports/v1/bob-endpoint',
+				baseURL: '/block-imports/v1/bob-endpoint',
 			},
 		] );
 

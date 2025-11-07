@@ -71,9 +71,7 @@ class BobEndpoint {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'holler' ),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
+				'permission_callback' => '__return_true',
 			)
 		);
 	}
@@ -123,6 +121,7 @@ class BobEndpoint {
 			'posts_per_page' => min( $per_page, 100 ), // Limit to prevent performance issues.
 			'paged'          => $page,
 			'post_status'    => 'publish',
+			'post_type'      => 'import-bob',
 			'meta_key'       => 'meta_endpoint_flag', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'meta_value'     => 'yes', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			'orderby'        => $orderby,
