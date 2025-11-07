@@ -89,7 +89,13 @@ class BobEndpoint {
 		$response = new WP_REST_Response();
 
 		try {
-			$response->set_data( $this->get_query_response( $request ) );
+			$query_data = $this->get_query_response( $request );
+			$response->set_data( $query_data['posts'] );
+
+			// Set pagination headers for PostChooser compatibility.
+			$response->header( 'X-WP-Total', $query_data['total'] );
+			$response->header( 'X-WP-TotalPages', $query_data['total_pages'] );
+
 		} catch ( Exception $e ) {
 			$response = new WP_Error( get_class( $e ), $e->getMessage() );
 		}
@@ -105,17 +111,66 @@ class BobEndpoint {
 	 * @return array The response data.
 	 */
 	protected function get_query_response( WP_REST_Request $request ) {
-		// Example response data.
-		$data = get_posts(
-			array(
-				'numberposts' => 15,
-				'post_status' => 'publish',
-				'meta_key'    => 'meta_endpoint_flag', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'meta_value'  => 'yes', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-			)
+		// Get parameters from request.
+		$per_page = $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10;
+		$page     = $request->get_param( 'page' ) ? $request->get_param( 'page' ) : 1;
+		$search   = $request->get_param( 'search' );
+		$orderby  = $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'date';
+		$order    = $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'desc';
+
+		// Base query args.
+		$args = array(
+			'posts_per_page' => min( $per_page, 100 ), // Limit to prevent performance issues.
+			'paged'          => $page,
+			'post_status'    => 'publish',
+			'meta_key'       => 'meta_endpoint_flag', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value'     => 'yes', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			'orderby'        => $orderby,
+			'order'          => $order,
 		);
 
-		return $data;
+		// Add search functionality.
+		if ( ! empty( $search ) ) {
+			$args['s'] = sanitize_text_field( $search );
+		}
+
+		// Execute the query.
+		$query = new \WP_Query( $args );
+		$posts = $query->posts;
+
+		// Transform posts to include necessary fields for PostChooser.
+		$formatted_posts = array();
+		foreach ( $posts as $post ) {
+			$formatted_post    = array(
+				'id'           => $post->ID, // PostChooser expects 'id'.
+				'ID'           => $post->ID, // Keep original for compatibility.
+				'title'        => array(
+					'rendered' => get_the_title( $post->ID ),
+				),
+				'excerpt'      => array(
+					'rendered' => get_the_excerpt( $post->ID ),
+				),
+				'link'         => get_permalink( $post->ID ),
+				'post_title'   => $post->post_title,
+				'post_excerpt' => $post->post_excerpt,
+				'guid'         => get_permalink( $post->ID ),
+				'modified'     => $post->post_modified,
+				'status'       => $post->post_status,
+				'type'         => $post->post_type,
+				'slug'         => $post->post_name,
+			);
+			$formatted_posts[] = $formatted_post;
+		}
+
+		// Calculate pagination.
+		$total       = $query->found_posts;
+		$total_pages = ceil( $total / $per_page );
+
+		return array(
+			'posts'       => $formatted_posts,
+			'total'       => $total,
+			'total_pages' => $total_pages,
+		);
 	}
 }
 

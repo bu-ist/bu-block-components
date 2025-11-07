@@ -9,10 +9,10 @@
 		"clean-build": "rm -rf ./build",
 		"wp-env": "wp-env",
 		"env-start": "wp-env start",
+		"env-startx": "wp-env start -- --xdebug",
 		"env-stop": "wp-env stop",
 		"env-destroy": "wp-env destroy",
-		"env-wp": "wp-env run cli wp",
-		"env-shell": "wp-env shell"
+		"env-wp": "wp-env run cli wp"
 	},
 	"keywords": [],
 	"author": "",

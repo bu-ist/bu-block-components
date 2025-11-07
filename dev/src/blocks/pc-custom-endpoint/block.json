@@ -1,13 +1,27 @@
 {
 	"$schema": "https://schemas.wp.org/wp/5.8/block.json",
 	"apiVersion": 2,
-	"name": "imports-dev/imports-dev-starter-block",
+	"name": "imports-dev/imports-dev-pc-custom-endpoint",
 	"version": "0.1.0",
 	"title": "Post Chooser with Custom Endpoint",
 	"category": "widgets",
 	"icon": "nametag",
 	"description": "Demo of a custom endpoint where the query includes a meta search",
 	"example": {},
+	"attributes": {
+		"selectedPostID": {
+			"type": "number"
+		},
+		"selectedPostTitle": {
+			"type": "string"
+		},
+		"selectedPostURL": {
+			"type": "string"
+		},
+		"selectedPostExcerpt": {
+			"type": "string"
+		}
+	},
 	"supports": {
 		"html": false
 	},
