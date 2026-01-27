@@ -1,6 +1,8 @@
 # Hooks
 
-These are React hooks <https://react.dev/reference/react/hooks>, not [WordPress Hooks](https://developer.wordpress.org/plugins/hooks/). They should be camelCase. Each subfolder should contain a readme.md that explains the purpose and usage of the hook.
+These are React hooks <https://react.dev/reference/react/hooks>, not [WordPress Hooks](https://developer.wordpress.org/plugins/hooks/). They should be camelCase.
+
+Each hook has its own README.md file with detailed documentation on props, usage examples, and implementation details.
 
 React Hooks are used in functional components to manage **state**, handle **side effects**, optimize **performance**, and **reuse stateful logic**. They allow developers to use features that were previously only available in class components, leading to cleaner, more modular, and more maintainable code.
 
