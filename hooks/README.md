@@ -1,6 +1,6 @@
 # Hooks
 
-These are React hooks <https://react.dev/reference/react/hooks>, not [WordPress Hooks](https://developer.wordpress.org/plugins/hooks/). They should be camelCase.
+These are [React Hooks](https://react.dev/reference/react/hooks), not [WordPress Hooks](https://developer.wordpress.org/plugins/hooks/). They should be camelCase.
 
 Each hook has its own README.md file with detailed documentation on props, usage examples, and implementation details.
 
