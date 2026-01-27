@@ -34,13 +34,6 @@ export function Edit({ attributes, setAttributes }) {
 
 ## Available Components
 
-This library includes the following components:
-
-- **PostChooser**: A modal interface for searching and selecting WordPress posts and pages
-- **LoadingSpinner**: An animated loading indicator with fade transitions
-- ... no one is adding to this list
-
-
 Each component has its own README.md file with detailed documentation on props, usage examples, and implementation details.
 
 ## Development Guidelines
