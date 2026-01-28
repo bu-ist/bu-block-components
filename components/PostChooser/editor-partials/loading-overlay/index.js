@@ -4,12 +4,10 @@ import { useEffect, useState } from '@wordpress/element';
 // Internal Dependencies
 import { LoadingSpinner as BULoadingSpinner } from '../../../LoadingSpinner/index.mjs';
 
-
 // Import Editor CSS.
 import './editor.scss';
 
 export const LoadingSpinner = ( props ) => {
-
 	const { loading } = props;
 
 	// Spinner visibility state for animation
@@ -35,11 +33,10 @@ export const LoadingSpinner = ( props ) => {
 		>
 			<BULoadingSpinner />
 		</div>
-	)
-}
+	);
+};
 
 export const LoadingOverlay = ( props ) => {
-
 	const { loading } = props;
 
 	// Overlay visibility state for animation
@@ -62,7 +59,6 @@ export const LoadingOverlay = ( props ) => {
 		<div
 			className="bu-components-post-chooser-results-overlay"
 			data-overlayvisible={ overlayVisible }
-		>
-		</div>
-	)
-}
+		></div>
+	);
+};

@@ -3,10 +3,7 @@ import classnames from 'classnames';
 
 // WordPress dependencies.
 import { useState } from '@wordpress/element';
-import {
-	Popover,
-	Button
-} from '@wordpress/components';
+import { Popover, Button } from '@wordpress/components';
 
 // Import CSS.
 import './editor.scss';
@@ -14,17 +11,15 @@ import './editor.scss';
 /**
  * Returns the class list for the component based on the current settings.
  *
- * @param {string} className  Additional classes assigned to the component.
+ * @param {string}  className Additional classes assigned to the component.
  * @param {boolean} offset    If true, adds the 'has-offset-label' class to the component.
- * @returns {string}          The computed class list for the component.
+ * @return {string}          The computed class list for the component.
  */
-const getClasses = ( className, offset  ) => classnames(
-	'bu-components-help-wrapper',
-	{
+const getClasses = ( className, offset ) =>
+	classnames( 'bu-components-help-wrapper', {
 		[ className ]: className,
 		[ `has-offset-label` ]: offset,
-	}
-);
+	} );
 
 /**
  * Help Wrapper Component
@@ -32,23 +27,17 @@ const getClasses = ( className, offset  ) => classnames(
  * A component that wraps children elements and provides a help icon button
  * that shows a popover with help information when clicked.
  *
- * @param {Object} props - Component props.
- * @param {string} [props.text] - Help text content to be displayed in the popover.
- * @param {string} [props.title] - Optional title for the help popover.
- * @param {string} [props.className] - Additional CSS class name for the wrapper element.
- * @param {string|Object} [props.offset] - Offset positioning for the help icon.
- * @param {React.ReactNode} [props.children] - Child elements to be wrapped by this component.
+ * @param {Object}          props             - Component props.
+ * @param {string}          [props.text]      - Help text content to be displayed in the popover.
+ * @param {string}          [props.title]     - Optional title for the help popover.
+ * @param {string}          [props.className] - Additional CSS class name for the wrapper element.
+ * @param {string|Object}   [props.offset]    - Offset positioning for the help icon.
+ * @param {React.ReactNode} [props.children]  - Child elements to be wrapped by this component.
  *
- * @returns {JSX.Element} The HelpWrapper component.
+ * @return {JSX.Element} The HelpWrapper component.
  */
 export const HelpWrapper = ( props ) => {
-	const {
-		text,
-		title,
-		className,
-		offset,
-		children
-	} = props;
+	const { text, title, className, offset, children } = props;
 
 	// State to manage the visibility of the popover.
 	// Initially, the popover is not visible.
@@ -110,12 +99,12 @@ export const HelpWrapper = ( props ) => {
 									<h3 className="bu-components-help-wrapper-popover-title">
 										{ title }
 									</h3>
-								)}
+								) }
 								{ text }
 							</div>
 						</Popover>
 					</>
-				)}
+				) }
 			</div>
 			{ /* Render children inside the wrapper, if any.
 				This is how the component can be used to wrap other elements.
@@ -124,5 +113,5 @@ export const HelpWrapper = ( props ) => {
 			*/ }
 			{ children }
 		</div>
-	)
+	);
 };

@@ -11,7 +11,8 @@ import './editor.scss';
 import helpPostIdImage from './help-post-id.png';
 
 export const Results = ( props ) => {
-	const { posts, onSelectPost, loading, totalItems, searchTerm, searchType } = props;
+	const { posts, onSelectPost, loading, totalItems, searchTerm, searchType } =
+		props;
 
 	return (
 		<div className="bu-components-post-chooser-results">
@@ -21,23 +22,42 @@ export const Results = ( props ) => {
 						{ searchType === 'slug' && (
 							<>
 								<h3>{ __( 'Search by Slug' ) }</h3>
-								<p>{ __( 'Enter the post slug to find it quickly.' ) }</p>
+								<p>
+									{ __(
+										'Enter the post slug to find it quickly.'
+									) }
+								</p>
 							</>
 						) }
 						{ searchType === 'default' && (
 							<>
 								<h3>{ __( 'Search Post Content' ) }</h3>
-								<p>{ __( 'Enter a search term to search the Title & Post Content. Note, post meta, taxonomies, and other metadata will not be searched.' ) }</p>
+								<p>
+									{ __(
+										'Enter a search term to search the Title & Post Content. Note, post meta, taxonomies, and other metadata will not be searched.'
+									) }
+								</p>
 							</>
 						) }
 						{ searchType === 'id' && (
 							<>
 								<h3>{ __( 'Find post by its ID' ) }</h3>
 								<p>
-									{ __('If looking for a specific post, enter the') } <strong>{ __('Post ID') }</strong> { __('in the search field.') }
+									{ __(
+										'If looking for a specific post, enter the'
+									) }{ ' ' }
+									<strong>{ __( 'Post ID' ) }</strong>{ ' ' }
+									{ __( 'in the search field.' ) }
 								</p>
-								<img className="bu-components-post-chooser-help-image" src={ helpPostIdImage } />
-								<p>{ __( 'The post ID can be found in the URL of the post edit screen.' ) }</p>
+								<img
+									className="bu-components-post-chooser-help-image"
+									src={ helpPostIdImage }
+								/>
+								<p>
+									{ __(
+										'The post ID can be found in the URL of the post edit screen.'
+									) }
+								</p>
 							</>
 						) }
 					</div>
@@ -49,7 +69,11 @@ export const Results = ( props ) => {
 						{ searchType === 'default' && (
 							<>
 								<h3>{ __( 'No Posts Found' ) }</h3>
-								<h4>{ __( 'The search term:' ) } <code>{ searchTerm }</code> { __( 'did not match any posts.' ) }</h4>
+								<h4>
+									{ __( 'The search term:' ) }{ ' ' }
+									<code>{ searchTerm }</code>{ ' ' }
+									{ __( 'did not match any posts.' ) }
+								</h4>
 								<p>
 									{ __(
 										'Your search term might be too specific. Try broadening your search.'
@@ -70,7 +94,6 @@ export const Results = ( props ) => {
 										'Check that the slug is exactly the same as the slug of the post. A partial match will not work.'
 									) }
 								</p>
-
 							</>
 						) }
 						{ searchType === 'id' && (
@@ -81,16 +104,18 @@ export const Results = ( props ) => {
 										'Check that a numerical post ID has been entered and that the post type is correct.'
 									) }
 								</p>
-
 							</>
 						) }
 					</div>
 				</div>
 			) }
-			<ul className="bu-components-post-chooser-results-list" data-loading={ loading }>
+			<ul
+				className="bu-components-post-chooser-results-list"
+				data-loading={ loading }
+			>
 				{ loading && (
 					<>
-						{/* Show 20 placeholder ResultsItem components to simulate data loading in interface */}
+						{ /* Show 20 placeholder ResultsItem components to simulate data loading in interface */ }
 						{ Array.from( { length: 20 } ).map( ( _, index ) => (
 							<ResultsItem key={ index } placeholder={ true } />
 						) ) }

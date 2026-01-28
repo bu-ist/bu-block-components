@@ -22,19 +22,22 @@ export const PostChooserModal = ( props ) => {
 		onClose = () => {}, // Function to call when the modal is closed.
 		label,
 		onSelectPost = () => {}, // Function to call when a post is selected.
-		postTypes= [
+		postTypes = [
 			{ label: __( 'Posts' ), value: 'post' },
 			{ label: __( 'Pages' ), value: 'page' },
 		], // Default post types to search.
 		primaryPostType = 'post', // Default primary post type.
 		placeholder = __( 'Enter a search term…' ),
 		title = __( 'Choose a Post' ),
+		entityKind = 'postType', // Default entity kind. Can be changed for custom entities
+		entityQuery = {}, // Query parameters passed to the component that override defaults.
 	} = props;
 
 	// Use the new useDebouncedInput hook to handle both immediate and debounced search terms
 	// searchTerm - updates immediately with each keystroke for responsive UI
 	// debouncedSearchTerm - only updates after delay (used for API calls to reduce requests)
-	const [ searchTerm, setSearchTerm, searchTermThrottled ] = useDebouncedInput('', 300);
+	const [ searchTerm, setSearchTerm, searchTermThrottled ] =
+		useDebouncedInput( '', 300 );
 
 	const [ sortOrder, setSortOrder ] = useState( {
 		orderby: 'date',
@@ -42,7 +45,10 @@ export const PostChooserModal = ( props ) => {
 	} );
 	const [ searchType, setSearchType ] = useState( 'recent' );
 	const [ selectedPostType, setSelectedPostType ] = useState(
-		primaryPostType || (postTypes && postTypes.length > 0 ? postTypes[ 0 ].value : 'post')
+		primaryPostType ||
+			( postTypes && postTypes.length > 0
+				? postTypes[ 0 ].value
+				: 'post' )
 	);
 
 	// Handle search Pagination for each search type separately
@@ -62,7 +68,10 @@ export const PostChooserModal = ( props ) => {
 	} );
 
 	// Determine if search term is numeric for ID search
-	const isSearchTermNumeric = searchTermThrottled && !isNaN(searchTermThrottled) && !isNaN(parseFloat(searchTermThrottled));
+	const isSearchTermNumeric =
+		searchTermThrottled &&
+		! isNaN( searchTermThrottled ) &&
+		! isNaN( parseFloat( searchTermThrottled ) );
 
 	// Base query parameters
 	const baseQuery = {
@@ -71,6 +80,10 @@ export const PostChooserModal = ( props ) => {
 		order: sortOrder.order,
 		status: 'publish',
 	};
+
+	// Merge in any entityQuery props passed to the component
+	// Any properties in entityQuery will override those in baseQuery.
+	Object.assign( baseQuery, entityQuery );
 
 	// Recent posts query (always active)
 	const recentQuery = {
@@ -81,78 +94,78 @@ export const PostChooserModal = ( props ) => {
 	};
 
 	// Content search query (only when there's a search term)
-	const contentQuery = searchTermThrottled ? {
-		...baseQuery,
-		search: searchTermThrottled,
-		page: searchCurrentPage.default,
-	} : undefined;
+	const contentQuery = searchTermThrottled
+		? {
+				...baseQuery,
+				search: searchTermThrottled,
+				page: searchCurrentPage.default,
+		  }
+		: undefined;
 
 	// Slug search query (only when there's a search term) - exact slug match only
-	const slugQuery = searchTermThrottled ? {
-		...baseQuery,
-		slug: searchTermThrottled,
-		page: searchCurrentPage.slug,
-	} : undefined;
+	const slugQuery = searchTermThrottled
+		? {
+				...baseQuery,
+				slug: searchTermThrottled,
+				page: searchCurrentPage.slug,
+		  }
+		: undefined;
 
 	// ID search query (only when search term is numeric)
-	const idQuery = isSearchTermNumeric ? {
-		...baseQuery,
-		include: [parseInt(searchTermThrottled)],
-		page: searchCurrentPage.id,
-	} : undefined;
+	const idQuery = isSearchTermNumeric
+		? {
+				...baseQuery,
+				include: [ parseInt( searchTermThrottled ) ],
+				page: searchCurrentPage.id,
+		  }
+		: undefined;
 
 	// Use separate useRequestData hooks for each search type
-	const [recentPosts, recentLoading, recentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		recentQuery
-	);
+	const [ recentPosts, recentLoading, recentInvalidateResolver ] =
+		useRequestData( entityKind, selectedPostType, recentQuery );
 
-	const [contentPosts, contentLoading, contentInvalidateResolver] = useRequestData(
-		'postType',
-		selectedPostType,
-		contentQuery
-	);
+	const [ contentPosts, contentLoading, contentInvalidateResolver ] =
+		useRequestData( entityKind, selectedPostType, contentQuery );
 
-	const [slugPosts, slugLoading, slugInvalidateResolver] = useRequestData(
-		'postType',
+	const [ slugPosts, slugLoading, slugInvalidateResolver ] = useRequestData(
+		entityKind,
 		selectedPostType,
 		slugQuery
 	);
 
-	const [idPosts, idLoading, idInvalidateResolver] = useRequestData(
-		'postType',
+	const [ idPosts, idLoading, idInvalidateResolver ] = useRequestData(
+		entityKind,
 		selectedPostType,
 		idQuery
 	);
 
 	// Get pagination for each search type
 	const { pagination: recentPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		recentQuery
 	);
 
 	const { pagination: contentPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		contentQuery || {}
 	);
 
 	const { pagination: slugPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		slugQuery || {}
 	);
 
 	const { pagination: idPagination } = useGetPagination(
-		'postType',
+		entityKind,
 		selectedPostType,
 		idQuery || {}
 	);
 
 	// Update search results state when individual search results change
-	useEffect(() => {
+	useEffect( () => {
 		// Update the recent posts search results with the latest data and pagination
 		const recentSearchResult = {
 			posts: recentPosts,
@@ -160,78 +173,84 @@ export const PostChooserModal = ( props ) => {
 			totalPages: recentPagination.totalPages || 0,
 		};
 
-		setSearchResults(prevResults => ({
+		setSearchResults( ( prevResults ) => ( {
 			...prevResults,
-			recent: recentSearchResult
-		}));
-	}, [recentPosts, recentPagination]);
+			recent: recentSearchResult,
+		} ) );
+	}, [ recentPosts, recentPagination ] );
 
-	useEffect(() => {
+	useEffect( () => {
 		// Determine the appropriate search result object based on whether we have a search term
 		// If searchTermThrottled exists: use the API data with pagination information
 		// If no search term: reset to empty/null values to clear results
 		const defaultSearchResult = searchTermThrottled
 			? {
-				posts: contentPosts,
-				totalItems: contentPagination.totalItems || 0,
-				totalPages: contentPagination.totalPages || 0,
-			}
+					posts: contentPosts,
+					totalItems: contentPagination.totalItems || 0,
+					totalPages: contentPagination.totalPages || 0,
+			  }
 			: { posts: null, totalItems: 0, totalPages: 0 };
 
 		// Update just the "default" search type in our results state object,
 		// preserving other search type results
-		setSearchResults(prevResults => ({
+		setSearchResults( ( prevResults ) => ( {
 			...prevResults,
-			default: defaultSearchResult
-		}));
-	}, [contentPosts, contentPagination, searchTermThrottled]);
+			default: defaultSearchResult,
+		} ) );
+	}, [ contentPosts, contentPagination, searchTermThrottled ] );
 
-	useEffect(() => {
+	useEffect( () => {
 		// Determine slug search results based on search term presence
 		// If searchTermThrottled exists: use the slug search results and pagination
 		// If no search term: reset to empty/null values
 		const slugSearchResult = searchTermThrottled
 			? {
-				posts: slugPosts,
-				totalItems: slugPagination.totalItems || 0,
-				totalPages: slugPagination.totalPages || 0,
-			}
+					posts: slugPosts,
+					totalItems: slugPagination.totalItems || 0,
+					totalPages: slugPagination.totalPages || 0,
+			  }
 			: { posts: null, totalItems: 0, totalPages: 0 };
 
 		// Update the slug search results while preserving other search types
-		setSearchResults(prevResults => ({
+		setSearchResults( ( prevResults ) => ( {
 			...prevResults,
-			slug: slugSearchResult
-		}));
-	}, [slugPosts, slugPagination, searchTermThrottled]);
+			slug: slugSearchResult,
+		} ) );
+	}, [ slugPosts, slugPagination, searchTermThrottled ] );
 
-	useEffect(() => {
+	useEffect( () => {
 		// Determine ID search results based on whether search term is numeric
 		// If isSearchTermNumeric is true: use the ID search results and pagination
 		// If not numeric: reset to empty/null values
 		const idSearchResult = isSearchTermNumeric
 			? {
-				posts: idPosts,
-				totalItems: idPagination.totalItems || 0,
-				totalPages: idPagination.totalPages || 0,
-			}
+					posts: idPosts,
+					totalItems: idPagination.totalItems || 0,
+					totalPages: idPagination.totalPages || 0,
+			  }
 			: { posts: null, totalItems: 0, totalPages: 0 };
 
 		// Update the ID search results while preserving other search types
-		setSearchResults(prevResults => ({
+		setSearchResults( ( prevResults ) => ( {
 			...prevResults,
-			id: idSearchResult
-		}));
-	}, [idPosts, idPagination, isSearchTermNumeric]);
+			id: idSearchResult,
+		} ) );
+	}, [ idPosts, idPagination, isSearchTermNumeric ] );
 
 	// Get current results based on selected search type
 	const getCurrentResults = () => {
-		return searchResults[searchType] || { posts: null, totalItems: 0, totalPages: 0 };
+		return (
+			searchResults[ searchType ] || {
+				posts: null,
+				totalItems: 0,
+				totalPages: 0,
+			}
+		);
 	};
 
 	// Get current loading state based on selected search type
 	const getCurrentLoadingState = () => {
-		switch (searchType) {
+		switch ( searchType ) {
 			case 'recent':
 				return recentLoading;
 			case 'default':
@@ -247,12 +266,12 @@ export const PostChooserModal = ( props ) => {
 
 	// Get current page for selected search type
 	const getCurrentPage = () => {
-		return searchCurrentPage[searchType] || 1;
+		return searchCurrentPage[ searchType ] || 1;
 	};
 
 	// Get current invalidate function based on selected search type
 	const getCurrentInvalidateFunction = () => {
-		switch (searchType) {
+		switch ( searchType ) {
 			case 'recent':
 				return recentInvalidateResolver;
 			case 'default':
@@ -269,71 +288,75 @@ export const PostChooserModal = ( props ) => {
 	const handleSearch = useCallback( () => {
 		// Trigger search by invalidating all search results
 		recentInvalidateResolver();
-		if (searchTermThrottled) {
+		if ( searchTermThrottled ) {
 			contentInvalidateResolver();
 			slugInvalidateResolver();
 		}
-		if (isSearchTermNumeric) {
+		if ( isSearchTermNumeric ) {
 			idInvalidateResolver();
 		}
-	}, [ recentInvalidateResolver, contentInvalidateResolver, slugInvalidateResolver, idInvalidateResolver, searchTermThrottled, isSearchTermNumeric ] );
+	}, [
+		recentInvalidateResolver,
+		contentInvalidateResolver,
+		slugInvalidateResolver,
+		idInvalidateResolver,
+		searchTermThrottled,
+		isSearchTermNumeric,
+	] );
 
 	// Handle page change for current search type
-	const handlePageChange = (newPage) => {
-		setSearchCurrentPage(prev => ({
+	const handlePageChange = ( newPage ) => {
+		setSearchCurrentPage( ( prev ) => ( {
 			...prev,
-			[searchType]: newPage
-		}));
+			[ searchType ]: newPage,
+		} ) );
 		getCurrentInvalidateFunction()();
 	};
 
 	/**
-	* When the search term changes or when we have search results,
-	* automatically switch to the appropriate search type.
-	*
-	* Note: Don't enter `searchType` as a dependency in this effect.
-	* Doing so will cause a rerender and the setting will be undone.
-	*/
+	 * When the search term changes or when we have search results,
+	 * automatically switch to the appropriate search type.
+	 *
+	 * Note: Don't enter `searchType` as a dependency in this effect.
+	 * Doing so will cause a rerender and the setting will be undone.
+	 */
 	useEffect( () => {
-		if (searchTermThrottled && searchType === 'recent') {
+		if ( searchTermThrottled && searchType === 'recent' ) {
 			// Auto-switch to content search when user starts typing
-			setSearchType('default');
-		} else if (!searchTermThrottled && searchType !== 'recent') {
+			setSearchType( 'default' );
+		} else if ( ! searchTermThrottled && searchType !== 'recent' ) {
 			// Auto-switch back to recent when search term is cleared
-			setSearchType('recent');
+			setSearchType( 'recent' );
 		}
 	}, [ searchTermThrottled ] );
 
 	/**
-	* When the search Term changes, set ALL search current pages to 1.
-	* If not, the query in useSelect() may throw an error if we request
-	* a page number that doesn't exist. Anytime the searchTerm changes this
-	* should be set back to page 1 of the results as the old results are
-	* now invalid.
-	* Setting this to run on searchTermThrottled was too slow at times due
-	* to the delay in the Throttler.
-	*/
+	 * When the search Term changes, set ALL search current pages to 1.
+	 * If not, the query in useSelect() may throw an error if we request
+	 * a page number that doesn't exist. Anytime the searchTerm changes this
+	 * should be set back to page 1 of the results as the old results are
+	 * now invalid.
+	 * Setting this to run on searchTermThrottled was too slow at times due
+	 * to the delay in the Throttler.
+	 */
 	useEffect( () => {
 		// When searchTerm changes (due to dependency array),
 		// reset search pages to 1 for types that use the search term
 		// Keep the "recent" page as is since it doesn't depend on searchTerm
 		// This prevents "invalid page" errors when changing search terms after pagination
-		setSearchCurrentPage(prev => ({
+		setSearchCurrentPage( ( prev ) => ( {
 			...prev,
 			default: 1,
 			slug: 1,
-			id: 1
-		}));
-
+			id: 1,
+		} ) );
 	}, [ searchTerm ] );
-
 
 	// Get current results and metadata
 	const currentResults = getCurrentResults();
 	const currentLoading = getCurrentLoadingState();
 	const currentPage = getCurrentPage();
 	const currentTotalPages = currentResults.totalPages || 0;
-
 
 	return (
 		<Modal
@@ -360,12 +383,14 @@ export const PostChooserModal = ( props ) => {
 					searchType={ searchType }
 					sortOrder={ sortOrder }
 					setSortOrder={ setSortOrder }
-					contentResultsCount={ searchResults.default.totalItems || 0 }
+					contentResultsCount={
+						searchResults.default.totalItems || 0
+					}
 					slugResultsCount={ searchResults.slug.totalItems || 0 }
 					idResultsCount={ searchResults.id.totalItems || 0 }
-					onChange={ (newType) => {
-						setSearchType(newType);
-					}}
+					onChange={ ( newType ) => {
+						setSearchType( newType );
+					} }
 				/>
 				<div className="bu-components-post-chooser-results-scrollable">
 					<LoadingSpinner loading={ currentLoading } />
