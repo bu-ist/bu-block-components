@@ -4,6 +4,31 @@
 
 `useRequestData` is a basically a wrapper around `getEntityRecords` (`getEntityRecord` if the query is not an array), with addtional processing that would be standard practice. This reduces the amount of redundant code within a theme.
 
+## Usage
+
+```jsx
+import { useRequestData } from '@bostonuniversity/block-imports';
+
+// Basic usage for fetching multiple items
+const [posts, isLoading] = useRequestData('postType', 'post', {
+  per_page: 5,
+  search: 'example'
+});
+
+// Fetching a single item by ID
+const [post, isLoading] = useRequestData('postType', 'post', 123);
+
+// Custom entities
+const [customData, isLoading, invalidateResolver] = useRequestData(
+  'bu-custom/v1',
+  'custom-entity-name',
+  { per_page: 10 }
+);
+
+// Using the invalidateResolver
+<button onClick={invalidateResolver}>Refresh Data</button>
+```
+
 ## Parameters
 
 | Parameter | Type | Default | Description |

@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "imports-dev/custom-entity-demo",
+    "version": "0.1.0",
+    "title": "Custom Entity Demo",
+    "category": "widgets",
+    "icon": "list-view",
+    "description": "Demo of using custom entities with useRequestData",
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "postId": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "textdomain": "imports-dev",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
+}

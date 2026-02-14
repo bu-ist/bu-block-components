@@ -5,9 +5,6 @@
  * and an option to search.
  */
 
-// WordPress dependencies
-import { __ } from '@wordpress/i18n';
-
 // Internal dependencies
 import { PostChooserModal } from './editor-partials/modal/index.js';
 
@@ -24,6 +21,8 @@ export const PostChooser = ( props ) => {
 		searchPlaceholder,
 		minCharacters = 3,
 		onClose,
+		entityKind,
+		entityQuery,
 	} = props;
 
 	return (
@@ -36,6 +35,8 @@ export const PostChooser = ( props ) => {
 			placeholder={ searchPlaceholder }
 			minCharacters={ minCharacters }
 			onClose={ onClose }
+			entityKind={ entityKind }
+			entityQuery={ entityQuery }
 		/>
 	);
 };

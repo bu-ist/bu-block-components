@@ -32,8 +32,38 @@ function create_block_imports_dev_block_init() {
 	register_block_type( __DIR__ . '/build/blocks/urd-post-terms' );
 	register_block_type( __DIR__ . '/build/blocks/urd-post-meta' );
 	register_block_type( __DIR__ . '/build/blocks/post-chooser' );
+	register_block_type( __DIR__ . '/build/blocks/custom-entity-demo' );
 }
 add_action( 'init', 'create_block_imports_dev_block_init' );
+
+/**
+ * Include custom REST API endpoints
+ */
+require_once plugin_dir_path( __FILE__ ) . 'includes/custom-endpoints.php';
+
+/**
+ * Include Core REST API Endpoint Filters
+ */
+require_once plugin_dir_path( __FILE__ ) . 'includes/endpoints.php';
+
+/**
+ * Enqueue custom entities JavaScript
+ */
+function imports_dev_enqueue_custom_entities() {
+    // Get the plugin basename for proper URL
+    $plugin_dir_url = trailingslashit(plugins_url(basename(dirname(__FILE__))));
+    $plugin_dir_path = plugin_dir_path(__FILE__);
+
+    wp_enqueue_script(
+        'imports-dev-custom-entities',
+        $plugin_dir_url . 'build/custom-entities.js',
+        array( 'wp-data', 'wp-core-data', 'wp-dom-ready', 'wp-api-fetch', 'wp-url' ),
+        filemtime( $plugin_dir_path . 'build/custom-entities.js' ),
+        true
+    );
+}
+add_action( 'admin_enqueue_scripts', 'imports_dev_enqueue_custom_entities' );
+add_action( 'wp_enqueue_scripts', 'imports_dev_enqueue_custom_entities' );
 
 /**
  * Test CPT
@@ -117,6 +147,13 @@ function imports_dev_action_cpt() {
 		'single' => true,
 		'type' => 'string',
 	));
+
+	// Register our new _bob_last_name meta field for demo filtering
+	register_post_meta('import-bob', 'bob_last_name', array(
+		'show_in_rest' => true,
+		'single' => true,
+		'type' => 'string',
+	));
 }
 
 add_action( 'init', 'imports_dev_action_cpt' );
@@ -181,3 +218,22 @@ function import_dev_action_tax() {
 }
 
 add_action( 'init', 'import_dev_action_tax' );
+
+/**
+ * Add sample post meta to import-bob posts when they're created
+ * This ensures some posts have the _bob_last_name meta field for our demo
+ */
+function imports_dev_add_sample_meta( $post_id, $post, $update ) {
+    // Only run on new import-bob posts
+    if ( 'import-bob' !== $post->post_type || $update ) {
+        return;
+    }
+
+    // Set the _bob_last_name meta randomly to either Smith, Jones, or Brown
+    $last_names = array( 'Smith', 'Jones', 'Brown' );
+    $last_name = $last_names[ array_rand( $last_names ) ];
+
+    // Add the meta field
+    update_post_meta( $post_id, '_bob_last_name', $last_name );
+}
+add_action( 'wp_insert_post', 'imports_dev_add_sample_meta', 10, 3 );
